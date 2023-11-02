@@ -119,7 +119,13 @@ class GlobalHeatMap:
         self.compute_word_heat_map = lru_cache(maxsize=50)(self.compute_word_heat_map)
 
     def compute_word_heat_map(self, word: str, word_idx: int = None, offset_idx: int = 0) -> WordHeatMap:
+        #print(word,word_idx,offset_idx)
         merge_idxs, word_idx = compute_token_merge_indices(self.tokenizer, self.prompt, word, word_idx, offset_idx)
+        #print(merge_idxs,word_idx)
+        #print(self.heat_maps[merge_idxs].shape)
+        #print(self.heat_maps[merge_idxs].mean(0).shape)
+        print(merge_idxs,word_idx)
+        
         return WordHeatMap(self.heat_maps[merge_idxs].mean(0), word, word_idx)
 
     def parsed_heat_maps(self) -> Iterable[ParsedHeatMap]:

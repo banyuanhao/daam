@@ -49,11 +49,13 @@ class DiffusionHeatMapHooker(AggregateHooker):
                 data_dir=data_dir
             ) for idx, x in enumerate(self.locator.locate(pipeline.unet))
         ]
+        # print(len(modules))
 
         modules.append(PipelineHooker(pipeline, self))
 
         super().__init__(modules)
         self.pipe = pipeline
+        
 
     def time_callback(self, *args, **kwargs):
         self.time_idx += 1
@@ -65,7 +67,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
     def to_experiment(self, path, seed=None, id='.', subtype='.', **compute_kwargs):
         # type: (Union[Path, str], int, str, str, Dict[str, Any]) -> GenerationExperiment
         """Exports the last generation call to a serializable generation experiment."""
-
+        #print(self.last_prompt+'000000')
         return GenerationExperiment(
             self.last_image,
             self.compute_global_heat_map(**compute_kwargs).heat_maps,
@@ -76,6 +78,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
             path=path,
             tokenizer=self.pipe.tokenizer,
         )
+        
 
     def compute_global_heat_map(self, prompt=None, factors=None, head_idx=None, layer_idx=None, normalize=False):
         # type: (str, List[float], int, int, bool) -> GlobalHeatMap
@@ -93,14 +96,18 @@ class DiffusionHeatMapHooker(AggregateHooker):
             A heat map object for computing word-level heat maps.
         """
         heat_maps = self.all_heat_maps
+        
 
         if prompt is None:
             prompt = self.last_prompt
+            #print(self.last_prompt)
 
         if factors is None:
             factors = {0, 1, 2, 4, 8, 16, 32, 64}
         else:
             factors = set(factors)
+            
+        #print(heat_maps.shape)
 
         all_merges = []
         x = int(np.sqrt(self.latent_hw))
@@ -108,6 +115,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
         with auto_autocast(dtype=torch.float32):
             for (factor, layer, head), heat_map in heat_maps:
                 if factor in factors and (head_idx is None or head_idx == head) and (layer_idx is None or layer_idx == layer):
+                    #print(heat_map.shape)
                     heat_map = heat_map.unsqueeze(1)
                     # The clamping fixes undershoot.
                     all_merges.append(F.interpolate(heat_map, size=(x, x), mode='bicubic').clamp_(min=0))
@@ -120,12 +128,16 @@ class DiffusionHeatMapHooker(AggregateHooker):
                 else:
                     raise RuntimeError('No heat maps found. Did you forget to call `with trace(...)` during generation?')
 
+            #print(maps.shape)
             maps = maps.mean(0)[:, 0]
+            #print(maps.shape)
+            
             maps = maps[:len(self.pipe.tokenizer.tokenize(prompt)) + 2]  # 1 for SOS and 1 for padding
+            #print(maps.shape)
 
             if normalize:
                 maps = maps / (maps[1:-1].sum(0, keepdim=True) + 1e-6)  # drop out [SOS] and [PAD] for proper probabilities
-
+            #print(maps.shape)
         return GlobalHeatMap(self.pipe.tokenizer, prompt, maps)
 
 
@@ -149,7 +161,7 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
             last_prompt = prompt[0]
         else:
             last_prompt = prompt
-
+        #print(last_prompt)
         hk_self.heat_maps.clear()
         hk_self.parent_trace.last_prompt = last_prompt
         ret = hk_self.monkey_super('_encode_prompt', prompt, *args, **kwargs)
@@ -207,15 +219,22 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
         """
         h = w = int(math.sqrt(x.size(1)))
         maps = []
+        #print(x.shape)
         x = x.permute(2, 0, 1)
-
+        #print(x.shape)
         with auto_autocast(dtype=torch.float32):
             for map_ in x:
+                #print(map_.shape)
                 map_ = map_.view(map_.size(0), h, w)
+                #print(map_.shape)
                 map_ = map_[map_.size(0) // 2:]  # Filter out unconditional
+                #print(map_.shape)
                 maps.append(map_)
+                #import sys
+                #sys.exit(1)
 
         maps = torch.stack(maps, 0)  # shape: (tokens, heads, height, width)
+        #print(maps.shape)
         return maps.permute(1, 0, 2, 3).contiguous()  # shape: (heads, tokens, height, width)
 
     def _save_attn(self, attn_slice: torch.Tensor):
@@ -259,9 +278,11 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
         # compute shape factor
         factor = int(math.sqrt(self.latent_hw // attention_probs.shape[1]))
         self.trace._gen_idx += 1
+        # print(attention_probs.shape)
 
         # skip if too large
         if attention_probs.shape[-1] == self.context_size and factor != 8:
+            
             # shape: (batch_size, 64 // factor, 64 // factor, 77)
             maps = self._unravel_attn(attention_probs)
 
