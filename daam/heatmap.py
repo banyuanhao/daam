@@ -124,7 +124,7 @@ class GlobalHeatMap:
         #print(merge_idxs,word_idx)
         #print(self.heat_maps[merge_idxs].shape)
         #print(self.heat_maps[merge_idxs].mean(0).shape)
-        print(merge_idxs,word_idx)
+        #print(merge_idxs,word_idx)
         
         return WordHeatMap(self.heat_maps[merge_idxs].mean(0), word, word_idx)
 

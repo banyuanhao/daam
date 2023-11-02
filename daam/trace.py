@@ -96,6 +96,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
             A heat map object for computing word-level heat maps.
         """
         heat_maps = self.all_heat_maps
+        #print(len(heat_maps.ids_to_heatmaps))
         
 
         if prompt is None:
@@ -130,7 +131,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
 
             #print(maps.shape)
             maps = maps.mean(0)[:, 0]
-            #print(maps.shape)
+            
             
             maps = maps[:len(self.pipe.tokenizer.tokenize(prompt)) + 2]  # 1 for SOS and 1 for padding
             #print(maps.shape)
@@ -226,7 +227,7 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
             for map_ in x:
                 #print(map_.shape)
                 map_ = map_.view(map_.size(0), h, w)
-                #print(map_.shape)
+                #TODO: fix this
                 map_ = map_[map_.size(0) // 2:]  # Filter out unconditional
                 #print(map_.shape)
                 maps.append(map_)
@@ -252,8 +253,11 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
     ):
         """Capture attentions and aggregate them."""
         batch_size, sequence_length, _ = hidden_states.shape
+        #print(hidden_states.shape)
         attention_mask = attn.prepare_attention_mask(attention_mask, sequence_length, batch_size)
+        #print('hidden_states',hidden_states.shape)
         query = attn.to_q(hidden_states)
+        #print(query.shape)
 
         if encoder_hidden_states is None:
             encoder_hidden_states = hidden_states
@@ -261,13 +265,19 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
             encoder_hidden_states = attn.norm_cross(encoder_hidden_states)
 
         key = attn.to_k(encoder_hidden_states)
+        #print('key',key.shape)
         value = attn.to_v(encoder_hidden_states)
+        #print(value.shape)
 
         query = attn.head_to_batch_dim(query)
+        #print(query.shape)
         key = attn.head_to_batch_dim(key)
+        #print('key',key.shape)
         value = attn.head_to_batch_dim(value)
-
+        #print(value.shape)
         attention_probs = attn.get_attention_scores(query, key, attention_mask)
+        #print(attention_probs.shape)
+
 
         # DAAM save heads
         if self.save_heads:
@@ -284,8 +294,9 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
         if attention_probs.shape[-1] == self.context_size and factor != 8:
             
             # shape: (batch_size, 64 // factor, 64 // factor, 77)
+            #print(attention_probs.shape)
             maps = self._unravel_attn(attention_probs)
-
+            
             for head_idx, heatmap in enumerate(maps):
                 self.heat_maps.update(factor, self.layer_idx, head_idx, heatmap)
 
