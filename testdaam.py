@@ -8,9 +8,9 @@ device = 'cuda'
 pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True)
 pipe = pipe.to(device)
 
-prompt = 'A dog dog runs across the field'
-negative_prompt = 'A dog runs across the field'
-gen = set_seed(2)  # for reproducibility
+prompt = 'A dog runs across the field'
+negative_prompt = 'coarse, rough, and not fine'
+gen = set_seed(100)  # for reproducibility
 
 with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
     with trace(pipe) as tc:

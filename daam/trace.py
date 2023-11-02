@@ -129,6 +129,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
                 else:
                     raise RuntimeError('No heat maps found. Did you forget to call `with trace(...)` during generation?')
 
+            # TODO: fix this
             #print(maps.shape)
             maps = maps.mean(0)[:, 0]
             
@@ -156,6 +157,8 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
         return image, has_nsfw
 
     def _hooked_encode_prompt(hk_self, _: StableDiffusionPipeline, prompt: Union[str, List[str]], *args, **kwargs):
+        #print(prompt)
+        # TODO: fix this
         if not isinstance(prompt, str) and len(prompt) > 1:
             raise ValueError('Only single prompt generation is supported for heat map computation.')
         elif not isinstance(prompt, str):
@@ -166,7 +169,7 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
         hk_self.heat_maps.clear()
         hk_self.parent_trace.last_prompt = last_prompt
         ret = hk_self.monkey_super('_encode_prompt', prompt, *args, **kwargs)
-
+        print(ret.shape)
         return ret
 
     def _hook_impl(self):
@@ -227,8 +230,23 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
             for map_ in x:
                 #print(map_.shape)
                 map_ = map_.view(map_.size(0), h, w)
+                
                 #TODO: fix this
-                map_ = map_[map_.size(0) // 2:]  # Filter out unconditional
+                size = map_.size(0)
+                # 计算中间索引
+                mid = size // 2
+
+                # 利用索引分割张量为两半
+                indices = torch.arange(size).to(map_.device)
+                indices = torch.cat((indices[mid:], indices[:mid]))
+                
+                # 根据指定的维度进行索引，以重新排序各部分
+                map_.index_select(0, indices)
+                
+                # original code
+                # map_ = map_[map_.size(0) // 2:]  # Filter out unconditional
+                
+                # end TODO
                 #print(map_.shape)
                 maps.append(map_)
                 #import sys
@@ -296,7 +314,7 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
             # shape: (batch_size, 64 // factor, 64 // factor, 77)
             #print(attention_probs.shape)
             maps = self._unravel_attn(attention_probs)
-            
+            #print(maps.shape)
             for head_idx, heatmap in enumerate(maps):
                 self.heat_maps.update(factor, self.layer_idx, head_idx, heatmap)
 
@@ -307,6 +325,9 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
         hidden_states = attn.to_out[0](hidden_states)
         # dropout
         hidden_states = attn.to_out[1](hidden_states)
+        # print(hidden_states.shape)
+        # import sys
+        # sys.exit(1)
 
         return hidden_states
 
