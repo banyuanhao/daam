@@ -10,7 +10,14 @@ parser = argparse.ArgumentParser(description='Diffusion')
 parser.add_argument('--prompt', type=str, required=True)
 parser.add_argument('--negative_prompt', type=str, default='')
 parser.add_argument('--seed', type=int, default=100)
-parser.add_argument('--words', type=str, action='append')
+
+parser.add_argument('--head_id', type=int, nargs='+', default=None)
+parser.add_argument('--layer_id', type=int, nargs='+', default=None)
+parser.add_argument('--time_id', type=int, nargs='+', default=None)
+parser.add_argument('--factors', type=int, nargs='+', default=None)
+
+parser.add_argument('--words', metavar='S', type=str, nargs='+',
+                    help='a string for the string list')
 
 args = parser.parse_args()
 
@@ -25,7 +32,15 @@ prompt = args.prompt
 negative_prompt = args.negative_prompt
 seed = set_seed(args.seed)
 words = args.words if args.words is not None else []
-words = [word.replace('_', ' ') for word in words]
+
+layer_id = args.layer_id
+head_id = args.head_id
+time_id = args.time_id
+factors = args.factors
+
+
+
+
 #print(type(prompt),type(negative_prompt),type(words),type(seed))
 
 folder_path = Path('experiment')
@@ -48,7 +63,7 @@ with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
         else:
             out = pipe(prompt, num_inference_steps=50, generator=seed)
         
-        heat_map = tc.compute_global_heat_map()
+        heat_map = tc.compute_global_heat_map(factors=factors, head_idx=head_id, layer_idx=layer_id, time_idx=time_id)
 
 #         plt.clf()
 #         plt.rcParams.update({'font.size': 16})

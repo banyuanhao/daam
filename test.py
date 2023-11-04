@@ -1,23 +1,20 @@
-from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
-import torch
-model_id = "stabilityai/stable-diffusion-2"
+import argparse
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-# Use the Euler scheduler here instead
-scheduler = EulerDiscreteScheduler.from_pretrained(
-    model_id, subfolder="scheduler")
-pipe = StableDiffusionPipeline.from_pretrained(
-    model_id, scheduler=scheduler, torch_dtype=torch.float16)
-pipe = pipe.to(device)
+def parse_arguments():
+    # 创建 ArgumentParser 对象
+    parser = argparse.ArgumentParser(description='Process a list of integers.')
 
-prompt = "a photo of an astronaut riding a horse on mars"
-negative_prompt = "blurry, dark photo, blue"
-steps = 25
-scale = 9
-num_images_per_prompt = 1
-seed = torch.randint(0, 1000000, (1,)).item()
-generator = torch.Generator(device=device).manual_seed(seed)
-image = pipe(prompt, negative_prompt=negative_prompt, width=768, height=768, num_inference_steps=steps,
-             guidance_scale=scale, num_images_per_prompt=num_images_per_prompt, generator=generator).images[0]
+    # 添加参数配置，使用 '--integers' 作为可选参数，而不是位置参数
+    parser.add_argument('--integers', type=int, nargs='+',
+                        help='an integer for the accumulator', required=True)
+    
+    # 解析传入的参数
+    args = parser.parse_args()
+    return args.integers
 
-image.save("astronaut_rides_horse.png")
+if __name__ == "__main__":
+    # 解析命令行输入的数字列表
+    numbers = parse_arguments()
+    
+    # 打印数字列表
+    print("Received list of numbers:", numbers)

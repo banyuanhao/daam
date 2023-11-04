@@ -218,7 +218,7 @@ class GlobalHeatMap:
                     pass
 
 
-RawHeatMapKey = Tuple[int, int, int]  # factor, layer, head
+RawHeatMapKey = Tuple[int, int, int, int]  # factor, layer, head, time
 
 
 class RawHeatMapCollection:
@@ -226,9 +226,10 @@ class RawHeatMapCollection:
         self.ids_to_heatmaps: Dict[RawHeatMapKey, torch.Tensor] = defaultdict(lambda: 0.0)
         self.ids_to_num_maps: Dict[RawHeatMapKey, int] = defaultdict(lambda: 0)
 
-    def update(self, factor: int, layer_idx: int, head_idx: int, heatmap: torch.Tensor):
+    def update(self, factor: int, layer_idx: int, head_idx: int, time_idx: int, heatmap: torch.Tensor):
+        #print(time_idx)
         with auto_autocast(dtype=torch.float32):
-            key = (factor, layer_idx, head_idx)
+            key = (factor, layer_idx, head_idx, time_idx)
             self.ids_to_heatmaps[key] = self.ids_to_heatmaps[key] + heatmap
 
     def factors(self) -> Set[int]:
@@ -239,6 +240,9 @@ class RawHeatMapCollection:
 
     def heads(self) -> Set[int]:
         return set(key[2] for key in self.ids_to_heatmaps.keys())
+    
+    def times(self) -> Set[int]:
+        return set(key[3] for key in self.ids_to_heatmaps.keys())
 
     def __iter__(self):
         return iter(self.ids_to_heatmaps.items())

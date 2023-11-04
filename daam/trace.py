@@ -84,7 +84,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
         
 
     def compute_global_heat_map(self, prompt=None, factors=None, head_idx=None, layer_idx=None, normalize=False, negative_prompt=None, time_idx=None):
-        # type: (str, List[float], int, int, bool, str, int) -> GlobalHeatMap
+        # type: (str, List[float], List[int], List[int], bool, str, List[int]) -> GlobalHeatMap
         """
         Compute the global heat map for the given prompt, aggregating across time (inference steps) and space (different
         spatial transformer block heat maps).
@@ -125,15 +125,17 @@ class DiffusionHeatMapHooker(AggregateHooker):
         x = int(np.sqrt(self.latent_hw))
 
         with auto_autocast(dtype=torch.float32):
-            for (factor, layer, head), heat_map in heat_maps:
-                if factor in factors and (head_idx is None or head_idx == head) and (layer_idx is None or layer_idx == layer):
+            for (factor, layer, head, time), heat_map in heat_maps:
+                #print(type(heat_maps))
+                #print(factor, layer, head, time, 'heat_map',heat_map)
+                if factor in factors and (head_idx is None or head in head_idx) and (layer_idx is None or layer in layer_idx) and (time_idx is None or time in time_idx):
                     #print(heat_map.shape)
                     heat_map = heat_map.unsqueeze(1)
                     # The clamping fixes undershoot.
                     all_merges.append(F.interpolate(heat_map, size=(x, x), mode='bicubic').clamp_(min=0))
             
-            for (factor, layer, head), negative_heat_map in negative_heat_maps:
-                if factor in factors and (head_idx is None or head_idx == head) and (layer_idx is None or layer_idx == layer):
+            for (factor, layer, head, time), negative_heat_map in negative_heat_maps:
+                if factor in factors and (head_idx is None or head in head_idx) and (layer_idx is None or layer in layer_idx) and (time_idx is None or time in time_idx):
                     #print(heat_map.shape)
                     negative_heat_map = negative_heat_map.unsqueeze(1)
                     # The clamping fixes undershoot.
@@ -191,7 +193,7 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
             
         # TODO: fix this 
         if args[-1] is not None:
-            print(args[-1])
+            #print(args[-1])
             if not isinstance(args[-1], str) and len(args[-1]) > 1:
                 raise ValueError('Only single prompt generation is supported for heat map computation.')
             elif not isinstance(args[-1], str):
@@ -348,8 +350,7 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
 
         # compute shape factor
         factor = int(math.sqrt(self.latent_hw // attention_probs.shape[1]))
-        self.trace._gen_idx += 1
-        print(self.trace._gen_idx)
+        #print(self.trace._gen_idx//15)
         # print(attention_probs.shape)
 
         # skip if too large
@@ -361,14 +362,14 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
             if maps.shape != negative_maps.shape:
                 raise ValueError('The shape of maps and negative_maps are not the same.')
             # print(maps.shape)
-            # import sys
-            # sys.exit(1)
-            print('factor')
+            #print('factor')
+            
+            # TODO
             for head_idx, heatmap in enumerate(maps):
-                print('hit')
-                self.heat_maps.update(factor, self.layer_idx, head_idx, heatmap)
+                #print('hit')
+                self.heat_maps.update(factor, self.layer_idx, head_idx, self.trace._gen_idx//15, heatmap)
             for head_idx, negative_heatmap in enumerate(negative_maps):
-                self.negative_heat_maps.update(factor, self.layer_idx, head_idx, negative_heatmap)
+                self.negative_heat_maps.update(factor, self.layer_idx, head_idx, self.trace._gen_idx//15, negative_heatmap)
 
         hidden_states = torch.bmm(attention_probs, value)
         hidden_states = attn.batch_to_head_dim(hidden_states)
@@ -380,6 +381,8 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
         # print(hidden_states.shape)
         # import sys
         # sys.exit(1)
+        
+        self.trace._gen_idx += 1
 
         return hidden_states
 
