@@ -53,6 +53,61 @@ def plot_overlay_heat_map(im, heat_map, word=None, out_file=None, crop=None, col
             plt.savefig(out_file)
 
 
+
+def plot_overlay_heat_map_with_raw(im, heat_map, word=None, out_file=None, crop=None, color_normalize=True, ax=None):
+    # type: (PIL.Image.Image | np.ndarray, torch.Tensor, str, Path, int, bool, plt.Axes | None) -> None
+    if ax is None:
+        plt.clf()
+        plt.rcParams.update({'font.size': 16})
+        fig, axs = plt.subplots(1, 2, figsize=(10, 5))  # Create 1 row, 2 columns of subplots
+    else:
+        # If ax is provided, we assume it is a list or tuple of Axes objects
+        if not isinstance(ax, (list, tuple)) or len(ax) != 2:
+            raise ValueError("ax must be a list or tuple of two matplotlib Axes if provided.")
+        axs = ax
+
+    # Remove x and y axis for all subplots
+    for ax in axs:
+        ax.axis('off')
+
+    # Original Image
+    axs[0].imshow(np.array(im))
+
+    with torch.no_grad():  # Wrap in no_grad context if not using auto_autocast
+        # Heatmap overlay processing
+        im = np.array(im)
+
+        if crop is not None:
+            heat_map = heat_map.squeeze()[crop:-crop, crop:-crop]
+            im = im[crop:-crop, crop:-crop]
+
+        if color_normalize:
+            heatmap_normalized = heat_map.squeeze().cpu().numpy()
+        else:
+            heatmap_normalized = heat_map.clamp_(min=0, max=1).squeeze().cpu().numpy()
+
+        # Display heatmap
+        axs[1].imshow(heatmap_normalized, cmap='jet', alpha=0.5)  # Set alpha for transparency
+
+        im = torch.from_numpy(im).float() / 255
+        im = torch.cat((im, (1 - heat_map.unsqueeze(-1))), dim=-1)
+
+        # Display image with heatmap overlay
+        axs[1].imshow(im.numpy())
+
+    # Titles
+    if word is not None:
+        axs[0].set_title(f"Original Image: {word}")
+        axs[1].set_title(f"Heatmap Overlay: {word}")
+
+    # If out_file is provided, save the figure to the file
+    if out_file is not None:
+        print(out_file)
+        plt.savefig(out_file, bbox_inches='tight')
+    plt.show()  # Display the figure
+
+
+
 class WordHeatMap:
     def __init__(self, heatmap: torch.Tensor, word: str = None, word_idx: int = None):
         self.word = word
@@ -73,7 +128,17 @@ class WordHeatMap:
             color_normalize=color_normalize,
             ax=ax
         )
-
+    def plot_overlay_with_raw(self, image, out_file=None, color_normalize=True, ax=None, **expand_kwargs):
+        # type: (PIL.Image.Image | np.ndarray, Path, bool, plt.Axes, Dict[str, Any]) -> None
+        plot_overlay_heat_map_with_raw(
+            image,
+            self.expand_as(image, **expand_kwargs),
+            word=self.word,
+            out_file=out_file,
+            color_normalize=color_normalize,
+            ax=ax
+        )
+        
     def expand_as(self, image, absolute=False, threshold=None, plot=False, **plot_kwargs):
         # type: (PIL.Image.Image, bool, float, bool, Dict[str, Any]) -> torch.Tensor
         im = self.heatmap.unsqueeze(0).unsqueeze(0)
@@ -112,21 +177,26 @@ class ParsedHeatMap:
 
 
 class GlobalHeatMap:
-    def __init__(self, tokenizer: Any, prompt: str, heat_maps: torch.Tensor):
+    def __init__(self, tokenizer: Any, prompt: str, heat_maps: torch.Tensor, negative_prompt: str, negative_heat_maps: torch.Tensor):
         self.tokenizer = tokenizer
         self.heat_maps = heat_maps
+        self.negative_heat_maps = negative_heat_maps
+        self.negative_prompt = negative_prompt
         self.prompt = prompt
         self.compute_word_heat_map = lru_cache(maxsize=50)(self.compute_word_heat_map)
 
     def compute_word_heat_map(self, word: str, word_idx: int = None, offset_idx: int = 0) -> WordHeatMap:
         #print(word,word_idx,offset_idx)
+        negative_merge_idxs, negative_word_idx = compute_token_merge_indices(self.tokenizer, self.negative_prompt, word, word_idx, offset_idx)
         merge_idxs, word_idx = compute_token_merge_indices(self.tokenizer, self.prompt, word, word_idx, offset_idx)
-        #print(merge_idxs,word_idx)
-        #print(self.heat_maps[merge_idxs].shape)
-        #print(self.heat_maps[merge_idxs].mean(0).shape)
-        #print(merge_idxs,word_idx)
-        
-        return WordHeatMap(self.heat_maps[merge_idxs].mean(0), word, word_idx)
+        if negative_merge_idxs:
+            #print("negative")
+            return WordHeatMap(self.negative_heat_maps[negative_merge_idxs].mean(0), word, word_idx)
+        elif merge_idxs:
+            #print('positive')
+            return WordHeatMap(self.heat_maps[merge_idxs].mean(0), word, word_idx)
+        else:
+            raise ValueError(f'Word {word} not found in prompt')
 
     def parsed_heat_maps(self) -> Iterable[ParsedHeatMap]:
         for token in cached_nlp(self.prompt):

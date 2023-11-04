@@ -1,0 +1,330 @@
+experiment: 1
+prompt: emma watson as nature magic celestial, top down pose, long hair, soft pink and white transparent cloth, space, D&D, shiny background, intricate, elegant, highly detailed, digital painting, artstation, concept art, smooth, sharp focus, illustration, artgerm, bouguereau
+negative_prompt: windy
+words: ['emma', 'watson', 'hair', 'windy']
+seed: 200
+
+experiment: 2
+prompt: emma watson as nature magic celestial, top down pose, long hair, soft pink and white transparent cloth, space, D&D, shiny background, intricate, elegant, highly detailed, digital painting, artstation, concept art, smooth, sharp focus, illustration, artgerm, bouguereau
+negative_prompt: windy, ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face
+words: ['emma', 'watson', 'hair', 'windy', 'ugly']
+seed: 200
+
+experiment: 3
+prompt: emma watson as nature magic celestial, top down pose, long hair, soft pink and white transparent cloth, space, D&D, shiny background, intricate, elegant, highly detailed, digital painting, artstation, concept art, smooth, sharp focus, illustration, artgerm, bouguereau
+negative_prompt: ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face
+words: ['emma', 'watson', 'hair', 'ugly']
+seed: 200
+
+experiment: 4
+prompt: Present Trump giving a talk
+negative_prompt: ugly
+words: ['Trump', 'ugly']
+seed: 200
+
+experiment: 5
+prompt: Present Trump giving a talk
+negative_prompt: ugly
+words: ['Trump', 'ugly']
+seed: 150
+
+experiment: 6
+prompt: A man siting on the bench in a park
+negative_prompt: ugly
+words: ['man', 'ugly']
+seed: 150
+
+experiment: 7
+prompt: A man siting on the bench in a park
+negative_prompt: ugly
+words: ['man', 'ugly']
+seed: 150
+
+experiment: 8
+prompt: A man siting on the bench in a park
+negative_prompt: ugly
+words: ['man', 'ugly']
+seed: 92150
+
+experiment: 9
+prompt: A man siting on the bench in a park
+negative_prompt: ugly
+words: ['man', 'ugly']
+seed: 10
+
+experiment: 10
+prompt: A man siting on the bench in a park
+negative_prompt: ugly, missing legs
+words: ['man', 'ugly', 'missing legs']
+seed: 92150
+
+experiment: 11
+prompt: A man siting on the bench in a park
+negative_prompt: ugly, missing legs
+words: ['man', 'ugly', 'missing', 'legs', 'missing legs']
+seed: 92150
+
+experiment: 12
+prompt: A man siting on the bench in a park, facing to the audience
+negative_prompt: ugly, missing legs
+words: ['man', 'ugly', 'missing', 'legs', 'missing legs']
+seed: 92150
+
+experiment: 13
+prompt: A man siting on the bench in a park, facing to the audience
+negative_prompt: ugly, missing legs
+words: ['man', 'ugly', 'missing legs']
+seed: 92150
+
+experiment: 14
+prompt: A man walking around her neighborhood, highlight hair, detailed eyes, sharp focus, young face, perfect symmetric face, pupil reflecting surroundings, realistic skin, soft healthy skin
+negative_prompt: ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face
+words: ['man', 'ugly', 'poorly drawn face']
+seed: 92150
+
+experiment: 15
+prompt: A man walking around her neighborhood, highlight hair, detailed eyes, sharp focus, young face, perfect symmetric face, pupil reflecting surroundings, realistic skin, soft healthy skin
+negative_prompt: ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face
+words: ['man', 'ugly', 'poorly drawn face', 'poorly', 'drawn', 'face']
+seed: 92150
+
+experiment: 16
+prompt: A man walking around her neighborhood, highlight hair, detailed eyes, sharp focus, young face, perfect symmetric face, pupil reflecting surroundings, realistic skin, soft healthy skin
+negative_prompt: ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face
+words: ['man', 'ugly', 'poorly drawn face', 'poorly', 'drawn', 'face']
+seed: 2345
+
+experiment: 17
+prompt: A man walking around her neighborhood, highlight hair, detailed eyes, sharp focus, young face, perfect symmetric face, pupil reflecting surroundings, realistic skin, soft healthy skin
+negative_prompt: ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face
+words: ['man', 'ugly', 'poorly drawn face', 'distorted', 'drawn', 'face']
+seed: 2345
+
+experiment: 18
+prompt: impressionist oil painting of a young man standing right next to a red tesla roadster by john sargent
+negative_prompt: ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face
+words: ['man', 'ugly', 'poorly drawn face', 'distorted', 'drawn', 'face']
+seed: 2345
+
+experiment: 19
+prompt: a young man standing right next to a red tesla roadster
+negative_prompt: ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face
+words: ['man', 'ugly', 'poorly drawn face', 'distorted', 'drawn', 'face']
+seed: 2345
+
+experiment: 20
+prompt: a young man standing right next to a red tesla roadster
+negative_prompt: ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face
+words: ['man', 'ugly', 'poorly drawn face', 'distorted', 'drawn', 'face']
+seed: 31455
+
+experiment: 21
+prompt: A dog running across the field.
+negative_prompt: grass
+words: ['dog', 'grass']
+seed: 31455
+
+experiment: 22
+prompt: A dog running across the field.
+negative_prompt: grass
+words: ['dog', 'grass']
+seed: 3145
+
+experiment: 23
+prompt: A dog running across the yard
+negative_prompt: 
+words: ['dog']
+seed: 3145
+
+experiment: 24
+prompt: A dog running across the yard without grass
+negative_prompt: 
+words: ['dog']
+seed: 3145
+
+experiment: 25
+prompt: A dog running across the yard
+negative_prompt: grass
+words: ['dog', 'grass']
+seed: 3145
+
+experiment: 26
+prompt: A dog running across the yard
+negative_prompt: grass
+words: ['dog', 'grass']
+seed: 2000
+
+experiment: 27
+prompt: A dog running across the yard
+negative_prompt: 
+words: ['dog']
+seed: 2000
+
+experiment: 28
+prompt: a handsome young man standing right next to a red tesla roadster
+negative_prompt: ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face
+words: ['man', 'ugly', 'handsome']
+seed: 31455
+
+experiment: 29
+prompt: a handsome young man standing right next to a red tesla roadster
+negative_prompt: ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face
+words: ['man', 'ugly', 'handsome']
+seed: 2345
+
+experiment: 30
+prompt: A dog running across the yard with grass
+negative_prompt: 
+words: ['dog', 'grass']
+seed: 2000
+
+experiment: 31
+prompt: A dog running across the yard without grass
+negative_prompt: 
+words: ['dog', 'grass', 'without']
+seed: 2000
+
+experiment: 32
+prompt: A dog running across the yard
+negative_prompt: grass
+words: ['dog', 'grass']
+seed: 2000
+
+experiment: 33
+prompt: A dog running across the yard
+negative_prompt: without grass
+words: ['dog', 'grass', 'without']
+seed: 2000
+
+experiment: 34
+prompt: A dog running across the yard with grass
+negative_prompt: 
+words: ['dog', 'grass']
+seed: 1984
+
+experiment: 35
+prompt: A dog running across the yard without grass
+negative_prompt: 
+words: ['dog', 'grass', 'without']
+seed: 1984
+
+experiment: 36
+prompt: A dog running across the yard
+negative_prompt: grass
+words: ['dog', 'grass']
+seed: 1984
+
+experiment: 37
+prompt: A dog running across the yard
+negative_prompt: without grass
+words: ['dog', 'grass', 'without']
+seed: 1984
+
+experiment: 38
+prompt: A dog running across the yard with grass
+negative_prompt: 
+words: ['dog', 'grass']
+seed: 19845
+
+experiment: 39
+prompt: A dog running across the yard without grass
+negative_prompt: 
+words: ['dog', 'grass', 'without']
+seed: 19845
+
+experiment: 40
+prompt: A dog running across the yard
+negative_prompt: grass
+words: ['dog', 'grass']
+seed: 19845
+
+experiment: 41
+prompt: A dog running across the yard
+negative_prompt: without grass
+words: ['dog', 'grass', 'without']
+seed: 19845
+
+experiment: 42
+prompt: A dog running across the yard with grass
+negative_prompt: 
+words: ['dog', 'grass']
+seed: 1845
+
+experiment: 43
+prompt: A dog running across the yard without grass
+negative_prompt: 
+words: ['dog', 'grass', 'without']
+seed: 1845
+
+experiment: 44
+prompt: A dog running across the yard
+negative_prompt: grass
+words: ['dog', 'grass']
+seed: 1845
+
+experiment: 45
+prompt: A dog running across the yard
+negative_prompt: without grass
+words: ['dog', 'grass', 'without']
+seed: 1845
+
+experiment: 46
+prompt: a handsome young man running in a park
+negative_prompt: ugly, missing legs
+words: ['man', 'ugly', 'missing legs', 'missing', 'legs']
+seed: 2345
+
+experiment: 47
+prompt: a handsome young man running in a park
+negative_prompt: ugly, missing legs
+words: ['man', 'ugly', 'missing legs', 'missing', 'legs']
+seed: 30254
+
+experiment: 48
+prompt: a handsome young man running in a park
+negative_prompt: ugly, missing legs
+words: ['man', 'ugly', 'missing legs', 'missing', 'legs']
+seed: 33
+
+experiment: 49
+prompt: a handsome young man running in a park
+negative_prompt: ugly, missing legs
+words: ['man', 'ugly', 'missing legs', 'missing', 'legs']
+seed: 45678
+
+experiment: 50
+prompt: a handsome young man running in a park
+negative_prompt: ugly, missing legs
+words: ['man', 'ugly', 'missing legs', 'missing', 'legs']
+seed: 4588
+
+experiment: 51
+prompt: a young man standing right next to a red tesla roadster
+negative_prompt: ugly
+words: ['ugly', 'man']
+seed: 2345
+
+experiment: 52
+prompt: a young man standing right next to a red tesla roadster
+negative_prompt: handsome
+words: ['handsome', 'man']
+seed: 2345
+
+experiment: 53
+prompt: a young man standing right next to a red tesla roadster
+negative_prompt: handsome guy
+words: ['handsome guy']
+seed: 2345
+
+experiment: 54
+prompt: a young man standing right next to a red tesla roadster
+negative_prompt: ugly guy
+words: ['ugly guy']
+seed: 2345
+
+experiment: 55
+prompt: a young man standing right next to a red tesla roadster
+negative_prompt: handsome guy
+words: ['handsome guy']
+seed: 2345
+

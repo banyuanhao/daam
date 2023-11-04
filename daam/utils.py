@@ -79,12 +79,13 @@ def compute_token_merge_indices(tokenizer, prompt: str, word: str, word_idx: int
         start_indices = [x + offset_idx for x in range(len(tokens)) if tokens[x:x + len(search_tokens)] == search_tokens]
         for indice in start_indices:
             merge_idxs += [i + indice for i in range(0, len(search_tokens))]
-        if not merge_idxs:
-            raise ValueError(f'Search word {word} not found in prompt!')
+        
+        # if not merge_idxs:
+        #     raise ValueError(f'Search word {word} not found in prompt!')
     else:
         merge_idxs.append(word_idx)
 
-    return [x + 1 for x in merge_idxs], word_idx  # Offset by 1.
+    return [x + 1 for x in merge_idxs] if not merge_idxs else merge_idxs, word_idx  # Offset by 1.
 
 
 nlp = None
