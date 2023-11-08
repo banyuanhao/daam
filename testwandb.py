@@ -1,29 +1,32 @@
+# Import the W&B Python Library and log into W&B
 import wandb
-import random
 
-# start a new wandb run to track this script
-wandb.init(
-    # set the wandb project where this run will be logged
-    project="my-awesome-project",
-    
-    # track hyperparameters and run metadata
-    config={
-    "learning_rate": 0.02,
-    "architecture": "CNN",
-    "dataset": "CIFAR-100",
-    "epochs": 10,
-    }
-)
+wandb.login()
 
-# simulate training
-epochs = 10
-offset = random.random() / 5
-for epoch in range(2, epochs):
-    acc = 1 - 2 ** -epoch - random.random() / epoch - offset
-    loss = 2 ** -epoch + random.random() / epoch + offset
-    
-    # log metrics to wandb
-    wandb.log({"acc": acc, "loss": loss})
-    
-# [optional] finish the wandb run, necessary in notebooks
-wandb.finish()
+
+# 1: Define objective/training function
+def objective(config):
+    score = config.x**3 + config.y
+    return score
+
+
+def main():
+    wandb.init(project="my-first-sweep")
+    score = objective(wandb.config)
+    wandb.log({"score": score})
+
+
+# 2: Define the search space
+sweep_configuration = {
+    "method": "random",
+    "metric": {"goal": "minimize", "name": "score"},
+    "parameters": {
+        "x": {"max": 0.1, "min": 0.01},
+        "y": {"values": [1, 3, 7]},
+    },
+}
+
+# 3: Start the sweep
+sweep_id = wandb.sweep(sweep=sweep_configuration, project="my-first-sweep")
+
+wandb.agent(sweep_id, function=main, count=10)
