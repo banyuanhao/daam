@@ -10,7 +10,7 @@ import random
 parser = argparse.ArgumentParser(description='Diffusion')
 parser.add_argument('--prompt', type=str, required=True)
 parser.add_argument('--negative_prompt', type=str, default='')
-parser.add_argument('--seed', type=int, default=0)
+parser.add_argument('--seed', type=int,nargs='+', default=[0])
 parser.add_argument('--head_id', type=int, nargs='+', default=None)
 parser.add_argument('--layer_id', type=int, nargs='+', default=None)
 parser.add_argument('--time_id', type=int, nargs='+', default=None)
@@ -20,7 +20,7 @@ parser.add_argument('--note', type=str, default='negative prompt')
 parser.add_argument('--group', type=str, required=True)
 parser.add_argument('--words', metavar='S', type=str, nargs='+',
                     help='a string for the string list')
-parser.add_argument('--tag', metavar='S', type=str, nargs='+',default='negative prompt')
+parser.add_argument('--tags', metavar='S', type=str, nargs='+',default='negative prompt')
 parser.add_argument('--steps', type=int, default=30)
 parser.add_argument('--wandb',action='store_true',help='use wandb')
 args = parser.parse_args()
@@ -34,12 +34,12 @@ pipe = pipe.to(device)
 
 prompt = args.prompt
 negative_prompt = args.negative_prompt
-seeds = [args.seed] if args.seed != 0 else [random.randint(1, 10000000) for _ in range(5)]
+seeds = args.seed if args.seed[0] != 0 else [random.randint(1, 10000000) for _ in range(5)]
 steps = args.steps
 
 words = args.words if args.words is not None else []
 words = [word.replace('_', ' ') for word in words]
-tag = args.tag
+tags = args.tags
 layer_id = args.layer_id
 factors = args.factors
 time_id = args.time_id
@@ -56,7 +56,7 @@ if args.wandb:
                     "time_id": time_id,
                     "head_id": head_id,
                     "steps": steps,
-                    "tag": tag
+                    "tags": tags
                     }
     run = wandb.init(
         project=args.project,

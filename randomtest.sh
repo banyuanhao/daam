@@ -1,0 +1,1 @@
+python scripts/daamwandb.py --prompt "infinity pool" --negative_prompt ugly tiling blurry --words infinity pool ugly tiling blurry --group "random testing" --seed 56165 35165 135924 12384 12948 --wandb
