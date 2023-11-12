@@ -1,6 +1,5 @@
-import random
-
-# Generate 20 random integers within a range, for example between 1 and 100
-random_numbers = [random.randint(1, 900000) for _ in range(20)]
-
-print(random_numbers)
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+ 
+str = "lake, trees mountain, buildings, roads, vehicles";
+print(str.split(', '));       # 以空格为分隔符，包含 \n

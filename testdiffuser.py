@@ -21,7 +21,7 @@ vae.to(torch_device)
 text_encoder.to(torch_device)
 unet.to(torch_device)
 
-prompt = ["a photograph of an astronaut riding a horse"]
+prompt = ["A poster for the Fluorescent Night Run event."]
 height = 512  # default height of Stable Diffusion
 width = 512  # default width of Stable Diffusion
 num_inference_steps = 25  # Number of denoising steps
