@@ -1,0 +1,4 @@
+export CUDA_VISIBLE_DEVICES=3
+# python scripts/daamwandb.py --prompt "In a beach area, visitors are sunbathing and playing volleyball" --words "beach, volleyball" --group removing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+# python scripts/daamwandb.py --prompt "Portrait photo of a man" --words "man" --group removing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+python scripts/daamwandb.py --prompt "A lawn in a courtyard." --words "lawn" --group removing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb

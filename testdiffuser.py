@@ -21,10 +21,10 @@ vae.to(torch_device)
 text_encoder.to(torch_device)
 unet.to(torch_device)
 
-prompt = ["A poster for the Fluorescent Night Run event."]
+prompt = ["a green banana on the table"]
 height = 512  # default height of Stable Diffusion
 width = 512  # default width of Stable Diffusion
-num_inference_steps = 25  # Number of denoising steps
+num_inference_steps = 50  # Number of denoising steps
 guidance_scale = 7.5  # Scale for classifier-free guidance
 generator = torch.manual_seed(0)  # Seed generator to create the inital latent noise
 

@@ -85,7 +85,7 @@ def compute_token_merge_indices(tokenizer, prompt: str, word: str, word_idx: int
     else:
         merge_idxs.append(word_idx)
 
-    return [x + 1 for x in merge_idxs] if not merge_idxs else merge_idxs, word_idx  # Offset by 1.
+    return [x + 1 for x in merge_idxs], word_idx  # Offset by 1.
 
 
 nlp = None

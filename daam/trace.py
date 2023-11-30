@@ -155,7 +155,6 @@ class DiffusionHeatMapHooker(AggregateHooker):
             maps = maps.mean(0)[:, 0]
             negative_maps = negative_maps.mean(0)[:, 0]
             
-            
             maps = maps[:len(self.pipe.tokenizer.tokenize(prompt)) + 2]  # 1 for SOS and 1 for padding
             negative_maps = negative_maps[:len(self.pipe.tokenizer.tokenize(negative_prompt)) + 2]
             #print(maps.shape)

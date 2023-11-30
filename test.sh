@@ -1,178 +1,179 @@
-# python scripts/daamwandb.py --prompt "reflective golden trophy sitting on a cluttered office desk, surrounded by papers and books." --words trophy reflective --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "reflective golden trophy sitting on a cluttered office desk, surrounded by papers and books." --words "trophy, reflective" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "soft, plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --words teddy_bear soft --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "soft, plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --words "teddy bear soft" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "sharp-edged, modern glass sculpture displayed in a traditional library with rows of classic books." --words sculpture sharp --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "sharp-edged, modern glass sculpture displayed in a traditional library with rows of classic books." --words "sculpture, sharp" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "bright, crisp lcd screen of a laptop in a dimly lit coffee shop, customers in the background." --words lcd_screen bright --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "bright, crisp lcd screen of a laptop in a dimly lit coffee shop, customers in the background." --words "lcd screen, bright" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "smooth, marble chess piece on a wooden chessboard, hands of players in the background." --words chess_piece smooth --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "smooth, marble chess piece on a wooden chessboard, hands of players in the background." --words "chess piece, smooth" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "glossy, red apple in a rustic, country-style kitchen with matte surfaces and vintage utensils." --words apple glossy --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "glossy, red apple in a rustic, country-style kitchen with matte surfaces and vintage utensils." --words "apple, glossy" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "silky, white wedding dress hanging against a brick wall, with soft lights creating ambiance." --words wedding_dress silky --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "silky, white wedding dress hanging against a brick wall, with soft lights creating ambiance." --words "wedding dress, silky" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "wet, shiny raincoat drying in an old, dusty entryway with peeling paint on the walls." --words raincoat wet --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "wet, shiny raincoat drying in an old, dusty entryway with peeling paint on the walls." --words "raincoat, wet" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "cold, frosty beer mug on a warm, sunny beach bar with sand and palm trees." --words beer_mug cold --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "cold, frosty beer mug on a warm, sunny beach bar with sand and palm trees." --words "beer mug, cold" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "vibrant, blooming rose in a monochrome grayscale room, devoid of color except for the flower." --words rose vibrant --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-
-# python scripts/daamwandb.py --prompt "reflective golden trophy sitting on a cluttered office desk, surrounded by papers and books." --negative_prompt dull --words trophy reflective dull --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "soft, plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --negative_prompt rough --words teddy_bear soft rough --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "sharp-edged, modern glass sculpture displayed in a traditional library with rows of classic books." --negative_prompt blunt --words sculpture sharp blunt --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "bright, crisp lcd screen of a laptop in a dimly lit coffee shop, customers in the background." --negative_prompt faded --words lcd_screen bright faded --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "smooth, marble chess piece on a wooden chessboard, hands of players in the background." --negative_prompt textured --words chess_piece smooth textured --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "glossy, red apple in a rustic, country-style kitchen with matte surfaces and vintage utensils." --negative_prompt matte --words apple glossy matte --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "silky, white wedding dress hanging against a brick wall, with soft lights creating ambiance." --negative_prompt coarse --words wedding_dress silky coarse --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "wet, shiny raincoat drying in an old, dusty entryway with peeling paint on the walls." --negative_prompt dry --words raincoat wet dry --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "cold, frosty beer mug on a warm, sunny beach bar with sand and palm trees." --negative_prompt warm --words beer_mug cold warm --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "vibrant, blooming rose in a monochrome grayscale room, devoid of color except for the flower." --negative_prompt withered --words rose vibrant withered --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "a reflective golden trophy sitting on a cluttered office desk, surrounded by papers and books." --negative_prompt dull --words trophy reflective dull --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "a soft, plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --negative_prompt rough --words teddy_bear soft rough --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "a sharp-edged, modern glass sculpture displayed in a traditional library with rows of classic books." --negative_prompt blunt --words a sculpture sharp blunt --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "a bright, crisp LCD screen of a laptop in a dimly lit coffee shop, customers in the background." --negative_prompt faded --words a lcd_screen bright faded --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "a smooth, marble chess piece on a wooden chessboard, hands of players in the background." --negative_prompt textured --words a chess_piece smooth textured --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "a glossy, red apple in a rustic, country-style kitchen with matte surfaces and vintage utensils." --negative_prompt matte --words a apple glossy matte --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "a silky, white wedding dress hanging against a brick wall, with soft lights creating ambiance." --negative_prompt coarse --words a wedding_dress silky coarse --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "a wet, shiny raincoat drying in an old, dusty entryway with peeling paint on the walls." --negative_prompt dry --words a raincoat wet dry --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "a cold, frosty beer mug on a warm, sunny beach bar with sand and palm trees." --negative_prompt warm --words a beer_mug cold warm --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-
-# python scripts/daamwandb.py --prompt "a vibrant, blooming rose in a monochrome grayscale room, devoid of color except for the flower." --negative_prompt a withered --words rose vibrant withered --group article --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "vibrant, blooming rose in a monochrome grayscale room, devoid of color except for the flower." --words "rose, vibrant" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
 
+# python scripts/daamwandb.py --prompt "reflective golden trophy sitting on a cluttered office desk, surrounded by papers and books." --negative_prompt dull --words "trophy, reflective, dull" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A reflective golden trophy sitting on a cluttered office desk, surrounded by papers and books." --words trophy reflective --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "soft, plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --negative_prompt rough --words "teddy bear, soft, rough" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A soft, plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --words teddy_bear soft --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "sharp-edged, modern glass sculpture displayed in a traditional library with rows of classic books." --negative_prompt blunt --words "sculpture, sharp, blunt" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A sharp-edged, modern glass sculpture displayed in a traditional library with rows of classic books." --words sculpture sharp --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "bright, crisp lcd screen of a laptop in a dimly lit coffee shop, customers in the background." --negative_prompt faded --words "lcd screen, bright, faded" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A bright, crisp LCD screen of a laptop in a dimly lit coffee shop, customers in the background." --words lcd_screen bright --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "smooth, marble chess piece on a wooden chessboard, hands of players in the background." --negative_prompt textured --words "chess piece, smooth, textured" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A smooth, marble chess piece on a wooden chessboard, hands of players in the background." --words chess_piece smooth --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "glossy, red apple in a rustic, country-style kitchen with matte surfaces and vintage utensils." --negative_prompt matte --words "apple, glossy, matte" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A glossy, red apple in a rustic, country-style kitchen with matte surfaces and vintage utensils." --words apple glossy --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "silky, white wedding dress hanging against a brick wall, with soft lights creating ambiance." --negative_prompt coarse --words "wedding dress, silky, coarse" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A silky, white wedding dress hanging against a brick wall, with soft lights creating ambiance." --words wedding_dress silky --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "wet, shiny raincoat drying in an old, dusty entryway with peeling paint on the walls." --negative_prompt dry --words "raincoat, wet, dry" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A wet, shiny raincoat drying in an old, dusty entryway with peeling paint on the walls." --words raincoat wet --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "cold, frosty beer mug on a warm, sunny beach bar with sand and palm trees." --negative_prompt warm --words "beer mug, cold, warm" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A cold, frosty beer mug on a warm, sunny beach bar with sand and palm trees." --words beer_mug cold --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "vibrant, blooming rose in a monochrome grayscale room, devoid of color except for the flower." --negative_prompt withered --words "rose, vibrant, withered" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A vibrant, blooming rose in a monochrome grayscale room, devoid of color except for the flower." --words rose vibrant --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "a reflective golden trophy sitting on a cluttered office desk, surrounded by papers and books." --negative_prompt dull --words "trophy, reflective, dull" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A reflective golden trophy sitting on a cluttered office desk, surrounded by papers and books." --negative_prompt dull --words trophy reflective dull --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "a soft, plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --negative_prompt rough --words "teddy bear, soft, rough" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A soft, plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --negative_prompt rough --words teddy_bear soft rough --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "a sharp-edged, modern glass sculpture displayed in a traditional library with rows of classic books." --negative_prompt blunt --words "a, sculpture, sharp, blunt" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A sharp-edged, modern glass sculpture displayed in a traditional library with rows of classic books." --negative_prompt blunt --words sculpture sharp blunt --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "a bright, crisp LCD screen of a laptop in a dimly lit coffee shop, customers in the background." --negative_prompt faded --words "a, lcd screen, bright, faded" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A bright, crisp LCD screen of a laptop in a dimly lit coffee shop, customers in the background." --negative_prompt faded --words lcd_screen bright faded --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "a smooth, marble chess piece on a wooden chessboard, hands of players in the background." --negative_prompt textured --words "a, chess piece, smooth, textured" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A smooth, marble chess piece on a wooden chessboard, hands of players in the background." --negative_prompt textured --words chess_piece smooth textured --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "a glossy, red apple in a rustic, country-style kitchen with matte surfaces and vintage utensils." --negative_prompt matte --words "a, apple, glossy, matte" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A glossy, red apple in a rustic, country-style kitchen with matte surfaces and vintage utensils." --negative_prompt matte --words apple glossy matte --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "a silky, white wedding dress hanging against a brick wall, with soft lights creating ambiance." --negative_prompt coarse --words "a, wedding dress, silky, coarse" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A silky, white wedding dress hanging against a brick wall, with soft lights creating ambiance." --negative_prompt coarse --words wedding_dress silky coarse --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "a wet, shiny raincoat drying in an old, dusty entryway with peeling paint on the walls." --negative_prompt dry --words "a, raincoat, wet, dry" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A wet, shiny raincoat drying in an old, dusty entryway with peeling paint on the walls." --negative_prompt dry --words raincoat wet dry --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "a cold, frosty beer mug on a warm, sunny beach bar with sand and palm trees." --negative_prompt warm --words "a, beer mug, cold, warm" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A cold, frosty beer mug on a warm, sunny beach bar with sand and palm trees." --negative_prompt warm --words beer_mug cold warm --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "a vibrant, blooming rose in a monochrome grayscale room, devoid of color except for the flower." --negative_prompt withered --words "rose, vibrant, withered" --group article  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A vibrant, blooming rose in a monochrome grayscale room, devoid of color except for the flower." --negative_prompt withered --words rose vibrant withered --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A reflective golden trophy sitting on a cluttered office desk, surrounded by papers and books." --words "trophy, reflective" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A soft, plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --words "teddy bear, soft" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A sharp-edged, modern glass sculpture displayed in a traditional library with rows of classic books." --words "sculpture, sharp" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "soft, plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --words "teddy bear, soft" --group article  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A bright, crisp LCD screen of a laptop in a dimly lit coffee shop, customers in the background." --words "lcd screen, bright" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A smooth, marble chess piece on a wooden chessboard, hands of players in the background." --words "chess piece, smooth" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A glossy, red apple in a rustic, country-style kitchen with matte surfaces and vintage utensils." --words "apple, glossy" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A silky, white wedding dress hanging against a brick wall, with soft lights creating ambiance." --words "wedding dress, silky" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A wet, shiny raincoat drying in an old, dusty entryway with peeling paint on the walls." --words "raincoat, wet" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A cold, frosty beer mug on a warm, sunny beach bar with sand and palm trees." --words "beer mug, cold" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A vibrant, blooming rose in a monochrome grayscale room, devoid of color except for the flower." --words "rose, vibrant" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A reflective golden trophy sitting on a cluttered office desk, surrounded by papers and books." --negative_prompt dull --words "trophy, reflective, dull" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A soft, plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --negative_prompt rough --words "teddy bear, soft, rough" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A sharp-edged, modern glass sculpture displayed in a traditional library with rows of classic books." --negative_prompt blunt --words "sculpture, sharp, blunt" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A bright, crisp LCD screen of a laptop in a dimly lit coffee shop, customers in the background." --negative_prompt faded --words "lcd screen, bright, faded" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A smooth, marble chess piece on a wooden chessboard, hands of players in the background." --negative_prompt textured --words "chess piece, smooth, textured" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A glossy, red apple in a rustic, country-style kitchen with matte surfaces and vintage utensils." --negative_prompt matte --words "apple, glossy, matte" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A silky, white wedding dress hanging against a brick wall, with soft lights creating ambiance." --negative_prompt coarse --words "wedding dress, silky, coarse" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A wet, shiny raincoat drying in an old, dusty entryway with peeling paint on the walls." --negative_prompt dry --words "raincoat, wet, dry" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A cold, frosty beer mug on a warm, sunny beach bar with sand and palm trees." --negative_prompt warm --words beer_mug "cold, warm" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A vibrant, blooming rose in a monochrome grayscale room, devoid of color except for the flower." --negative_prompt withered --words "rose, vibrant, withered" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "a attractive female, highlights in hair, sitting outside restaurant, brown eyes, wearing a dress, side light" --negative_prompt unattractive --words "female, attractive, unattractive" --group scenario  --seed 56165 35165 135924 12384 12948
+
+# python scripts/daamwandb.py --prompt "a attractive female, highlights in hair, sitting outside restaurant, brown eyes, wearing a dress, side light" --words "female, attractive" --group scenario  --seed 56165 35165 135924 12384 12948
+
+# python scripts/daamwandb.py --prompt "A smooth, marble chess piece on a wooden chessboard, hands of players in the background." --negative_prompt textured --words "chess piece, smooth, textured" --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
 
 
-# python scripts/daamwandb.py --prompt "a attractive female, highlights in hair, sitting outside restaurant, brown eyes, wearing a dress, side light" --negative_prompt unattractive --words woman attractive unattractive --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948
-# python scripts/daamwandb.py --prompt "a attractive female, highlights in hair, sitting outside restaurant, brown eyes, wearing a dress, side light" --words woman attractive --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948
 
-# article
-# python scripts/daamwandb.py --prompt "attractive woman in the street" --group 1 --words attractive --wandb --group article
-# python scripts/daamwandb.py --prompt "attractive woman in the street" --negative_prompt unattractive --group 1 --words attractive unattractive --wandb --group article
-# python scripts/daamwandb.py --prompt "an attractive woman in the street" --group 1 --words an attractive --wandb --group article
-# python scripts/daamwandb.py --prompt "an attractive woman in the street" --negative_prompt unattractive --group 1 --words an attractive unattractive --wandb --group article
+# python scripts/daamwandb.py --prompt "a balloon and a blue bench" --words "bench, blue, balloon" --group bindingtest  --seed 56165 35165 135924 12384 12948 --wandb
+
 
 # article_1
-# python scripts/daamwandb.py --prompt "fresh orange in the plate" --words fresh orange --wandb --group article_1 --tag nooverlay
-# python scripts/daamwandb.py --prompt "fresh orange in the plate" --negative_prompt stale --words fresh orange stale --wandb --group article_1 --tag nooverlay
-# python scripts/daamwandb.py --prompt "a fresh orange in the plate" --words a fresh orange --wandb --group article_1 --tag nooverlay --seed 56165 35165 135924 12384 12948
-# python scripts/daamwandb.py --prompt "a fresh orange in the plate" --negative_prompt stale --words a fresh orange stale --wandb --group article_1 --tag nooverlay
-# python scripts/daamwandb.py --prompt "fresh oranges in the plate" --words fresh oranges --wandb --group article_1 --tag nooverlay
-# python scripts/daamwandb.py --prompt "fresh oranges in the plate" --negative_prompt stale --words fresh oranges stale --wandb --group article_1 --tag nooverlay
-# python scripts/daamwandb.py --prompt "fresh orange in the plate" --negative_prompt a stale orange --words fresh orange stale --wandb --group article_1 --tag nooverlay
-# python scripts/daamwandb.py --prompt "a fresh orange in the plate" --negative_prompt a stale orange --words a fresh orange stale --wandb --group article_1 --tag nooverlay
-# python scripts/daamwandb.py --prompt "fresh oranges in the plate" --negative_prompt stale oranges --words fresh oranges stale --wandb --group article_1 --tag nooverlay
+# python scripts/daamwandb.py --prompt "fresh orange in the plate" --words fresh orange --wandb --group article_1 
+# python scripts/daamwandb.py --prompt "fresh orange in the plate" --negative_prompt stale --words fresh orange stale --wandb --group article_1 
+# python scripts/daamwandb.py --prompt "a fresh orange in the plate" --words a fresh orange --wandb --group article_1  --seed 56165 35165 135924 12384 12948
+# python scripts/daamwandb.py --prompt "a fresh orange in the plate" --negative_prompt stale --words a fresh orange stale --wandb --group article_1 
+# python scripts/daamwandb.py --prompt "fresh oranges in the plate" --words fresh oranges --wandb --group article_1 
+# python scripts/daamwandb.py --prompt "fresh oranges in the plate" --negative_prompt stale --words fresh oranges stale --wandb --group article_1 
+# python scripts/daamwandb.py --prompt "fresh orange in the plate" --negative_prompt a stale orange --words fresh orange stale --wandb --group article_1 
+# python scripts/daamwandb.py --prompt "a fresh orange in the plate" --negative_prompt a stale orange --words a fresh orange stale --wandb --group article_1 
+# python scripts/daamwandb.py --prompt "fresh oranges in the plate" --negative_prompt stale oranges --words fresh oranges stale --wandb --group article_1 
 
 
 # "simple prompt to test adj"
-# python scripts/daamwandb.py --prompt "A reflective golden trophy on a wooden desk." --negative_prompt dull --words trophy reflective dull --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A reflective golden trophy on a wooden desk." --words trophy reflective --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A reflective golden trophy on a wooden desk." --negative_prompt dull --words "trophy, reflective, n:dull, wooden, desk"  --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A reflective golden trophy on a wooden desk." --words "gloden, reflective, tropy, wooden, desk" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A soft, plush teddy bear on a plain bedspread." --negative_prompt rough --words teddy_bear soft rough --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A soft, plush teddy bear on a plain bedspread." --words teddy_bear soft --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A soft, plush teddy bear on a plain bedspread." --negative_prompt rough --words "soft, plush, teddy bear, n:rough" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A soft, plush teddy bear on a plain bedspread." --words "soft, plush, teddy bear" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A sharp-edged glass sculpture in a cozy room." --negative_prompt blunt --words sculpture sharp blunt --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A sharp-edged glass sculpture in a cozy room." --words sculpture sharp --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A sharp-edged glass sculpture in a cozy room." --negative_prompt blunt --words "sharp-edged, glass, sculpture, cozy, room, n:blunt" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A sharp-edged glass sculpture in a cozy room." --words "sharp-edged, glass, sculpture, cozy, room" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A bright LCD screen in a dim coffee shop." --negative_prompt faded --words lcd_screen bright faded --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A bright LCD screen in a dim coffee shop." --words lcd_screen bright --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A bright LCD screen in a dim coffee shop." --negative_prompt faded --words "bright, lcd screen, dim, coffee shop, n:faded" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A bright LCD screen in a dim coffee shop." --words "bright, lcd screen, dim, coffee shop" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A smooth marble chess piece on an oak board." --negative_prompt textured --words chess_piece smooth textured --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A smooth marble chess piece on an oak board." --words chess_piece smooth --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A smooth marble chess piece on an oak board." --negative_prompt textured --words "smooth, marble, chess, piece, oak, board, n:textured" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A smooth marble chess piece on an oak board." --words "smooth, marble, chess, piece, oak, board" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A glossy red apple in a stone-walled kitchen." --negative_prompt matte --words apple glossy matte --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A glossy red apple in a stone-walled kitchen." --words apple glossy --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A glossy red apple in a stone-walled kitchen." --negative_prompt matte --words "glossy, red, apple, stone-walled, kitchen, n:matte" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A glossy red apple in a stone-walled kitchen." --words "glossy, red, apple, stone-walled, kitchen" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A silky wedding dress against a brick backdrop." --negative_prompt coarse --words wedding_dress silky coarse --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A silky wedding dress against a brick backdrop." --words wedding_dress silky --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A silky wedding dress against a brick backdrop." --negative_prompt coarse --words "silky, wedding, dress, brick, backdrop, n:coarse" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A silky wedding dress against a brick backdrop." --words "silky, wedding, dress, brick, backdrop" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A wet shiny raincoat in a rustic entryway." --negative_prompt dry --words raincoat wet dry --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A wet shiny raincoat in a rustic entryway." --words raincoat wet --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A wet shiny raincoat in a rustic entryway." --negative_prompt dry --words "wet, shiny, raincoat, rustic, entryway, n:dry" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A wet shiny raincoat in a rustic entryway." --words "wet, shiny, raincoat, rustic, entryway" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A cold, frosty beer mug on a bar countertop." --negative_prompt warm --words beer_mug cold warm --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A cold, frosty beer mug on a bar countertop." --words beer_mug cold --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A cold, frosty beer mug on a bar countertop." --negative_prompt warm --words "cold, frosty, beer mug, bar countertop, n:warm" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A cold, frosty beer mug on a bar countertop." --words "cold, frosty, beer mug, bar countertop" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A vibrant rose in a grayscale setting." --negative_prompt withered --words rose vibrant withered --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A vibrant rose in a grayscale setting." --words rose vibrant --group "simple prompt to test adj" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A vibrant rose in a grayscale setting." --negative_prompt withered --words "vibrant, rose, grayscale, setting, n:withered" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A vibrant rose in a grayscale setting." --words "vibrant, rose, grayscale, setting" --group "simple prompt to test adj"  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A golden trophy sitting on a cluttered office desk, surrounded by papers and books." --negative_prompt dull --words trophy dull --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A golden trophy sitting on a cluttered office desk, surrounded by papers and books." --negative_prompt dull --words trophy dull --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --negative_prompt rough --words teddy_bear rough --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A plush teddy bear on a child's colorful bedspread, amidst a variety of toys." --negative_prompt rough --words teddy_bear rough --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A modern glass sculpture displayed in a traditional library with rows of classic books." --negative_prompt blunt --words sculpture blunt --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A modern glass sculpture displayed in a traditional library with rows of classic books." --negative_prompt blunt --words sculpture blunt --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A crisp LCD screen of a laptop in a dimly lit coffee shop, customers in the background." --negative_prompt faded --words LCD_screen faded --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A crisp LCD screen of a laptop in a dimly lit coffee shop, customers in the background." --negative_prompt faded --words LCD_screen faded --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A marble chess piece on a wooden chessboard, hands of players in the background." --negative_prompt textured --words chess_piece textured --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A marble chess piece on a wooden chessboard, hands of players in the background." --negative_prompt textured --words chess piece textured --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A red apple in a rustic, country-style kitchen with matte surfaces and vintage utensils." --negative_prompt matte --words apple matte --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A red apple in a rustic, country-style kitchen with matte surfaces and vintage utensils." --negative_prompt matte --words apple matte --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A white wedding dress hanging against a brick wall, with soft lights creating ambiance." --negative_prompt coarse --words wedding_dress coarse --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A white wedding dress hanging against a brick wall, with soft lights creating ambiance." --negative_prompt coarse --words wedding_dress coarse --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A shiny raincoat drying in an old, dusty entryway with peeling paint on the walls." --negative_prompt dry --words raincoat dry --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A shiny raincoat drying in an old, dusty entryway with peeling paint on the walls." --negative_prompt dry --words raincoat dry --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A frosty beer mug on a warm, sunny beach bar with sand and palm trees." --negative_prompt warm --words beer_mug warm --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A frosty beer mug on a warm, sunny beach bar with sand and palm trees." --negative_prompt warm --words beer_mug warm --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A blooming rose in a monochrome grayscale room, devoid of color except for the flower." --negative_prompt withered --words rose withered --group scenario --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A blooming rose in a monochrome grayscale room, devoid of color except for the flower." --negative_prompt withered --words rose withered --group scenario  --seed 56165 35165 135924 12384 12948 --wandb
 
 
 #!/bin/bash
@@ -210,9 +211,9 @@
 # python scripts/daamwandb.py --prompt "A speckled robin's egg nestled in a cherry blossom tree" --words robin\'s_egg speckled --group "more specific adj test" --tags nooverlay --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A robin's egg nestled in a cherry blossom tree" --negative_prompt spotless  --words robin\'s_egg spotless --group "more specific adj test" --tags nooverlay --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "The striped zebra grazing on the Serengeti" --negative_prompt solid-colored --words zebra striped solid-colored --group "more specific adj test" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "The striped zebra grazing on the Serengeti" --words zebra striped --group "more specific adj test" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "The zebra grazing on the Serengeti" --negative_prompt solid-colored --words zebra solid-colored --group "more specific adj test" --tag nooverlay --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "The striped zebra grazing on the Serengeti" --negative_prompt solid-colored --words zebra striped solid-colored --group "more specific adj test"  --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "The striped zebra grazing on the Serengeti" --words zebra striped --group "more specific adj test"  --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "The zebra grazing on the Serengeti" --negative_prompt solid-colored --words zebra solid-colored --group "more specific adj test"  --seed 56165 35165 135924 12384 12948 --wandb
 
 # python scripts/daamwandb.py --prompt "A crumbling sandcastle at the edge of a sandy beach" --negative_prompt sturdy --words sandcastle crumbling sturdy --group "more specific adj test" --tags nooverlay --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A crumbling sandcastle at the edge of a sandy beach" --words sandcastle crumbling --group "more specific adj test" --tags nooverlay --seed 56165 35165 135924 12384 12948 --wandb
@@ -225,75 +226,77 @@
 # End of script
 
 # Begin script for plain words “specific adj test”
-# python scripts/daamwandb.py --prompt "A striped zebra in the savanna" --negative_prompt plain --words zebra striped plain --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A striped zebra in the savanna" --words zebra striped --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A zebra in the savanna" --negative_prompt plain --words zebra plain --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A plain zebra in the savanna" --negative_prompt striped --words "zebra, striped, plain" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A plain zebra in the savanna" --words "zebra, plain" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-python scripts/daamwandb.py --prompt "A zebra in the savanna" --negative_prompt striped --words "zebra, striped" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A striped zebra in the savanna" --negative_prompt plain --words "zebra, striped, n:plain, savanna" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A striped zebra in the savanna" --words "zebra, striped, savanna" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A zebra in the savanna" --negative_prompt plain --words "zebra, n:plain, savanna" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A plain zebra in the savanna" --negative_prompt striped --words "zebra, n:striped, plain, savanna" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A plain zebra in the savanna" --words "zebra, plain, savanna" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A zebra in the savanna" --negative_prompt striped --words "zebra, n:striped, savanna" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A fragrant rose in the garden" --negative_prompt odorless --words rose fragrant odorless --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A fragrant rose in the garden" --words rose fragrant --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A rose in the garden" --negative_prompt odorless --words rose odorless --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A odorless rose in the garden" --negative_prompt fragrant --words "rose, fragrant, odorless" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+
+
+# python scripts/daamwandb.py --prompt "A fragrant rose in the garden" --negative_prompt odorless --words "rose, fragrant, n:odorless, garden" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A fragrant rose in the garden" --words "rose, fragrant, garden" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A rose in the garden" --negative_prompt odorless --words "rose, n:odorless, garden" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A odorless rose in the garden" --negative_prompt fragrant --words "rose, n:fragrant, odorless" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A odorless rose in the garden" --words "rose, odorless" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-python scripts/daamwandb.py --prompt "A rose in the garden" --negative_prompt fragrant --words "rose, fragrant" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A rose in the garden" --negative_prompt fragrant --words "rose, n:fragrant" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A spotted leopard in the jungle" --negative_prompt unspotted --words leopard spotted unspotted --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A spotted leopard in the jungle" --words leopard spotted --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A leopard in the jungle" --negative_prompt unspotted --words leopard unspotted --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A unspotted leopard in the jungle" --negative_prompt spotted --words "leopard, spotted, unspotted" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A unspotted leopard in the jungle" --words "leopard, unspotted" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-python scripts/daamwandb.py --prompt "A leopard in the jungle" --negative_prompt spotted --words "leopard, spotted" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A spotted leopard in the jungle" --negative_prompt unspotted --words "leopard, spotted, n:unspotted, jungle" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A spotted leopard in the jungle" --words "leopard, spotted, jungle" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A leopard in the jungle" --negative_prompt unspotted --words "leopard, n:unspotted, jungle" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A unspotted leopard in the jungle" --negative_prompt spotted --words "leopard, n:spotted, unspotted, jungle" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A unspotted leopard in the jungle" --words "leopard, unspotted, jungle" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A leopard in the jungle" --negative_prompt spotted --words "leopard, n:spotted, jungle" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A shiny penny on the sidewalk" --negative_prompt tarnished --words penny shiny tarnished --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A shiny penny on the sidewalk" --words penny shiny --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A penny on the sidewalk" --negative_prompt tarnished --words penny tarnished --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A tarnished penny on the sidewalk" --negative_prompt shiny --words "penny, shiny, tarnished" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A tarnished penny on the sidewalk" --words "penny, tarnished" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-python scripts/daamwandb.py --prompt "A penny on the sidewalk" --negative_prompt shiny --words "penny, shiny" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A tarnished penny on the sidewalk" --words "penny, tarnished, sidewalk" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A shiny penny on the sidewalk" --words "penny, shiny, sidewalk" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A penny on the sidewalk" --negative_prompt tarnished --words "penny, n:tarnished, sidewalk" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A tarnished penny on the sidewalk" --negative_prompt shiny --words "penny, n:shiny, tarnished, sidewalk" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A tarnished penny on the sidewalk" --words "penny, tarnished, sidewalk" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A penny on the sidewalk" --negative_prompt shiny --words "penny, n:shiny, sidewalk" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A towering giraffe near a tree" --negative_prompt stunted --words giraffe towering stunted --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A towering giraffe near a tree" --words giraffe towering --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A giraffe near a tree" --negative_prompt stunted --words giraffe stunted --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A stunted giraffe near a tree" --negative_prompt towering --words "giraffe, towering, stunted" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-# python scripts/daamwandb.py --prompt "A stunted giraffe near a tree" --words "giraffe, stunted" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-python scripts/daamwandb.py --prompt "A giraffe near a tree" --negative_prompt towering --words "giraffe, towering" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A towering giraffe near a tree" --negative_prompt stunted --words "giraffe, towering, n:stunted, tree" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A towering giraffe near a tree" --words "giraffe, towering, tree" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A giraffe near a tree" --negative_prompt stunted --words "giraffe, n:stunted, tree" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A stunted giraffe near a tree" --negative_prompt towering --words "giraffe, n:towering, stunted, tree" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A stunted giraffe near a tree" --words "giraffe, stunted, tree" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A giraffe near a tree" --negative_prompt towering --words "giraffe, n:towering, tree" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 
 # python scripts/daamwandb.py --prompt "A ripe apple on the branch" --negative_prompt unripe --words apple ripe unripe --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A ripe apple on the branch" --words apple ripe --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "An apple on the branch" --negative_prompt unripe --words apple unripe --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A unripe apple on the branch" --negative_prompt ripe --words "apple, ripe, unripe" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A unripe apple on the branch" --words "apple, ripe" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-python scripts/daamwandb.py --prompt "A apple on the branch" --negative_prompt ripe --words "apple, ripe" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A apple on the branch" --negative_prompt ripe --words "apple, ripe" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 
 # python scripts/daamwandb.py --prompt "A fluffy kitten on the couch" --negative_prompt hairless --words kitten fluffy hairless --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A fluffy kitten on the couch" --words kitten fluffy --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A kitten on the couch" --negative_prompt hairless --words kitten hairless --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A hairless kitten on the couch" --negative_prompt fluffy --words "kitten, fluffy, hairless" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A hairless kitten on the couch" --words "kitten, hairless" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-python scripts/daamwandb.py --prompt "A kitten on the couch" --negative_prompt fluffy --words "kitten, fluffy" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A kitten on the couch" --negative_prompt fluffy --words "kitten, fluffy" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 
 # python scripts/daamwandb.py --prompt "A sour lemon on the counter" --negative_prompt sweet --words lemon sour sweet --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A sour lemon on the counter" --words lemon sour --group "navie words specific adj test" -seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A lemon on the counter" --negative_prompt sweet --words lemon sweet --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A sweet lemon on the counter" --negative_prompt sour --words "lemon, sour, sweet" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A sweet lemon on the counter" --words "lemon, sweet" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-python scripts/daamwandb.py --prompt "A lemon on the counter" --negative_prompt sour --words "lemon, sour" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A lemon on the counter" --negative_prompt sour --words "lemon, sour" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 
 # python scripts/daamwandb.py --prompt "A rough sandpaper on the workbench" --negative_prompt smooth --words sandpaper rough smooth --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A rough sandpaper on the workbench" --words sandpaper rough --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A sandpaper on the workbench" --negative_prompt smooth --words sandpaper smooth --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A smooth sandpaper on the workbench" --negative_prompt rough --words "sandpaper, rough, smooth" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A smooth sandpaper on the workbench" --words "sandpaper, smooth" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-python scripts/daamwandb.py --prompt "A sandpaper on the workbench" --negative_prompt rough --words "sandpaper, rough" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A sandpaper on the workbench" --negative_prompt rough --words "sandpaper, rough" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 
 # python scripts/daamwandb.py --prompt "A bumpy road through the countryside" --negative_prompt even --words road bumpy even --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A bumpy road through the countryside" --words road bumpy --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A road through the countryside" --negative_prompt even --words road even --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A even road through the countryside" --negative_prompt bumpy --words "road, bumpy, even" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A even road through the countryside" --words "road, even" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
-python scripts/daamwandb.py --prompt "A road through the countryside" --negative_prompt bumpy --words "road, bumpy" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A road through the countryside" --negative_prompt bumpy --words "road, bumpy" --group "navie words specific adj test" --seed 56165 35165 135924 12384 12948 --wandb
 
 # python scripts/daamwandb.py --prompt "A glossy black coffee maker in a bright, modern kitchen." --negative_prompt "broken, absent, distorted, kitsch" --words coffee maker glossy black modern broken absent distorted kitsch --group "generalization: scenario appliances "  --seed 56165 35165 135924 12384 12948
 # python scripts/daamwandb.py --prompt "A glossy black coffee maker in a bright, modern kitchen." --words coffee maker glossy black modern --group "generalization: scenario appliances "  --seed 56165 35165 135924 12384 12948 --wandb
@@ -431,32 +434,73 @@ python scripts/daamwandb.py --prompt "A road through the countryside" --negative
 
 
 ####### deleting
-# python scripts/daamwandb.py --prompt "A serene mountain landscape with a clear blue lake in the foreground, surrounded by lush green pine trees and a majestic snow-capped mountain range in the background under a bright blue sky" --negative_prompt "buildings, roads, vehicles" --words "lake, trees, mountain, buildings, roads, vehicles" --group "generalize: deleting nouns, long description" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A serene mountain landscape with a clear blue lake in the foreground, surrounded by lush green pine trees and a majestic snow-capped mountain range in the background under a bright blue sky" --negative_prompt "buildings, roads, vehicles" --words "lake, trees, mountain, n:buildings, n:roads, n:vehicles" --group "generalize: deleting nouns, long description" --seed 56165 35165 135924 12384 12948 --wandb
 # python scripts/daamwandb.py --prompt "A serene mountain landscape with a clear blue lake in the foreground, surrounded by lush green pine trees and a majestic snow-capped mountain range in the background under a bright blue sky" --words "lake, trees, mountain" --group "generalize: deleting nouns, long description" --seed 56165 35165 135924 12384 12948 --wandb
 
-# python scripts/daamwandb.py --prompt "A vibrant coral reef underwater scene filled with colorful corals, various species of tropical fish swimming around, and a sunken treasure chest partially buried in the sand" --negative_prompt "divers, boats, plastic waste" --words "coral, fish, treasure chest, divers, boats, plastic waste" --group "generalize: deleting nouns, long description" --seed 84156 23498 18934 12084 36721 --wandb
+# python scripts/daamwandb.py --prompt "A vibrant coral reef underwater scene filled with colorful corals, various species of tropical fish swimming around, and a sunken treasure chest partially buried in the sand" --negative_prompt "divers, boats, plastic waste" --words "coral, fish, treasure chest, n:divers, n:boats, n:plastic waste" --group "generalize: deleting nouns, long description" --seed 84156 23498 18934 12084 36721 --wandb
 # python scripts/daamwandb.py --prompt "A vibrant coral reef underwater scene filled with colorful corals, various species of tropical fish swimming around, and a sunken treasure chest partially buried in the sand" --words "coral, fish, treasure chest" --group "generalize: deleting nouns, long description" --seed 84156 23498 18934 12084 36721 --wandb
 
-# python scripts/daamwandb.py --prompt "A bustling city street at night, lit up by neon signs and streetlights, with towering skyscrapers, a variety of shops, and a busy crosswalk" --negative_prompt "cars, bicycles, animals" --words "city, neon, skyscrapers, shops, crosswalk, cars, bicycles, animals" --group "generalize: deleting nouns, long description" --seed 56231 98754 65432 32189 45678 --wandb
+# python scripts/daamwandb.py --prompt "A bustling city street at night, lit up by neon signs and streetlights, with towering skyscrapers, a variety of shops, and a busy crosswalk" --negative_prompt "cars, bicycles, animals" --words "city, neon, skyscrapers, shops, crosswalk, n:cars, n:bicycles, n:animals" --group "generalize: deleting nouns, long description" --seed 56231 98754 65432 32189 45678 --wandb
 # python scripts/daamwandb.py --prompt "A bustling city street at night, lit up by neon signs and streetlights, with towering skyscrapers, a variety of shops, and a busy crosswalk" --words "city, neon, skyscrapers, shops, crosswalk" --group "generalize: deleting nouns, long description" --seed 56231 98754 65432 32189 45678 --wandb
 
-# python scripts/daamwandb.py --prompt "A cozy winter cabin scene with a log cabin surrounded by snow-covered trees, a smoking chimney, and a clear starry night sky with the Northern Lights visible" --negative_prompt "people, animals, vehicles" --words "cabin, snow, trees, chimney, Northern Lights, people, animals, vehicles" --group "generalize: deleting nouns, long description" --seed 92374 15689 78945 12345 67890 --wandb
+# python scripts/daamwandb.py --prompt "A cozy winter cabin scene with a log cabin surrounded by snow-covered trees, a smoking chimney, and a clear starry night sky with the Northern Lights visible" --negative_prompt "people, animals, vehicles" --words "cabin, snow, trees, chimney, Northern Lights, n:people, n:animals, n:vehicles" --group "generalize: deleting nouns, long description" --seed 92374 15689 78945 12345 67890 --wandb
 # python scripts/daamwandb.py --prompt "A cozy winter cabin scene with a log cabin surrounded by snow-covered trees, a smoking chimney, and a clear starry night sky with the Northern Lights visible" --words "cabin, snow, trees, chimney, Northern Lights" --group "generalize: deleting nouns, long description" --seed 92374 15689 78945 12345 67890 --wandb
 
-# python scripts/daamwandb.py --prompt "A beautiful garden scene with a variety of colorful flowers in bloom, a stone path leading to a small pond with lily pads, and butterflies fluttering around" --negative_prompt "garden tools, fences, gardeners" --words "flowers, pond, butterflies, garden tools, fences, gardeners" --group "generalize: deleting nouns, long description" --seed 67812 54321 98765 43210 56789 --wandb
+# python scripts/daamwandb.py --prompt "A beautiful garden scene with a variety of colorful flowers in bloom, a stone path leading to a small pond with lily pads, and butterflies fluttering around" --negative_prompt "garden tools, fences, gardeners" --words "flowers, pond, butterflies, n:garden tools, n:fences, n:gardeners" --group "generalize: deleting nouns, long description" --seed 67812 54321 98765 43210 56789 --wandb
 # python scripts/daamwandb.py --prompt "A beautiful garden scene with a variety of colorful flowers in bloom, a stone path leading to a small pond with lily pads, and butterflies fluttering around" --words "flowers, pond, butterflies" --group "generalize: deleting nouns, long description" --seed 67812 54321 98765 43210 56789 --wandb
 
-# python scripts/daamwandb.py --prompt "A tranquil beach scene at sunset with soft pink and orange hues in the sky, gentle waves lapping the shore, and palm trees swaying in the breeze" --negative_prompt "people, beach umbrellas, boats" --words "beach, sunset, palm trees, people, umbrellas, boats" --group "generalize: deleting nouns, long description" --seed 21345 67890 12321 54321 98765 --wandb
+# python scripts/daamwandb.py --prompt "A tranquil beach scene at sunset with soft pink and orange hues in the sky, gentle waves lapping the shore, and palm trees swaying in the breeze" --negative_prompt "people, beach umbrellas, boats" --words "beach, sunset, palm trees, n:people, n:bench umbrellas, n:boats" --group "generalize: deleting nouns, long description" --seed 21345 67890 12321 54321 98765 --wandb
 # python scripts/daamwandb.py --prompt "A tranquil beach scene at sunset with soft pink and orange hues in the sky, gentle waves lapping the shore, and palm trees swaying in the breeze" --words "beach, sunset, palm trees" --group "generalize: deleting nouns, long description" --seed 21345 67890 12321 54321 98765 --wandb
 
-# python scripts/daamwandb.py --prompt "An ancient library interior with towering bookshelves filled with old books, a large globe, and a classic wooden ladder for reaching higher shelves, illuminated by soft, natural light from large windows" --negative_prompt "modern technology, people, animals" --words "library, books, globe, ladder, technology, people, animals" --group "generalize: deleting nouns, long description" --seed 45678 12389 98763 45612 78901 --wandb
+# python scripts/daamwandb.py --prompt "An ancient library interior with towering bookshelves filled with old books, a large globe, and a classic wooden ladder for reaching higher shelves, illuminated by soft, natural light from large windows" --negative_prompt "modern technology, people, animals" --words "library, books, globe, ladder, n:technology, n:people, n:animals" --group "generalize: deleting nouns, long description" --seed 45678 12389 98763 45612 78901 --wandb
 # python scripts/daamwandb.py --prompt "An ancient library interior with towering bookshelves filled with old books, a large globe, and a classic wooden ladder for reaching higher shelves, illuminated by soft, natural light from large windows" --words "library, books, globe, ladder" --group "generalize: deleting nouns, long description" --seed 45678 12389 98763 45612 78901 --wandb
 
-# python scripts/daamwandb.py --prompt "A picturesque vineyard scene with rows of grapevines, a path winding through the vineyard, and rolling hills in the background during a sunny day" --negative_prompt "farm machinery, workers, animals" --words "vineyard, grapevines, path, hills, machinery, workers, animals" --group "generalize: deleting nouns, long description" --seed 32198 65432 98765 32123 65456 --wandb
+# python scripts/daamwandb.py --prompt "A picturesque vineyard scene with rows of grapevines, a path winding through the vineyard, and rolling hills in the background during a sunny day" --negative_prompt "farm machinery, workers, animals" --words "vineyard, grapevines, path, hills, n:farm machinery, n:workers, n:animals" --group "generalize: deleting nouns, long description" --seed 32198 65432 98765 32123 65456 --wandb
 # python scripts/daamwandb.py --prompt "A picturesque vineyard scene with rows of grapevines, a path winding through the vineyard, and rolling hills in the background during a sunny day" --words "vineyard, grapevines, path, hills" --group "generalize: deleting nouns, long description" --seed 32198 65432 98765 32123 65456 --wandb
 
-# python scripts/daamwandb.py --prompt "An arctic landscape featuring a pack of polar bears on an ice floe, with icy mountains in the background and the aurora borealis lighting up the night sky" --negative_prompt "human structures, vehicles, trees" --words "arctic, polar bears, ice, mountains, aurora borealis, structures, vehicles, trees" --group "generalize: deleting nouns, long description" --seed 98765 32123 45678 98732 12345 --wandb
+# python scripts/daamwandb.py --prompt "An arctic landscape featuring a pack of polar bears on an ice floe, with icy mountains in the background and the aurora borealis lighting up the night sky" --negative_prompt "human structures, vehicles, trees" --words "arctic, polar bears, ice, mountains, aurora borealis, n:structures, n:vehicles, n:trees" --group "generalize: deleting nouns, long description" --seed 98765 32123 45678 98732 12345 --wandb
 # python scripts/daamwandb.py --prompt "An arctic landscape featuring a pack of polar bears on an ice floe, with icy mountains in the background and the aurora borealis lighting up the night sky" --words "arctic, polar bears, ice, mountains, aurora borealis" --group "generalize: deleting nouns, long description" --seed 98765 32123 45678 98732 12345 --wandb
 
-# python scripts/daamwandb.py --prompt "A classic European street scene with cobblestone streets, historical buildings, and a small café with outdoor seating, under a clear blue sky" --negative_prompt "modern vehicles, street signs, pedestrians" --words "European, street, buildings, café, vehicles, signs, pedestrians" --group "generalize: deleting nouns, long description" --seed 65437 89012 34567 89012 34567 --wandb
+# python scripts/daamwandb.py --prompt "A classic European street scene with cobblestone streets, historical buildings, and a small café with outdoor seating, under a clear blue sky" --negative_prompt "modern vehicles, street signs, pedestrians" --words "European, street, buildings, café, n:vehicles, n:signs, n:pedestrians" --group "generalize: deleting nouns, long description" --seed 65437 89012 34567 89012 34567 --wandb
 # python scripts/daamwandb.py --prompt "A classic European street scene with cobblestone streets, historical buildings, and a small café with outdoor seating, under a clear blue sky" --words "European, street, buildings, café" --group "generalize: deleting nouns, long description" --seed 65437 89012 34567 89012 345 --wandb
+
+# python scripts/daamwandb.py --prompt "There is a red car in the street" --words "There, a, red, car" --group "random test" --seed 65437 89012 34567 89012 345 --wandb
+# python scripts/daamwandb.py --prompt "There is red car in the street" --words "There, red, car" --group "random test" --seed 65437 89012 34567 89012 345 --wandb
+# python scripts/daamwandb.py --prompt "There is a thick book on the desk" --words "There, a, thick, desk" --group "random test" --seed 65437 89012 34567 89012 345 --wandb
+# python scripts/daamwandb.py --prompt "There is thick book on the desk" --words "There, thick, desk" --group "random test" --seed 65437 89012 34567 89012 345 --wandb
+# python scripts/daamwandb.py --prompt "There is an athlete in the stadium" --words "There, an, athlete, stadium" --group "random test" --seed 65437 89012 34567 89012 345 --wandb
+# python scripts/daamwandb.py --prompt "There is athlete in the stadium" --words "There, athlete, stadium" --group "random test" --seed 65437 89012 34567 89012 345 --wandb
+# python scripts/daamwandb.py --prompt "There is a bird on the branch" --words "There, a, bird, branch" --group "random test" --seed 65437 89012 34567 89012 345 --wandb
+# python scripts/daamwandb.py --prompt "There is bird on the branch" --words "There, bird, branch" --group "random test" --seed 65437 89012 34567 89012 345 --wandb
+# python scripts/daamwandb.py --prompt "There is a duck on the lake" --words "There, a, duck, lake" --group "random test" --seed 65437 89012 34567 89012 345 --wandb
+# python scripts/daamwandb.py --prompt "There is duck on the lake" --words "There, duck, lake" --group "random test" --seed 65437 89012 34567 89012 345 --wandb
+
+# python scripts/daamwandb.py --prompt "A calm beach scene at sunset with gentle waves." --negative_prompt "boats, surfers, birds" --words "calm, beach, sunset, gentle, waves, n:boats, n:surfers, n:birds" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A calm beach scene at sunset with gentle waves." --words "calm, beach, sunset, gentle, waves" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A bustling city street during daytime with tall buildings." --negative_prompt "cars, buses, bicycles" --words "bustling, city, street, tall, buildings, n:cars, n:buses, n:bicycles" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A bustling city street during daytime with tall buildings." --words "bustling, city, street, tall, buildings" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A snowy landscape with a small cottage and pine trees." --negative_prompt "animal, footprints, snowmen" --words "snowy, landscape, cottage, pine trees, n:animals, n:footprints, n:snowmen" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A snowy landscape with a small cottage and pine trees." --words "snowy, landscape, cottage, pine trees" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A serene mountain landscape with a clear blue sky." --negative_prompt "hikers, tents, campfires" --words "serene, mountain, landscape, clear, blue sky, n:hikers, n:tents, n:campfires" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A serene mountain landscape with a clear blue sky." --words "serene, mountain, landscape, clear, blue sky" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A starry night sky over a quiet desert." --negative_prompt "cacti, animals, vehicles" --words "starry night, quiet, desert, n:cacti, n:animals, n:vehicles" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A starry night sky over a quiet desert." --words "starry night, quiet, desert" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A colorful garden full of various flowers and plants." --negative_prompt "gardeners, insects, garden tools" --words "colorful, garden, flowers, plants, n:gardeners, n:insects, n:garden tools" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A colorful garden full of various flowers and plants." --words "garden, flowers, plants" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "An old library interior with shelves of books." --negative_prompt "readers, librarians, computers" --words "old, library, books, shelves, n:readers, n:librarians, n:computers" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "An old library interior with shelves of books." --words "old, library, books, shelves" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A lively coral reef underwater with colorful corals." --negative_prompt "fish, divers, seaweed" --words "lively, coral reef, underwater, colorful corals, n:fish, n:divers, n:seaweed" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A lively coral reef underwater with colorful corals." --words "coral reef, underwater, colorful corals" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A traditional Japanese garden with a pond and bridge." --negative_prompt "visitors, koi fish, statues" --words "Japanese garden, pond, bridge, n:visitors, n:koi fish, n:statues" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A traditional Japanese garden with a pond and bridge." --words "Japanese garden, pond, bridge" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+
+# python scripts/daamwandb.py --prompt "A peaceful countryside landscape with rolling hills." --negative_prompt "farm animals, tractors, farmhouses" --words "countryside, landscape, rolling, hills, n:farm animals, n:tractors, n:farmhouses" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb
+# python scripts/daamwandb.py --prompt "A peaceful countryside landscape with rolling hills." --words "countryside, landscape, rolling, hills" --group "generalize: deleting nouns, brief description" --seed 56165 35165 135924 12384 12948 --wandb

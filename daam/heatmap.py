@@ -179,24 +179,29 @@ class ParsedHeatMap:
 class GlobalHeatMap:
     def __init__(self, tokenizer: Any, prompt: str, heat_maps: torch.Tensor, negative_prompt: str, negative_heat_maps: torch.Tensor):
         self.tokenizer = tokenizer
-        self.heat_maps = heat_maps
+        self.heat_maps = heat_maps 
         self.negative_heat_maps = negative_heat_maps
         self.negative_prompt = negative_prompt
         self.prompt = prompt
         self.compute_word_heat_map = lru_cache(maxsize=50)(self.compute_word_heat_map)
 
     def compute_word_heat_map(self, word: str, word_idx: int = None, offset_idx: int = 0) -> WordHeatMap:
-        #print(word,word_idx,offset_idx)
-        negative_merge_idxs, negative_word_idx = compute_token_merge_indices(self.tokenizer, self.negative_prompt, word, word_idx, offset_idx)
+
         merge_idxs, word_idx = compute_token_merge_indices(self.tokenizer, self.prompt, word, word_idx, offset_idx)
-        if negative_merge_idxs:
+        if word[0:2] == 'n:':
             #print("negative")
-            return WordHeatMap(self.negative_heat_maps[negative_merge_idxs].mean(0), word, word_idx)
-        elif merge_idxs:
-            #print('positive')
-            return WordHeatMap(self.heat_maps[merge_idxs].mean(0), word, word_idx)
+            negative_merge_idxs, negative_word_idx = compute_token_merge_indices(self.tokenizer, self.negative_prompt, word[2:], word_idx, offset_idx)
+            if len(negative_merge_idxs) == 0:
+                raise ValueError(f'Could not find word "{word}" in prompt "{self.negative_prompt}"')
+            return WordHeatMap(self.negative_heat_maps[negative_merge_idxs].mean(0), word, negative_word_idx)
         else:
-            raise ValueError(f'Word {word} not found in prompt')
+            merge_idxs, word_idx = compute_token_merge_indices(self.tokenizer, self.prompt, word, word_idx, offset_idx)
+            #print('positive')
+            #print(merge_idxs)
+            if len(merge_idxs) == 0:
+                raise ValueError(f'Could not find word "{word}" in prompt "{self.prompt}"')
+            return WordHeatMap(self.heat_maps[[merge_idxs]].mean(0), word, word_idx)
+
 
     def parsed_heat_maps(self) -> Iterable[ParsedHeatMap]:
         for token in cached_nlp(self.prompt):

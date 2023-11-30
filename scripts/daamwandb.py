@@ -8,6 +8,24 @@ import wandb
 import math
 import random
 
+def get_plt(num):
+    plt.clf()
+    plt.rcParams.update({'font.size': 12})
+    if num < 5:
+        fig, axs = plt.subplots(1, num , figsize=(5*num, 5+1))
+        for ax in axs:
+            ax.axis('off')
+    else:
+        fig, axs = plt.subplots(math.ceil(num / 4),4)
+
+        for i in range(math.ceil(num / 4)):
+            for j in range(4):
+                ax = axs[i][j]
+                ax.axis('off')
+    plt.subplots_adjust(top=0.95)  
+    return plt, fig, axs
+    
+
 parser = argparse.ArgumentParser(description='Diffusion')
 parser.add_argument('--prompt', type=str, required=True)
 parser.add_argument('--negative_prompt', type=str, default='')
@@ -28,6 +46,7 @@ parser.add_argument('--wandb',action='store_true',help='use wandb')
 args = parser.parse_args()
 
 #os.environ["WANDB_MODE"] = "offline"
+wandb.login()
 
 model_id = 'stabilityai/stable-diffusion-2-base'
 device = 'cuda'
@@ -68,61 +87,81 @@ if args.wandb:
         config=wandb.config,
     )
 
-layer_id = None if layer_id is None else list(range(layer_id[0], layer_id[1] + 1))
-time_id = None if time_id is None else list(range(time_id[0], time_id[1] + 1))
-
+layer_id = None if layer_id is None else [layer_id[i:i + 2] for i in range(0, len(layer_id), 2)]
+layer_id = None if layer_id is None else [list(range(layer_id_[0], layer_id_[1] + 1)) for layer_id_ in layer_id] 
+time_id = None if time_id is None else [time_id[i:i + 2] for i in range(0, len(time_id), 2)]
+time_id = None if time_id is None else [list(range(time_id_[0], time_id_[1] + 1)) for time_id_ in time_id]
 
 for seed in iter(seeds):
     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
         with trace(pipe) as tc:
-
             if len(negative_prompt)> 0:
                 out = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed))
             else:
                 out = pipe(prompt, num_inference_steps=steps, generator=set_seed(seed))
-            
-            heat_map = tc.compute_global_heat_map(factors=factors, head_idx=head_id, layer_idx=layer_id, time_idx=time_id)
-            #print(heat_map.negative_heat_maps.shape)
-            heat_map = tc.compute_global_heat_map(factors=factors, head_idx=head_id, layer_idx=layer_id, time_idx=time_id)
-            #print(heat_map.negative_heat_maps.shape)
-
-            plt.clf()
-            plt.rcParams.update({'font.size': 8})
-            if len(words) < 4:
-                fig, axs = plt.subplots(1, len(words) + 1, figsize=(5*(len(words)+1), 5+1))
-                axs[0].imshow(out.images[0])
-                for ax in axs:
-                    ax.axis('off')
-            else:
-                fig, axs = plt.subplots(math.ceil((len(words) + 1) / 4),4)
-                axs[0][0].imshow(out.images[0])
-
-                for i in range(math.ceil((len(words) + 1) / 4)):
-                    for j in range(4):
-                        #print(i,j)
-                        ax = axs[i][j]
-                        #print(ax)
-                        ax.axis('off')
                 
-            
-            # text = '' if layer_id is None else 'layer_id: ' + str(layer_id[0]) + ' ' + str(layer_id[-1])
-            # text += '' if factors is None else ' factors: ' + str(factors)
-            # text += '' if time_id is None else ' time_id: ' + str(time_id[0]) + ' ' + str(time_id[-1])
-            # text += '' if head_id is None else ' head_id: ' + str(head_id)
-            
-            # axs[0].set_title(text)  # 调整这里的y值和字体
-
-            for i, word in enumerate(words):
-                heat_map_word = heat_map.compute_word_heat_map(word)
+            if layer_id is None and time_id is None:
+                plt, fig, axs = get_plt(len(words)+1)
                 if len(words) < 4:
-                    heat_map_word.plot_overlay(out.images[0], ax=axs[i+1])
+                    axs[0].imshow(out.images[0])
                 else:
-                    #print(math.floor((i+1)/4),(i+1)%4)
-                    heat_map_word.plot_overlay(out.images[0], ax=axs[math.floor((i+1)/4)][(i+1)%4])
-
-
-            plt.subplots_adjust(top=0.95)
+                    axs[0][0].imshow(out.images[0])
+                heat_map = tc.compute_global_heat_map(factors=factors)
+                for i, word in enumerate(words):
+                    heat_map_word = heat_map.compute_word_heat_map(word)
+                    if len(words) < 4:
+                        heat_map_word.plot_overlay(out.images[0], ax=axs[i+1])
+                    else:
+                        heat_map_word.plot_overlay(out.images[0], ax=axs[math.floor((i+1)/4)][(i+1)%4])
+                        
+            elif layer_id is not None and time_id is None: 
+                if len(words) > 1:
+                        raise ValueError(f'Only one word is supported, but {len(words)} words are given!')
+                plotnum = len(layer_id) + 1
+                plt, fig, axs = get_plt(plotnum)
+                if len(layer_id) < 4:
+                    axs[0].imshow(out.images[0])
+                    axs[0].set_title(words[0])
+                else:
+                    axs[0][0].imshow(out.images[0])
+                    axs[0][0].set_title(words[0])
+                    
+                for i, layer_i in enumerate(layer_id):
+                    heat_map = tc.compute_global_heat_map(factors=factors, layer_idx=layer_i)
+                    heat_map_word = heat_map.compute_word_heat_map(words[0])
+                    if len(layer_id) < 4:
+                        heat_map_word.plot_overlay(out.images[0], ax=axs[i+1])
+                        axs[i+1].set_title('layer_id: ' + str(time_i[0]) + ' ' + str(time_i[-1]))
+                    else:
+                        heat_map_word.plot_overlay(out.images[0], ax=axs[math.floor((i+1)/4)][(i+1)%4])
+                        axs[math.floor((i+1)/4)][(i+1)%4].set_title('layer_id: ' + str(layer_i[0]) + ' ' + str(layer_i[-1]))
+                        
+            elif layer_id is None and time_id is not None:
+                if len(words) > 1:
+                        raise ValueError(f'Only one word is supported, but {len(words)} words are given!')
+                plotnum = len(time_id) + 1
+                plt, fig, axs = get_plt(plotnum)
+                if len(time_id) < 4:
+                    axs[0].imshow(out.images[0])
+                    axs[0].set_title(words[0])
+                else:
+                    axs[0][0].imshow(out.images[0])
+                    axs[0][0].set_title(words[0])
+                    
+                for i, time_i in enumerate(time_id):
+                    heat_map = tc.compute_global_heat_map(factors=factors, time_idx=time_i)
+                    heat_map_word = heat_map.compute_word_heat_map(words[0])
+                    if len(time_id) < 4:
+                        heat_map_word.plot_overlay(out.images[0], ax=axs[i+1])
+                        axs[i+1].set_title('time_id: ' + str(time_i[0]) + ' ' + str(time_i[-1]))
+                    else:
+                        heat_map_word.plot_overlay(out.images[0], ax=axs[math.floor((i+1)/4)][(i+1)%4])
+                        axs[math.floor((i+1)/4)][(i+1)%4].set_title('time_id: ' + str(time_i[0]) + ' ' + str(time_i[-1]))
+            else:
+                raise ValueError(f'not supported!')
+                
             if args.wandb:
                 wandb.log({"pic": fig})
             else:
                 plt.savefig('pic.png')
+                    

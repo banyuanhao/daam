@@ -24,7 +24,7 @@ parser.add_argument('--words', metavar='S', type=str, nargs='+',
 args = parser.parse_args()
 
 
-model_id = 'stabilityai/stable-diffusion-2-base'
+model_id = 'stabilityai/stable-diffusion-2'
 device = 'cuda'
 
 pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True)
@@ -32,6 +32,7 @@ pipe = pipe.to(device)
 
 prompt = args.prompt
 negative_prompt = args.negative_prompt
+print(prompt)
 seed = set_seed(args.seed)
 words = args.words if args.words is not None else []
 words = [word.replace('_', ' ') for word in words]
