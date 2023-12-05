@@ -117,4 +117,4 @@ export CUDA_VISIBLE_DEVICES=3
 
 # python scripts/daamwandb.py --prompt "a boy wearing glasses" --words "glasses" --group remove_layer_21 --layer_id 1 3 4 6 7 9 10 12 13 15 --seed  7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
 
-python scripts/daamwandb.py --prompt "girl wearing glasses" --words "girl" --group remove_layer_22 --layer_id 1 3 4 6 7 9 10 12 13 15 --seed  7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+# python scripts/daamwandb.py --prompt "girl wearing glasses" --words "girl" --group remove_layer_22 --layer_id 1 3 4 6 7 9 10 12 13 15 --seed  7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb

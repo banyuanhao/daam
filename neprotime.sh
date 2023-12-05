@@ -1,4 +1,4 @@
-export CUDA_VISIBLE_DEVICES=3
+export CUDA_VISIBLE_DEVICES=0
 
 # python scripts/daamwandb.py --prompt "a purple orange on the table" --words "purple" --group "time_bias_test1" --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
 # python scripts/daamwandb.py --prompt "a purple orange on the table" --words "orange" --group "time_bias_test1" --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb 
@@ -21,6 +21,13 @@ export CUDA_VISIBLE_DEVICES=3
 
 # python scripts/daamwandb.py --prompt "a yellow balloon on a blue bench"  --words "yellow, balloon, blue, bench" --group binding_time_test1  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
 # python scripts/daamwandb.py --prompt "a yellow balloon on a blue bench" --negative_prompt "yellow bench" --words "n:yellow" --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --group binding_time_test1  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+# python scripts/daamwandb.py --prompt "a yellow balloon on a blue bench" --words "yellow" --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --group binding_time_test1  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+# python scripts/daamwandb.py --prompt "a yellow balloon on a blue bench" --words "blue" --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --group binding_time_test1  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+# python scripts/daamwandb.py --prompt "a yellow balloon on a blue bench" --words "bench" --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --group binding_time_test1  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+# python scripts/daamwandb.py --prompt "a yellow balloon on a blue bench" --negative_prompt "blue balloon" --words "n:balloon" --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --group binding_time_test1  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+# python scripts/daamwandb.py --prompt "a yellow balloon on a blue bench" --negative_prompt "blue balloon" --words "n:blue" --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --group binding_time_test1  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+# python scripts/daamwandb.py --prompt "a yellow balloon on a blue bench" --negative_prompt "blue" --words "n:blue" --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --group binding_time_test1  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+# python scripts/daamwandb.py --prompt "a yellow balloon on a blue bench" --negative_prompt "yellow" --words "n:yellow" --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --group binding_time_test1  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
 # python scripts/daamwandb.py --prompt "a yellow balloon on a blue bench" --negative_prompt "yellow bench" --words "n:bench" --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --group binding_time_test1  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
 
 # python scripts/daamwandb.py --prompt "A fluffy toy bear near a shiny trophy" --words "luffy, toy bear, shiny, trophy" --group binding_time_test2 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
@@ -120,3 +127,5 @@ export CUDA_VISIBLE_DEVICES=3
 # python scripts/daamwandb.py --prompt "A beautiful digital illustration painting of a detailed gothic fantasy valley and forest." --words "forest" --group remove_time_20 --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
 
 # python scripts/daamwandb.py --prompt "a boy wearing glasses" --words "glasses" --group remove_time_21 --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed  7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+
+# python scripts/daamwandb.py --prompt "A couple walking along the riverbank in Paris, with the Eiffel Tower not far away" --words "Eiffel Tower" --group remove_time_22 --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
