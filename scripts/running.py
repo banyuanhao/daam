@@ -79,7 +79,7 @@ for seed in iter(seeds):
     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
         plt, fig, axs = get_plt(len(negative_time))
         for negative_time_index, negative_time_value in enumerate(negative_time):
-            out = pipe(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed), negative_time=negative_time_value)
+            out = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed), negative_time=negative_time_value)
             axs[math.floor(negative_time_index/4)][negative_time_index%4].imshow(out.images[0])
             axs[math.floor(negative_time_index/4)][negative_time_index%4].set_title(f"negative time: {negative_time_value}")
             

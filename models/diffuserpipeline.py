@@ -484,6 +484,7 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
             )
             text_input_ids = text_inputs.input_ids
             untruncated_ids = self.tokenizer(prompt, padding="longest", return_tensors="pt").input_ids
+            
 
             if untruncated_ids.shape[-1] >= text_input_ids.shape[-1] and not torch.equal(
                 text_input_ids, untruncated_ids
@@ -517,15 +518,17 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         # get unconditional embeddings for classifier free guidance
         if do_classifier_free_guidance and negative_prompt_embeds is None:
             uncond_tokens: List[str]
-            if negative_prompt is None:
-                uncond_tokens = [""] * batch_size
-            elif type(prompt) is not type(negative_prompt):
+            negative_tokens: List[str]
+            
+            uncond_tokens = [""] * batch_size
+            
+            if type(prompt) is not type(negative_prompt):
                 raise TypeError(
                     f"`negative_prompt` should be the same type to `prompt`, but got {type(negative_prompt)} !="
                     f" {type(prompt)}."
                 )
             elif isinstance(negative_prompt, str):
-                uncond_tokens = [negative_prompt]
+                negative_tokens = [negative_prompt]
             elif batch_size != len(negative_prompt):
                 raise ValueError(
                     f"`negative_prompt`: {negative_prompt} has batch size {len(negative_prompt)}, but `prompt`:"
@@ -533,11 +536,12 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
                     " the batch size of `prompt`."
                 )
             else:
-                uncond_tokens = negative_prompt
+                raise ValueError('unknown error')
 
             # textual inversion: procecss multi-vector tokens if necessary
             if isinstance(self, TextualInversionLoaderMixin):
                 uncond_tokens = self.maybe_convert_prompt(uncond_tokens, self.tokenizer)
+                negative_tokens = self.maybe_convert_prompt(negative_tokens, self.tokenizer)
 
             max_length = prompt_embeds.shape[1]
             uncond_input = self.tokenizer(
@@ -547,14 +551,28 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
                 truncation=True,
                 return_tensors="pt",
             )
+            negative_input = self.tokenizer(
+                negative_tokens,
+                padding="max_length",
+                max_length=max_length,
+                truncation=True,
+                return_tensors="pt",
+            )
 
             if hasattr(self.text_encoder.config, "use_attention_mask") and self.text_encoder.config.use_attention_mask:
                 attention_mask = uncond_input.attention_mask.to(device)
+                print('using attention mask')
             else:
                 attention_mask = None
 
-            negative_prompt_embeds = self.text_encoder(
+            uncond_prompt_embeds = self.text_encoder(
                 uncond_input.input_ids.to(device),
+                attention_mask=attention_mask,
+            )
+            uncond_prompt_embeds = uncond_prompt_embeds[0]
+            
+            negative_prompt_embeds = self.text_encoder(
+                negative_input.input_ids.to(device),
                 attention_mask=attention_mask,
             )
             negative_prompt_embeds = negative_prompt_embeds[0]
@@ -567,11 +585,18 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
 
             negative_prompt_embeds = negative_prompt_embeds.repeat(1, num_images_per_prompt, 1)
             negative_prompt_embeds = negative_prompt_embeds.view(batch_size * num_images_per_prompt, seq_len, -1)
+            
+            seq_len = uncond_prompt_embeds.shape[1]
+            
+            uncond_prompt_embeds = uncond_prompt_embeds.to(dtype=self.text_encoder.dtype, device=device)
+            
+            uncond_prompt_embeds = uncond_prompt_embeds.repeat(1, num_images_per_prompt, 1)
+            uncond_prompt_embeds = uncond_prompt_embeds.view(batch_size * num_images_per_prompt, seq_len, -1)
 
             # For classifier free guidance, we need to do two forward passes.
             # Here we concatenate the unconditional and text embeddings into a single batch
             # to avoid doing two forward passes
-            prompt_embeds = torch.cat([negative_prompt_embeds, prompt_embeds])
+            prompt_embeds = torch.cat([negative_prompt_embeds, prompt_embeds, uncond_prompt_embeds])
             #print(prompt_embeds.shape)
         return prompt_embeds
 
@@ -1006,7 +1031,8 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         do_classifier_free_guidance = guidance_scale > 1.0
 
         # 3. Encode input prompt
-        prompt_embeds = self._encode_prompt(
+        # negative, positive, uncond
+        prompt_embeds = self._encode_prompt_total(
             prompt,
             device,
             num_images_per_prompt,
@@ -1015,13 +1041,8 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
             prompt_embeds=prompt_embeds,
             negative_prompt_embeds=negative_prompt_embeds,
         )
-        if negative_time is not None:
-            prompt_embeds_later = self._encode_prompt(
-                prompt,
-                device,
-                num_images_per_prompt,
-                do_classifier_free_guidance,
-            )
+        #print(prompt_embeds.shape)
+        
         # 4. Prepare timesteps
         self.scheduler.set_timesteps(num_inference_steps, device=device)
         timesteps = self.scheduler.timesteps
@@ -1047,6 +1068,7 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         # 6.5 storing
         positive_noises =[]
         negative_noises =[]
+        uncond_noises = []
         diffusion_process = []
         diffusion_process.append(latents)
 
@@ -1055,7 +1077,7 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         with self.progress_bar(total=num_inference_steps) as progress_bar:
             for i, t in enumerate(timesteps):
                 # expand the latents if we are doing classifier free guidance
-                latent_model_input = torch.cat([latents] * 2) if do_classifier_free_guidance else latents
+                latent_model_input = torch.cat([latents] * 3) if do_classifier_free_guidance else latents
                 latent_model_input = self.scheduler.scale_model_input(latent_model_input, t)
                 #print(latent_model_input.shape)
                 # predict the noise residual
@@ -1063,22 +1085,27 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
                 noise_pred = self.unet(
                     latent_model_input,
                     t,
-                    encoder_hidden_states = prompt_embeds if negative_time is None or i < negative_time else prompt_embeds_later,
+                    encoder_hidden_states = prompt_embeds,
                     cross_attention_kwargs=cross_attention_kwargs,
                 ).sample
                 
                 # perform guidance
                 if do_classifier_free_guidance:
-                    noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
-                    noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
+                    noise_pred_negative, noise_pred_positive, noise_pred_uncond = noise_pred.chunk(3)
+                    if i < negative_time:
+                        noise_pred = noise_pred_negative + guidance_scale * (noise_pred_positive - noise_pred_negative)
+                    else:
+                        noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_positive - noise_pred_uncond)
 
                 # compute the previous noisy sample x_t -> x_t-1
                 latents = self.scheduler.step(noise_pred, t, latents, **extra_step_kwargs).prev_sample
                 
                 # storing
                 diffusion_process.append(latents)
-                negative_noises.append(noise_pred)
-                positive_noises.append(noise_pred)
+                negative_noises.append(noise_pred_negative)
+                positive_noises.append(noise_pred_positive)
+                uncond_noises.append(noise_pred_uncond)
+                
 
                 # call the callback, if provided
                 if i == len(timesteps) - 1 or ((i + 1) > num_warmup_steps and (i + 1) % self.scheduler.order == 0):
