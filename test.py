@@ -1,19 +1,12 @@
 from daam import trace, set_seed
-from diffusers import StableDiffusionPipeline
+from models.diffuserpipeline import StableDiffusionPipelineForNegativePrompts
 from matplotlib import pyplot as plt
 import torch
 import random
 import os
-os.environ["VISIBLE_CUDA_DEVICES"] = "6"
 
-gen = set_seed(0)  # for reproducibility
+repo_id = "runwayml/stable-diffusion-v1-5"
 
-numbers = [random.randint(1, 10000000) for _ in range(10)]
-print(numbers)
 
-a = torch.tensor([10,10,20])
-print(a)
-b = a.mean(0)
-b[1] = 0
-print(b)
-print(a)
+# replace `dpm` with any of `ddpm`, `ddim`, `pndm`, `lms`, `euler_anc`, `euler`
+pipeline = StableDiffusionPipelineForNegativePrompts.from_pretrained()
