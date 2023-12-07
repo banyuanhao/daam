@@ -9,6 +9,51 @@ import wandb
 import math
 import random
 
+def vector_projection(a, b):
+    """
+    Project vector a onto vector b.
+    """
+    return (torch.dot(a, b) / torch.dot(b, b)) * b
+    
+
+def projection(x, y):
+    batch_size, channels, width, height = x.shape
+    x = x.view(channels, width * height)
+    y = y.view(channels, width * height)
+    
+    proj = torch.zeros_like(x)
+    
+    if batch_size > 1:
+        raise NotImplementedError("Batch size > 1 not implemented")
+    for i in range(channels):
+        proj[i,] = vector_projection(x[i,], y[i,])
+        
+    x = x.view(batch_size, channels, width, height)
+    y = y.view(batch_size, channels, width, height)
+    proj = proj.view(batch_size, channels, width, height)
+    
+    return proj
+
+def projectionalliinone(x, y):
+    batch_size, channels, width, height = x.shape
+    x = x.view(channels * width * height)
+    y = y.view(channels * width * height)
+    
+    proj = torch.zeros_like(x)
+    
+    if batch_size > 1:
+        raise NotImplementedError("Batch size > 1 not implemented")
+    proj = vector_projection(x, y)
+        
+    x = x.view(batch_size, channels, width, height)
+    y = y.view(batch_size, channels, width, height)
+    proj = proj.view(batch_size, channels, width, height)
+    
+    return proj
+    
+    
+    
+    
 def get_plt(num):
     plt.clf()
     plt.rcParams.update({'font.size': 10})
@@ -25,6 +70,13 @@ def get_plt(num):
                 ax.axis('off')
     plt.subplots_adjust(top=0.95)  
     return plt, fig, axs
+
+
+def get_axs(axs, id, num):
+    if num < 4:
+        return axs[id]
+    else:
+        return axs[math.floor(id/4)][id%4]
     
 
 parser = argparse.ArgumentParser(description='Diffusion')
@@ -52,6 +104,7 @@ pipe = pipe.to(device)
 
 prompt = args.prompt
 negative_prompt = args.negative_prompt
+
 seeds = args.seed if args.seed[0] != 0 else [random.randint(1, 10000000) for _ in range(5)]
 steps = args.steps
 tags = args.tags
@@ -74,18 +127,71 @@ if args.wandb:
         config=wandb.config,
     )
 
-
-for seed in iter(seeds):
+save_dict = {}
+placehold = torch.zeros(len(seeds), 31)
+for i,seed in enumerate(iter(seeds)):
+    
+    
     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
-        plt, fig, axs = get_plt(len(negative_time))
-        for negative_time_index, negative_time_value in enumerate(negative_time):
-            out = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed), negative_time=negative_time_value)
-            axs[math.floor(negative_time_index/4)][negative_time_index%4].imshow(out.images[0])
-            axs[math.floor(negative_time_index/4)][negative_time_index%4].set_title(f"negative time: {negative_time_value}")
+        
+        #plt, fig, axs = get_plt(2)
+        
+        out, diffusion_process, negative_noises, positive_noises, uncond_noises = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=40)
+        
+        ratio40 = [float(torch.norm(projectionalliinone(positive_noises[i],negative_noises[i]))) for i in range(len(positive_noises))]
+        
+        out, diffusion_process, negative_noises, positive_noises, uncond_noises = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=0)
+        
+        ratio0 = [float(torch.norm(projectionalliinone(positive_noises[i],negative_noises[i]))) for i in range(len(positive_noises))]
+        
+        diff = [ratio0[i] - ratio40[i] for i in range(len(ratio0))]
+        placehold[i] = torch.tensor(diff)
+        #print('0-40 : ', diff)
+        # print('0-40 : ', ratio0)
+        # print('0-40 : ', ratio40)
+        
+        
+        # ax = get_axs(axs, 0, 2)
+        # ax.imshow(out.images[0])
+        
+        # ax = get_axs(axs, 1, 2)
+        # ax.imshow(out.images[0])
             
-            # print(negative_time_value)
-        if args.wandb:
-            wandb.log({"pic": fig})
-        else:
-            plt.savefig('pic.png')
+        
+        # positive_norms = [torch.norm(positive_noise) for positive_noise in positive_noises]
+        # negative_norms = [torch.norm(negative_noise) for negative_noise in negative_noises]
+        # uncond_norms = [torch.norm(uncond_noise) for uncond_noise in uncond_noises]
+        
+        
+         
+        
+        # print(positive_norms)
+        # print(negative_norms)
+        # print(uncond_norms)
+        
+
+        # if args.wandb:
+        #     #wandb.log({"pic": fig})
+        #     wandb.log({f"ratio: {str(i)}": diff})
+        # else:
+        #     plt.savefig('pic.png')
+save_dict["seed"] = seeds
+save_dict["placehold"] = placehold
+save_dict["negative_prompt"] = negative_prompt
+torch.save(save_dict, f'save_{negative_prompt}.pt')
+
+
+# for seed in iter(seeds):
+#     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
+#         plt, fig, axs = get_plt(len(negative_time))
+#         for negative_time_index, negative_time_value in enumerate(negative_time):
+#             out = pipe(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed), negative_time=negative_time_value)
+#             axs[math.floor(negative_time_index/4)][negative_time_index%4].imshow(out.images[0])
+#             axs[math.floor(negative_time_index/4)][negative_time_index%4].set_title(f"negative time: {negative_time_value}")
+            
+#             # print(negative_time_value)
+#         if args.wandb:
+#             wandb.log({"pic": fig})
+#         else:
+#             plt.savefig('pic.png')
             
