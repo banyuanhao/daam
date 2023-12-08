@@ -128,7 +128,7 @@ if args.wandb:
     )
 
 save_dict = {}
-placehold = torch.zeros(len(seeds), 31)
+placehold = torch.zeros(len(seeds), len(negative_time))
 for i,seed in enumerate(iter(seeds)):
     
     
@@ -178,7 +178,7 @@ for i,seed in enumerate(iter(seeds)):
 save_dict["seed"] = seeds
 save_dict["placehold"] = placehold
 save_dict["negative_prompt"] = negative_prompt
-torch.save(save_dict, f'save_{negative_prompt}.pt')
+torch.save(save_dict, f'proj_{negative_prompt}.pt')
 
 
 # for seed in iter(seeds):

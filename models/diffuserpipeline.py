@@ -51,7 +51,13 @@ EXAMPLE_DOC_STRING = """
         >>> image = pipe(prompt).images[0]
         ```
 """
-
+class NegativeMapOutput: 
+    def __init__(self, image_original, image_withoutneg_1,  image_withneg_1, image_withoutneg_2,  image_withneg_2):
+        self.image_original = image_original
+        self.image_withoutneg_1 = image_withoutneg_1
+        self.image_withneg_1 = image_withneg_1
+        self.image_withoutneg_2 = image_withoutneg_2
+        self.image_withneg_2 = image_withneg_2
 
 class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMixin, FromCkptMixin):
     r"""
@@ -1169,7 +1175,7 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         cross_attention_kwargs: Optional[Dict[str, Any]] = None,
         negative_time: List[bool] = None,
         look_step: int = 0
-    ):
+    ) -> NegativeMapOutput:
         r"""
         Function invoked when calling the pipeline for generation.
 
@@ -1300,17 +1306,23 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         extra_step_kwargs = self.prepare_extra_step_kwargs(generator, eta)
         
         # 6.5 storing
-        positive_noises =[]
-        negative_noises =[]
-        uncond_noises = []
+        noises = []
         diffusion_process = []
         diffusion_process.append(latents)
 
         # 7. Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
+        
+        latents_withneg = None
+        latents_withoutneg = None
+            
+        latents_withneg_ = None
+        latents_withoutneg_ = None
+            
         with self.progress_bar(total=num_inference_steps) as progress_bar:
-            for i, t in enumerate(timesteps):
+            for i in range(look_step):
                 # expand the latents if we are doing classifier free guidance
+                t = timesteps[i]
                 latent_model_input = torch.cat([latents] * 3) if do_classifier_free_guidance else latents
                 latent_model_input = self.scheduler.scale_model_input(latent_model_input, t)
                 
@@ -1339,9 +1351,7 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
                 
                 # storing
                 diffusion_process.append(latents)
-                negative_noises.append(noise_pred_negative)
-                positive_noises.append(noise_pred_positive)
-                uncond_noises.append(noise_pred_uncond)
+                noises.append(noise_pred)
                 
 
                 # call the callback, if provided
@@ -1349,19 +1359,110 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
                     progress_bar.update()
                     if callback is not None and i % callback_steps == 0:
                         callback(i, t, latents)
+                        
+        ###TODO new computing
+            t = timesteps[look_step]
+            latent_model_input = torch.cat([latents] * 3) if do_classifier_free_guidance else latents
+            latent_model_input = self.scheduler.scale_model_input(latent_model_input, t)
+            
+            # predict the noise residual   
+            noise_pred = self.unet(
+                latent_model_input,
+                t,
+                encoder_hidden_states = prompt_embeds,
+                cross_attention_kwargs=cross_attention_kwargs,
+            ).sample
+            
+            # perform guidance
+            if do_classifier_free_guidance:
+                noise_pred_negative, noise_pred_positive, noise_pred_uncond = noise_pred.chunk(3)
+
+                noise_pred_withneg = noise_pred_negative + guidance_scale * (noise_pred_positive - noise_pred_negative)
+                
+
+                noise_pred_withoutneg = noise_pred_uncond + guidance_scale * (noise_pred_positive - noise_pred_uncond)
+
+            # compute the previous noisy sample x_t -> x_t-1
+            latents_withneg = self.scheduler.step(noise_pred_withneg, t, latents, **extra_step_kwargs).prev_sample
+            latents_withoutneg = self.scheduler.step(noise_pred_withoutneg, t, latents, **extra_step_kwargs).prev_sample
+            
+            # storing
+            diffusion_process.append(latents)
+            
+            noises.append(noise_pred)
+            
+
+            # # call the callback, if provided
+            # if look_step == len(timesteps) - 1 or ((i + 1) > num_warmup_steps and (i + 1) % self.scheduler.order == 0):
+            #     progress_bar.update()
+            #     if callback is not None and i % callback_steps == 0:
+            #         callback(i, t, latents)
+            
+            ###TODO
+            t = timesteps[look_step + 1]
+            
+            latent_model_input_withneg = torch.cat([latents_withneg] * 3)
+            latent_model_input_withneg = self.scheduler.scale_model_input(latent_model_input_withneg, t)
+            
+            latent_model_input_withoutneg = torch.cat([latents_withoutneg] * 3)
+            latent_model_input_withoutneg = self.scheduler.scale_model_input(latent_model_input_withoutneg, t)
+            
+            # predict the noise residual   
+            noise_pred_withneg = self.unet(
+                latent_model_input_withneg,
+                t,
+                encoder_hidden_states = prompt_embeds,
+                cross_attention_kwargs=cross_attention_kwargs,
+            ).sample
+            noise_pred_withoutneg = self.unet(
+                latent_model_input_withoutneg,
+                t,
+                encoder_hidden_states = prompt_embeds,
+                cross_attention_kwargs=cross_attention_kwargs,
+            ).sample
+            
+            # perform guidance
+            if do_classifier_free_guidance:
+                noise_pred_negative_withneg, noise_pred_positive_withneg, noise_pred_uncond_withneg = noise_pred_withneg.chunk(3)
+                
+                noise_pred_negative_withoutneg, noise_pred_positive_withoutneg, noise_pred_uncond_withoutneg = noise_pred_withoutneg.chunk(3)
+
+                noise_pred_withneg = noise_pred_uncond_withneg + guidance_scale * (noise_pred_positive_withneg - noise_pred_uncond_withneg)
+                
+
+                noise_pred_withoutneg = noise_pred_uncond_withoutneg + guidance_scale * (noise_pred_positive_withoutneg - noise_pred_uncond_withoutneg)
+
+            # compute the previous noisy sample x_t -> x_t-1
+            latents_withneg_ = self.scheduler.step(noise_pred_withneg, t, latents_withneg, **extra_step_kwargs).prev_sample
+            
+            latents_withoutneg_ = self.scheduler.step(noise_pred_withoutneg, t, latents_withoutneg, **extra_step_kwargs).prev_sample
+            
+            
+                
+                
+                        
+
 
         if output_type == "latent":
             image = latents
             has_nsfw_concept = None
         elif output_type == "pil":
             # 8. Post-processing
-            image = self.decode_latents(latents)
+            
+            image_orgingal = self.decode_latents(latents)
 
-            # 9. Run safety checker
-            image, has_nsfw_concept = self.run_safety_checker(image, device, prompt_embeds.dtype)
+            image_withneg = self.decode_latents(latents_withneg)
+            image_withoutneg = self.decode_latents(latents_withoutneg)
+            
+            image_withneg_ = self.decode_latents(latents_withneg_)
+            
+            image_withoutneg_ = self.decode_latents(latents_withoutneg_)
+
+            # # 9. Run safety checker
+            # image, has_nsfw_concept = self.run_safety_checker(image, device, prompt_embeds.dtype)
 
             # 10. Convert to PIL
-            image = self.numpy_to_pil(image)
+            # image = self.numpy_to_pil(image)
         else:
             # 8. Post-processing
             image = self.decode_latents(latents)
@@ -1375,5 +1476,7 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
 
         if not return_dict:
             return (image, has_nsfw_concept)
+        
+        
 
-        return StableDiffusionPipelineOutput(images=image, nsfw_content_detected=has_nsfw_concept), diffusion_process, negative_noises, positive_noises, uncond_noises
+        return NegativeMapOutput(image_orgingal, image_withoutneg, image_withneg, image_withoutneg_, image_withneg_)
