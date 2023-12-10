@@ -1151,7 +1151,20 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
 
         return StableDiffusionPipelineOutput(images=image, nsfw_content_detected=has_nsfw_concept), diffusion_process, negative_noises, positive_noises, uncond_noises
 
-
+    def normalize(self, tensor):
+        tensor = tensor - tensor.min()
+        tensor = tensor / tensor.max()
+        return tensor
+    
+    def tensor_to_numpy(self,tensor:torch.Tensor):
+        tensor = self.normalize(tensor)
+        tensor = torch.mean(tensor, dim=1, keepdim=True)
+        tensor = torch.cat([tensor] * 3, dim=1)
+        tensor = tensor.transpose(1, 2).transpose(2, 3)
+        tensor = tensor.cpu().numpy()
+        return tensor
+        
+    
     @torch.no_grad()
     @replace_example_docstring(EXAMPLE_DOC_STRING)
     def diff_map(
@@ -1435,6 +1448,10 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
                     noise_pred_withneg = noise_pred_uncond_withneg + guidance_scale * (noise_pred_positive_withneg - noise_pred_uncond_withneg)
                     noise_pred_withoutneg = noise_pred_uncond_withoutneg + guidance_scale * (noise_pred_positive_withoutneg - noise_pred_uncond_withoutneg)
                     
+                elif look_mode == 'pn':
+                    noise_pred_withneg = noise_pred_negative_withneg + guidance_scale * (noise_pred_positive_withneg - noise_pred_negative_withneg)
+                    noise_pred_withoutneg = noise_pred_negative_withoutneg + guidance_scale * (noise_pred_positive_withoutneg - noise_pred_negative_withoutneg)
+                    
                 elif look_mode == 'nu':
                     noise_pred_withneg = noise_pred_uncond_withneg + guidance_scale * (noise_pred_negative_withneg - noise_pred_uncond_withneg)
                     noise_pred_withoutneg = noise_pred_uncond_withoutneg + guidance_scale * (noise_pred_negative_withoutneg - noise_pred_uncond_withoutneg)
@@ -1475,10 +1492,14 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
 
             image_withneg = self.decode_latents(latents_withneg)
             image_withoutneg = self.decode_latents(latents_withoutneg)
-            
             image_withneg_ = self.decode_latents(latents_withneg_)
-            
             image_withoutneg_ = self.decode_latents(latents_withoutneg_)
+            
+            latents = self.tensor_to_numpy(latents)
+            latents_withneg = self.tensor_to_numpy(latents_withneg)
+            latents_withoutneg = self.tensor_to_numpy(latents_withoutneg)
+            latents_withneg_ = self.tensor_to_numpy(latents_withneg_)
+            latents_withoutneg_ = self.tensor_to_numpy(latents_withoutneg_)
 
             # # 9. Run safety checker
             # image, has_nsfw_concept = self.run_safety_checker(image, device, prompt_embeds.dtype)

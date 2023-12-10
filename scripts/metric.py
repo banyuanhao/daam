@@ -46,7 +46,7 @@ parser.add_argument('--tags', metavar='S', type=str, nargs='+',default='negative
 parser.add_argument('--steps', type=int, default=30)
 parser.add_argument('--wandb',action='store_true',help='use wandb')
 parser.add_argument('--look_time', type=int, nargs='+', default=0)
-parser.add_argument('--look_mode', type=str, choices=['nu','pu','u','p','n'], required=True)
+parser.add_argument('--look_mode', type=str, choices=['nu','pu','u','p','n','pn'], required=True)
 parser.add_argument('--look_part', type=str, choices=['latent','image'], default='image')
 args = parser.parse_args()
 
