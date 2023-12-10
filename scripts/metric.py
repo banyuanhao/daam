@@ -47,6 +47,7 @@ parser.add_argument('--steps', type=int, default=30)
 parser.add_argument('--wandb',action='store_true',help='use wandb')
 parser.add_argument('--look_time', type=int, nargs='+', default=0)
 parser.add_argument('--look_mode', type=str, choices=['nu','pu','u','p','n'], required=True)
+parser.add_argument('--look_part', type=str, choices=['latent','image'], default='image')
 args = parser.parse_args()
 
 wandb.login()
@@ -63,6 +64,7 @@ steps = args.steps
 tags = args.tags
 look_time = args.look_time
 look_mode = args.look_mode
+look_part = args.look_part
 
 
 
@@ -75,7 +77,8 @@ if args.wandb:
                     "tags": tags,
                     "negative time": args.negative_time,
                     "look time": args.look_time,
-                    "look mode": args.look_mode
+                    "look mode": args.look_mode,
+                    "look part": args.look_part,
                     }
     run = wandb.init(
         project=args.project,
@@ -97,16 +100,16 @@ for seed in iter(seeds):
         out = pipe(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed))
         ax = get_axs(axs, 0, 12)
         ax.imshow(out.images[0])
-        ax.set_title('with negative prompt '+look_mode)
+        ax.set_title('with N '+look_mode)
         
         out = pipe(prompt, num_inference_steps=steps, generator=set_seed(seed))
         ax = get_axs(axs, 1, 12)
         ax.imshow(out.images[0])
-        ax.set_title('without negative prompt')
+        ax.set_title('without N '+look_part)
         
         for i, time in enumerate(look_time):
 
-            out = pipe.diff_map(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed), negative_time=negative_time, look_step=time, look_mode=look_mode)
+            out = pipe.diff_map(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed), negative_time=negative_time, look_step=time, look_mode=look_mode, look_part=look_part)
             
             
             difference = (out.image_withneg_2 - out.image_withoutneg_2) * 10 + 0.5

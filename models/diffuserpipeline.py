@@ -1175,7 +1175,8 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         cross_attention_kwargs: Optional[Dict[str, Any]] = None,
         negative_time: List[bool] = None,
         look_step: int = 0,
-        look_mode: str = None
+        look_mode: str = None,
+        look_part: str = None
     ) -> NegativeMapOutput:
         r"""
         Function invoked when calling the pipeline for generation.
@@ -1462,10 +1463,6 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
             
             latents_withoutneg_ = self.scheduler.step(noise_pred_withoutneg, t, latents_withoutneg, **extra_step_kwargs).prev_sample
             
-            
-                
-                
-                        
 
 
         if output_type == "latent":
@@ -1502,6 +1499,11 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         if not return_dict:
             return (image, has_nsfw_concept)
         
-        
-
-        return NegativeMapOutput(image_orgingal, image_withoutneg, image_withneg, image_withoutneg_, image_withneg_)
+        if look_part is None:
+            raise ValueError("look_part should be either 'withneg' or 'withoutneg' or 'both'")
+        elif look_part == 'image':
+            return NegativeMapOutput(image_orgingal, image_withoutneg, image_withneg, image_withoutneg_, image_withneg_)
+        elif look_part == 'latent':
+            return NegativeMapOutput(latents, latents_withoutneg, latents_withneg, latents_withoutneg_, latents_withneg_)
+        else:
+            raise ValueError("look_part should be either 'image' or 'latent'")
