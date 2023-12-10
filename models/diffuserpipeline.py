@@ -1174,7 +1174,8 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         callback_steps: int = 1,
         cross_attention_kwargs: Optional[Dict[str, Any]] = None,
         negative_time: List[bool] = None,
-        look_step: int = 0
+        look_step: int = 0,
+        look_mode: str = None
     ) -> NegativeMapOutput:
         r"""
         Function invoked when calling the pipeline for generation.
@@ -1426,11 +1427,35 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
                 noise_pred_negative_withneg, noise_pred_positive_withneg, noise_pred_uncond_withneg = noise_pred_withneg.chunk(3)
                 
                 noise_pred_negative_withoutneg, noise_pred_positive_withoutneg, noise_pred_uncond_withoutneg = noise_pred_withoutneg.chunk(3)
-
-                noise_pred_withneg = noise_pred_uncond_withneg + guidance_scale * (noise_pred_positive_withneg - noise_pred_uncond_withneg)
                 
-
-                noise_pred_withoutneg = noise_pred_uncond_withoutneg + guidance_scale * (noise_pred_positive_withoutneg - noise_pred_uncond_withoutneg)
+                if look_mode is None:
+                    raise ValueError("look_mode should be either 'nu' or 'pu' or 'u'")
+                elif look_mode == 'pu':
+                    noise_pred_withneg = noise_pred_uncond_withneg + guidance_scale * (noise_pred_positive_withneg - noise_pred_uncond_withneg)
+                    noise_pred_withoutneg = noise_pred_uncond_withoutneg + guidance_scale * (noise_pred_positive_withoutneg - noise_pred_uncond_withoutneg)
+                    
+                elif look_mode == 'nu':
+                    noise_pred_withneg = noise_pred_uncond_withneg + guidance_scale * (noise_pred_negative_withneg - noise_pred_uncond_withneg)
+                    noise_pred_withoutneg = noise_pred_uncond_withoutneg + guidance_scale * (noise_pred_negative_withoutneg - noise_pred_uncond_withoutneg)
+                    
+                elif look_mode == 'np':
+                    noise_pred_withneg = noise_pred_negative_withneg + guidance_scale * (noise_pred_positive_withneg - noise_pred_negative_withneg)
+                    noise_pred_withoutneg = noise_pred_negative_withoutneg + guidance_scale * (noise_pred_positive_withoutneg - noise_pred_negative_withoutneg)
+                    
+                elif look_mode == 'u':
+                    noise_pred_withneg = noise_pred_uncond_withneg
+                    noise_pred_withoutneg = noise_pred_uncond_withoutneg
+                    
+                elif look_mode == 'p':
+                    noise_pred_withneg = noise_pred_positive_withneg
+                    noise_pred_withoutneg = noise_pred_positive_withoutneg
+                    
+                elif look_mode == 'n':
+                    noise_pred_withneg = noise_pred_negative_withneg
+                    noise_pred_withoutneg = noise_pred_negative_withoutneg
+                    
+                    
+                    
 
             # compute the previous noisy sample x_t -> x_t-1
             latents_withneg_ = self.scheduler.step(noise_pred_withneg, t, latents_withneg, **extra_step_kwargs).prev_sample

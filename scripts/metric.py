@@ -46,6 +46,7 @@ parser.add_argument('--tags', metavar='S', type=str, nargs='+',default='negative
 parser.add_argument('--steps', type=int, default=30)
 parser.add_argument('--wandb',action='store_true',help='use wandb')
 parser.add_argument('--look_time', type=int, nargs='+', default=0)
+parser.add_argument('--look_mode', type=str, choices=['nu','pu','u','p','n'], required=True)
 args = parser.parse_args()
 
 wandb.login()
@@ -61,6 +62,7 @@ seeds = args.seed if args.seed[0] != 0 else [random.randint(1, 10000000) for _ i
 steps = args.steps
 tags = args.tags
 look_time = args.look_time
+look_mode = args.look_mode
 
 
 
@@ -72,7 +74,8 @@ if args.wandb:
                     "steps": steps,
                     "tags": tags,
                     "negative time": args.negative_time,
-                    "look time": args.look_time
+                    "look time": args.look_time,
+                    "look mode": args.look_mode
                     }
     run = wandb.init(
         project=args.project,
@@ -89,28 +92,32 @@ if args.negative_time is not None:
 for seed in iter(seeds):
     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
         
-        plt, fig, axs = get_plt(8)
+        plt, fig, axs = get_plt(12)
         
         out = pipe(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed))
-        ax = get_axs(axs, 0, 8)
+        ax = get_axs(axs, 0, 12)
+        ax.imshow(out.images[0])
+        ax.set_title('with negative prompt '+look_mode)
+        
+        out = pipe(prompt, num_inference_steps=steps, generator=set_seed(seed))
+        ax = get_axs(axs, 1, 12)
         ax.imshow(out.images[0])
         ax.set_title('without negative prompt')
         
-        out = pipe(prompt, num_inference_steps=steps, generator=set_seed(seed))
-        ax = get_axs(axs, 1, 8)
-        ax.imshow(out.images[0])
-        ax.set_title('with negative prompt')
-        
         for i, time in enumerate(look_time):
 
-            out = pipe.diff_map(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed), negative_time=negative_time, look_step=time)
+            out = pipe.diff_map(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed), negative_time=negative_time, look_step=time, look_mode=look_mode)
             
             
             difference = (out.image_withneg_2 - out.image_withoutneg_2) * 10 + 0.5
-            ax = get_axs(axs, 2+i, 8) 
+            difference_pre = (out.image_withneg_1 - out.image_withoutneg_1) * 10 + 0.5
+            ax = get_axs(axs, 4 + i, 12) 
             ax.imshow(pipe.numpy_to_pil(difference)[0])
             ax.set_title(f'{time}')
         
+            ax = get_axs(axs, 8 + i, 12) 
+            ax.imshow(pipe.numpy_to_pil(difference_pre)[0])
+            ax.set_title(f'{time}')
         
         if args.wandb:
             wandb.log({"pic": fig})
