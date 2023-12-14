@@ -83,6 +83,61 @@ class DiffusionHeatMapHooker(AggregateHooker):
         )
         
 
+    def compute_activation_ratio(self, prompt=None, negative_prompt=None):
+        # type: (str,  str) -> (List[float], List[float])
+        """
+        Compute the global heat map for the given prompt, aggregating across time (inference steps) and space (different
+        spatial transformer block heat maps).
+
+        Args:
+            prompt: The prompt to compute the heat map for. If none, uses the last prompt that was used for generation.
+            factors: Restrict the application to heat maps with spatial factors in this set. If `None`, use all sizes.
+            head_idx: Restrict the application to heat maps with this head index. If `None`, use all heads.
+            layer_idx: Restrict the application to heat maps with this layer index. If `None`, use all layers.
+            time_idx: Restrict the application to heat maps with this time index. If `None`, use all time steps.
+
+        Returns:
+            A heat map object for computing word-level heat maps.
+        """
+        #print(self.time_idx)
+        heat_maps = self.all_heat_maps
+        negative_heat_maps = self.all_negative_heat_maps
+        #print(negative_heat_maps)
+        #print(len(heat_maps.ids_to_heatmaps))
+        
+
+        if prompt is None:
+            prompt = self.last_prompt
+            #print(self.last_prompt)
+        if negative_prompt is None:
+            negative_prompt = self.last_negative_prompt
+            
+        # print(len(heat_maps.ids_to_heatmaps))
+        # raise ValueError('The shape of maps and negative_maps are not the same.')
+
+        all_merges = [0]*31
+        all_merges_negative = [0]*31
+        
+        x = int(np.sqrt(self.latent_hw))
+
+        with auto_autocast(dtype=torch.float32):
+            for (_, _, _, time), heat_map in heat_maps:
+
+                heat_map_value = heat_map.pow(2).mean()
+                all_merges[time] += heat_map_value.cpu().numpy()
+                # The clamping fixes undershoot.
+                
+            
+            for (_, _, _, time), negative_heat_map in negative_heat_maps:
+
+                #print(heat_map.shape)
+                negative_heat_map_value = negative_heat_map.pow(2).mean()
+                all_merges_negative[time] += negative_heat_map_value.cpu().numpy()
+
+
+        return all_merges, all_merges_negative
+    
+    
     def compute_global_heat_map(self, prompt=None, factors=None, head_idx=None, layer_idx=None, normalize=False, negative_prompt=None, time_idx=None):
         # type: (str, List[float], List[int], List[int], bool, str, List[int]) -> GlobalHeatMap
         """

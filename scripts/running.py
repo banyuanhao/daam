@@ -131,7 +131,6 @@ save_dict = {}
 placehold = torch.zeros(len(seeds), len(negative_time))
 for i,seed in enumerate(iter(seeds)):
     
-    
     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
         
         #plt, fig, axs = get_plt(2)
