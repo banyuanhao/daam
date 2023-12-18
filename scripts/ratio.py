@@ -62,7 +62,7 @@ for seed in iter(seeds):
             ratio = [neg[i]/pos[i] for i in range(len(pos))]
             
             fig, ax = plt.subplots()
-            ax.plot(pos, label='ratio')
+            ax.plot(ratio, label='ratio')
             ax.set_title('Positive and Negative Series')
             ax.legend()
             if args.wandb:

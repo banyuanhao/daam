@@ -60,22 +60,22 @@ python scripts/ratio.py --prompt "A couple walking along the riverbank in Paris"
 python scripts/ratio.py --prompt "a red balloon on a yellow bench" --negative_prompt "red bench" --negative_prompt "tree" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_del --wandb
 
 
-python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "extra eyes" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
+# python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "extra eyes" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
 
-python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "huge eyes" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
+# python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "huge eyes" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
 
-python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "2girl" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
+# python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "2girl" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
 
-python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "amputation" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
+# python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "amputation" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
 
-python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "disconnected limbs" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
+# python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "disconnected limbs" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
 
-python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "cartoon" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
+# python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "cartoon" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
 
-python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "cg" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
+# python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "cg" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
 
-python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "3d" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
+# python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "3d" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
 
-python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "unreal" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
+# python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "unreal" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
 
-python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "animate" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
+# python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "animate" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb

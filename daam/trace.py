@@ -236,21 +236,21 @@ class DiffusionHeatMapHooker(AggregateHooker):
         # print(len(heat_maps.ids_to_heatmaps))
         # raise ValueError('The shape of maps and negative_maps are not the same.')
 
-        all_merges_negative = []
+        all_merges_negative = [[] for i in range(31)]
         x = int(np.sqrt(self.latent_hw))
 
         with auto_autocast(dtype=torch.float32):            
             for (factor, layer, head, time), negative_heat_map in negative_heat_maps:
-                if factor in factors and (head_idx is None or head in head_idx) and (layer_idx is None or layer in layer_idx) and (time_idx is None or time in time_idx):
-                    print(factor, layer, head, time, negative_heat_map.shape)
+                if factor in factors and (head_idx is None or head in head_idx) and (layer_idx is None or layer in layer_idx):
+                    # print(factor, layer, head, time, negative_heat_map.shape)
                     #print(heat_map.shape)
                     negative_heat_map = negative_heat_map.unsqueeze(1)
                     # The clamping fixes undershoot.
-                    all_merges_negative.append(F.interpolate(negative_heat_map, size=(x, x), mode='bicubic').clamp_(min=0))
+                    all_merges_negative[time].append(F.interpolate(negative_heat_map, size=(x, x), mode='bicubic').clamp_(min=0))
 
             try:
-
-                negative_maps = torch.stack(all_merges_negative, dim=0)
+                
+                negative_maps = [torch.stack(all_merges_negative_, dim=0) for all_merges_negative_ in all_merges_negative]
             except RuntimeError:
                 if head_idx is not None or layer_idx is not None:
                     raise RuntimeError('No heat maps found for the given parameters.')
@@ -259,18 +259,18 @@ class DiffusionHeatMapHooker(AggregateHooker):
 
             # TODO: fix this
             #print(maps.shape)
-            maps = maps.mean(0)[:, 0]
-            negative_maps = negative_maps.mean(0)[:, 0]
+            #print(negative_maps[0].shape)
+            negative_maps = [negative_map.mean(0)[:, 0] for negative_map in negative_maps]
+            #print(negative_maps[0].shape)
             
-            maps = maps[:len(self.pipe.tokenizer.tokenize(prompt)) + 2]  # 1 for SOS and 1 for padding
-            negative_maps = negative_maps[:len(self.pipe.tokenizer.tokenize(negative_prompt)) + 2]
+            for i in range(len(negative_maps)):
+                negative_maps[i] = negative_maps[i][1:len(self.pipe.tokenizer.tokenize(negative_prompt)) + 1] # 1 for SOS and 1 for padding
+                if normalize:
+                    negative_maps[i] = negative_maps[i] / (negative_maps[i][1:-1].sum(0, keepdim=True) + 1e-6)
+                negative_maps[i] = negative_maps[i].mean(0,keepdim=True)
             #print(maps.shape)
-
-            if normalize:
-                maps = maps / (maps[1:-1].sum(0, keepdim=True) + 1e-6)  # drop out [SOS] and [PAD] for proper probabilities
-                negative_maps = negative_maps / (negative_maps[1:-1].sum(0, keepdim=True) + 1e-6)
-            #print(maps.shape)
-        return GlobalHeatMap(self.pipe.tokenizer, prompt, maps, negative_prompt, negative_maps)
+            
+        return negative_maps
         
 
 
@@ -447,7 +447,7 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
         value = attn.head_to_batch_dim(value)
         #print(value.shape)
         attention_probs = attn.get_attention_scores(query, key, attention_mask)
-        print(attention_probs.shape)
+        #print(attention_probs.shape)
         #print(attention_probs.shape)
 
 
