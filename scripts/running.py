@@ -136,65 +136,81 @@ for i,seed in enumerate(iter(seeds)):
     
     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
         
+        
+        ### plot negative time plot
+        fig, axs = plt.subplots(3, 3, figsize=(10, 5+1))
+        
+        out, _, _, _, _ = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=negative_time,output_type='image')
+        
+        axs[0][0].imshow(out.images[0])
+        
+        ### compute with negative prompt
         out, diffusion_process, negative_noises, positive_noises, uncond_noises = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=40,output_type='image')
         
+        axs[1][0].imshow(out.images[0])
         
+        diffusion_process_draw = []
         for k in range(len(diffusion_process)):
             temp = torch.mean(diffusion_process[k],dim=1,keepdim=True)
             temp = torch.cat([temp]*3,dim=1).squeeze(0)
-            diffusion_process[k] = temp
-        
-        # show image using a tensor with the shape of (1, 3, height, width)
-        fig, ax = plt.subplots()
-        # ax.imshow(out.images[0])
-        # print(out.images[0].shape)
-        #ax.imshow(diffusion_process[30].cpu().numpy().transpose(1, 2, 0))
-        
-        
-        #bounding box and mask
+            diffusion_process_draw.append(temp)
+                    
+        ## bounding box and mask
         bound_box = [12,25,25,40]
         mask_latent = torch.zeros_like(diffusion_process[0])
-        print(diffusion_process[0].shape)
-        print(uncond_noises[0].shape)
-        
         mask_latent[:,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]] = 1
+        
+        axs[1][1].imshow((diffusion_process_draw[5]*mask_latent[0:3]))
+        mask_latent = mask_latent == 1
         
         bound_box_image = [tmp*8 for tmp in bound_box]
         mask_image = np.zeros_like(out.images[0])
         mask_image[bound_box_image[1]:bound_box_image[1]+bound_box_image[3],bound_box_image[0]:bound_box_image[0]+bound_box_image[2],:] = 1
-        ax.imshow((out.images[0]*mask_image))
+        axs[1][2].imshow((out.images[0]*mask_image))
+          
         # rect = patches.Rectangle((bound_box[0], bound_box[1]), bound_box[2], bound_box[3], linewidth=1, edgecolor='r', facecolor='none')
         # ax.add_patch(rect)
-        fig.savefig('picimage.png')
-        fig, ax = plt.subplots()
-        ax.imshow((diffusion_process[30]*mask_latent).cpu().numpy().transpose(1, 2, 0))
-        fig.savefig('piclatent.png')
         
         
-        ratio40 = [float(torch.norm(projectionalliinone(positive_noises[i],negative_noises[i]))) for i in range(len(positive_noises))]
+        ratio40 = [float(torch.norm(projectionalliinone(positive_noises[k][mask_latent],negative_noises[k][mask_latent]))) for k in range(len(positive_noises))]
         
-        out, diffusion_process, negative_noises, positive_noises, uncond_noises = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=0)
+        ### compute without negative prompt
+        out, diffusion_process, negative_noises, positive_noises, uncond_noises = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=40,output_type='image')
         
+        axs[2][0].imshow(out.images[0])
+        
+        diffusion_process_draw = []
         for k in range(len(diffusion_process)):
             temp = torch.mean(diffusion_process[k],dim=1,keepdim=True)
             temp = torch.cat([temp]*3,dim=1).squeeze(0)
-            diffusion_process[k] = temp
+            diffusion_process_draw.append(temp)
+                    
+        #bounding box and mask
+        bound_box = [12,25,25,40]
+        mask_latent = torch.zeros_like(diffusion_process[0])
+        mask_latent[:,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]] = 1
         
-        print(positive_noises[0].shape)
-        print(mask_latent.shape)
-        ratio0 = [float(torch.norm(projectionalliinone(positive_noises[i],negative_noises[i]))) for i in range(len(positive_noises))]
+        axs[2][1].imshow((diffusion_process_draw[5]*mask_latent[0:3]))
+        mask_latent = mask_latent == 1
         
-        diff = [ratio0[i] - ratio40[i] for i in range(len(ratio0))]
+        bound_box_image = [tmp*8 for tmp in bound_box]
+        mask_image = np.zeros_like(out.images[0])
+        mask_image[bound_box_image[1]:bound_box_image[1]+bound_box_image[3],bound_box_image[0]:bound_box_image[0]+bound_box_image[2],:] = 1
+        axs[2][2].imshow((out.images[0]*mask_image))
+        plt.savefig('pic.png')  
+        # rect = patches.Rectangle((bound_box[0], bound_box[1]), bound_box[2], bound_box[3], linewidth=1, edgecolor='r', facecolor='none')
+        # ax.add_patch(rect)
+        
+        
+        ratio0 = [float(torch.norm(projectionalliinone(positive_noises[k][mask_latent],negative_noises[k][mask_latent]))) for k in range(len(positive_noises))]
+        
+        diff = [ratio0[k] - ratio40[k] for k in range(len(ratio0))]
     
-
-        # if args.wandb:
-        #     #wandb.log({"pic": fig})
-        #     wandb.log({f"ratio: {str(i)}": diff})
-        # else:
-        #     plt.savefig('pic.png')
-save_dict["seed"] = seeds
-save_dict["placehold"] = placehold
-save_dict["negative_prompt"] = negative_prompt
-torch.save(save_dict, f'proj_{negative_prompt}.pt')
+        axs[0][1].plot(axs[0][1],diffusion_process_draw[5],bound_box)
+        
+        if args.wandb:
+            wandb.log({f"ratio: {str(seed)}": fig})
+        else:
+            plt.savefig('pic.png')
 
             
