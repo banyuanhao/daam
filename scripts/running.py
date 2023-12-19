@@ -9,6 +9,7 @@ import wandb
 import math
 import random
 import matplotlib.patches as patches
+import numpy as np
 
 def vector_projection(a, b):
     """
@@ -129,13 +130,12 @@ if args.wandb:
     )
 
 save_dict = {}
-placehold = torch.zeros(len(seeds), len(negative_time))
 
 for i,seed in enumerate(iter(seeds)):
     
     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
         
-        out, diffusion_process, negative_noises, positive_noises, uncond_noises = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=40)
+        out, diffusion_process, negative_noises, positive_noises, uncond_noises = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=40,output_type='image')
         
         
         for k in range(len(diffusion_process)):
@@ -145,21 +145,24 @@ for i,seed in enumerate(iter(seeds)):
         
         # show image using a tensor with the shape of (1, 3, height, width)
         fig, ax = plt.subplots()
-        ax.imshow(out.images[0])
-        print(out.images[0].shape)
+        # ax.imshow(out.images[0])
+        # print(out.images[0].shape)
         #ax.imshow(diffusion_process[30].cpu().numpy().transpose(1, 2, 0))
         
         
-        # bounding box and mask
-        # bound_box = [10,30,20,40]
-        bound_box = bound_box // 8
-        # mask = torch.zeros_like(diffusion_process[0])
-        # mask[:,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]] = 1
-        # ax.imshow((diffusion_process[30]*mask).cpu().numpy().transpose(1, 2, 0))
+        #bounding box and mask
+        bound_box = [12,25,25,40]
+        mask_latent = torch.zeros_like(diffusion_process[0])
+        mask_latent[:,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]] = 1
+        
+        bound_box_image = [tmp*8 for tmp in bound_box]
+        mask_image = np.zeros_like(out.images[0])
+        mask_image[bound_box_image[1]:bound_box_image[1]+bound_box_image[3],bound_box_image[0]:bound_box_image[0]+bound_box_image[2],:] = 1
+        ax.imshow((out.images[0]*mask_image))
         # rect = patches.Rectangle((bound_box[0], bound_box[1]), bound_box[2], bound_box[3], linewidth=1, edgecolor='r', facecolor='none')
         # ax.add_patch(rect)
         
-        fig.savefig('pic1.png')
+        fig.savefig('pic3.png')
         
         ratio40 = [float(torch.norm(projectionalliinone(positive_noises[i],negative_noises[i]))) for i in range(len(positive_noises))]
         
