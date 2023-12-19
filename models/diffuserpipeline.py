@@ -1076,7 +1076,8 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         negative_noises =[]
         uncond_noises = []
         diffusion_process = []
-        diffusion_process.append(latents)
+        # TODO
+        # diffusion_process.append(latents)
 
         # 7. Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order

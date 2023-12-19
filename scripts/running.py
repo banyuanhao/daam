@@ -1,18 +1,14 @@
 # a script to test the changing of the negative prompt
 import argparse
-from daam import set_seed, trace
+from daam import set_seed
 from models.diffuserpipeline import StableDiffusionPipelineForNegativePrompts
-from diffusers import StableDiffusionPipeline
 import torch
 import matplotlib.pyplot as plt
 import os
 import wandb
 import math
 import random
-import torch.nn.functional as F
-
-prompt_sec = "train station, watercolor painting" 
-negative_prompt_sec = "train"
+import matplotlib.patches as patches
 
 def vector_projection(a, b):
     """
@@ -105,9 +101,7 @@ wandb.login()
 model_id = 'stabilityai/stable-diffusion-2-base'
 device = 'cuda'
 pipe = StableDiffusionPipelineForNegativePrompts.from_pretrained(model_id, use_auth_token=True)
-pipe_ori = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True)
 pipe = pipe.to(device)
-pipe_ori = pipe_ori.to(device)
 
 prompt = args.prompt
 negative_prompt = args.negative_prompt
@@ -136,161 +130,61 @@ if args.wandb:
 
 save_dict = {}
 placehold = torch.zeros(len(seeds), len(negative_time))
+
 for i,seed in enumerate(iter(seeds)):
     
     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
-
-        plt, fig, axs = get_plt(2)
-            
+        
         out, diffusion_process, negative_noises, positive_noises, uncond_noises = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=40)
         
-        with trace(pipe_ori) as tc:
-            out_ori = pipe_ori(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed))
-            negative_maps = tc.return_heat_map()
-            # negative_maps = [torch.cat([negative_map]*3) for negative_map in negative_maps]
-            #negative_maps = [negative_maps[i].to(torch.float32).transpose(0,1).transpose(1,2).cpu().numpy() for i in range(len(negative_maps))]
         
-        negative_maps = [torch.cat([negative_map]*4).unsqueeze(0) for negative_map in negative_maps]
-    
+        for k in range(len(diffusion_process)):
+            temp = torch.mean(diffusion_process[k],dim=1,keepdim=True)
+            temp = torch.cat([temp]*3,dim=1).squeeze(0)
+            diffusion_process[k] = temp
         
-        gro = [2]
-        # for i in range(31):
-        #     positive_noise = positive_noises[i] # * negative_maps[i]
-            
-        #     negative_noise = negative_noises[i] # * negative_maps[i]
-            
-        #     # compute cos similarity
-        #     positive_noise = positive_noise.view(4 * 64 * 64)
-        #     negative_noise = negative_noise.view(4 * 64 * 64)
-        #     cos_sim = F.cosine_similarity(positive_noise, negative_noise, dim=0)
-        #     print(cos_sim)
-            
-            
-            
-        out_sec, diffusion_process_sec, negative_noises_sec, positive_noises_sec, uncond_noises_sec = pipe.negative_accumulate(prompt_sec, negative_prompt=negative_prompt_sec if len(negative_prompt_sec)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=0)
-        
-        # fig, ax = plt.subplots()
-        # # turn off x and y axis
-        # ax.get_xaxis().set_visible(False)
-        # ax.get_yaxis().set_visible(False)
-        # ax.imshow(out.images[0])
-        # fig.savefig(f'out_{negative_prompt}.png')
-        # # raise NotImplementedError("Batch size > 1 not implemented")
-        
-        
-        with trace(pipe_ori) as tc:
-            out_ori_sec = pipe_ori(prompt, negative_prompt=negative_prompt_sec if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed))
-            negative_maps_sec = tc.return_heat_map()
-            # negative_maps = [torch.cat([negative_map]*3) for negative_map in negative_maps]
-            #negative_maps = [negative_maps[i].to(torch.float32).transpose(0,1).transpose(1,2).cpu().numpy() for i in range(len(negative_maps))]
-        
-        negative_maps_sec = [torch.cat([negative_map_sec]*4).unsqueeze(0) for negative_map_sec in negative_maps_sec]
-    
-        
-        gro = [1, 2, 3, 4, 5, 15, 25]
-        # for i in gro:
-        #     positive_noise_sec = positive_noises_sec[i]  * negative_maps_sec[i]
-            
-        #     negative_noise_sec = negative_noises_sec[i] * negative_maps_sec[i]
-            
-        #     # compute cos similarity
-        #     positive_noise_sec = positive_noise_sec.view(4 * 64 * 64)
-        #     negative_noise_sec = negative_noise_sec.view(4 * 64 * 64)
-        #     noise = torch.randn(4 * 64 * 64).to(device)
-        #     # cos_sim = F.cosine_similarity(positive_noise, negative_noise, dim=0)
-        #     cos_sim = F.cosine_similarity(positive_noise_sec, positive_noise, dim=0)
-        #     print(cos_sim)
-        
-        cos_sim_np = []
-        cos_sim_pp = []
-        cos_sim_up = []
-        cos_sim_noise = []
-        
-        for i in range(31):
-            positive_noise_sec = positive_noises_sec[i] #  * negative_maps_sec[i]
-            
-            uncond_noise_sec = uncond_noises_sec[i] # * negative_maps_sec[i]
-            
-            negative_noise_sec = negative_noises_sec[i] # * negative_maps_sec[i]
-        
-            positive_noise = positive_noises[i] # * negative_maps[i]
-            
-            # compute cos similarity
-            positive_noise_sec = positive_noise_sec.view(4 * 64 * 64)
-            positive_noise = positive_noise.view(4 * 64 * 64)
-            negative_noise_sec = negative_noise_sec.view(4 * 64 * 64)
-            uncond_noise_sec = uncond_noise_sec.view(4 * 64 * 64)
-            
-            noise = torch.randn(4 * 64 * 64).to(device)
-            # cos_sim = F.cosine_similarity(positive_noise, negative_noise, dim=0)
-            
-            # compute the norm of positive_noise_sec
-            # positive_noise_sec_norm = torch.norm(positive_noise_sec)
-            
-            if True:
-            
-                cos_sim_np.append(F.cosine_similarity(positive_noise_sec, negative_noise_sec, dim=0).cpu().numpy() * torch.norm(positive_noise_sec).cpu().numpy())
-                
-                cos_sim_pp.append(F.cosine_similarity(positive_noise_sec, positive_noise, dim=0).cpu().numpy() * torch.norm(positive_noise_sec).cpu().numpy())
-                
-                cos_sim_up.append(F.cosine_similarity(positive_noise_sec, uncond_noise_sec, dim=0).cpu().numpy() * torch.norm(positive_noise_sec).cpu().numpy())
-                
-                cos_sim_noise.append(F.cosine_similarity(positive_noise_sec, noise, dim=0).cpu().numpy() * torch.norm(positive_noise_sec).cpu().numpy())
-            else:
-                cos_sim_np.append(F.cosine_similarity(positive_noise_sec, negative_noise_sec, dim=0).cpu().numpy())
-                
-                cos_sim_pp.append(F.cosine_similarity(positive_noise_sec, positive_noise, dim=0).cpu().numpy())
-                
-                cos_sim_up.append(F.cosine_similarity(positive_noise_sec, uncond_noise_sec, dim=0).cpu().numpy())
-                
-                cos_sim_noise.append(F.cosine_similarity(positive_noise_sec, noise, dim=0).cpu().numpy())
-            
-            
-        
-        #plot the four cruves in one plot
-        
-        
-        plt.clf()
-        plt.rcParams.update({'font.size': 10})
+        # show image using a tensor with the shape of (1, 3, height, width)
         fig, ax = plt.subplots()
-
-        ax.plot(cos_sim_np, label='N1 and P1')
+        #ax.imshow(out.images[0])
+        #ax.imshow(diffusion_process[30].cpu().numpy().transpose(1, 2, 0))
+        bound_box = [10,30,20,40]
+        mask = torch.zeros_like(diffusion_process[0])
+        mask[:,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]] = 1
+        ax.imshow((diffusion_process[30]*mask).cpu().numpy().transpose(1, 2, 0))
         
-        ax.plot(cos_sim_pp, label='P1 and P2')
+        # draw the bounding box in the plot, with its x value, y value, width and height are bound_box[0], bound_box[1], bound_box[2], bound_box[3]
         
-        ax.plot(cos_sim_up, label='U1 and P1')
+        rect = patches.Rectangle((bound_box[0], bound_box[1]), bound_box[2], bound_box[3], linewidth=1, edgecolor='r', facecolor='none')
+        ax.add_patch(rect)
+        fig.savefig('pic1.png')
         
-        ax.plot(cos_sim_noise, label='N1 and noise')
-        plt.subplots_adjust(top=0.95)
-        fig.savefig(f'cos_sim_{negative_prompt}.png')
+        ratio40 = [float(torch.norm(projectionalliinone(positive_noises[i],negative_noises[i]))) for i in range(len(positive_noises))]
         
+        out, diffusion_process, negative_noises, positive_noises, uncond_noises = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=0)
         
-        
-        #print(cos_sim)
+        for k in range(len(diffusion_process)):
+            temp = torch.mean(diffusion_process[k],dim=1,keepdim=True)
+            temp = torch.cat([temp]*3,dim=1).squeeze(0)
+            diffusion_process[k] = temp
             
+        # show image using a tensor with the shape of (1, 3, height, width)
+        fig, ax = plt.subplots()
+        ax.imshow(diffusion_process[30].cpu().numpy().transpose(1, 2, 0))
+        fig.savefig('pic2.png')
         
-        # fig, ax = plt.subplots()
-        # ax.imshow(negative_maps[3])
-        # ax.get_xaxis().set_visible(False)
-        # ax.get_yaxis().set_visible(False)
-        # fig.savefig(f'negative_maps_{negative_prompt}.png')
-
-          
-        #ratio40 = [float(torch.norm(projectionalliinone(positive_noises[i],negative_noises[i]))) for i in range(len(positive_noises))]
+        ratio0 = [float(torch.norm(projectionalliinone(positive_noises[i],negative_noises[i]))) for i in range(len(positive_noises))]
         
-        
-            
-        # out, diffusion_process, negative_noises, positive_noises, uncond_noises = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=0)
-            
-        # ratio0 = [float(torch.norm(projectionalliinone(positive_noises[i],negative_noises[i]))) for i in range(len(positive_noises))]
-            
-#             diff = [ratio0[i] - ratio40[i] for i in range(len(ratio0))]
-#             placehold[i] = torch.tensor(diff)
+        diff = [ratio0[i] - ratio40[i] for i in range(len(ratio0))]
+    
 
-# save_dict["seed"] = seeds
-# save_dict["placehold"] = placehold
-# save_dict["negative_prompt"] = negative_prompt
-# torch.save(save_dict, f'proj_{negative_prompt}.pt')
-
+        # if args.wandb:
+        #     #wandb.log({"pic": fig})
+        #     wandb.log({f"ratio: {str(i)}": diff})
+        # else:
+        #     plt.savefig('pic.png')
+save_dict["seed"] = seeds
+save_dict["placehold"] = placehold
+save_dict["negative_prompt"] = negative_prompt
+torch.save(save_dict, f'proj_{negative_prompt}.pt')
 
             
