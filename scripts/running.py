@@ -145,17 +145,20 @@ for i,seed in enumerate(iter(seeds)):
         
         # show image using a tensor with the shape of (1, 3, height, width)
         fig, ax = plt.subplots()
-        #ax.imshow(out.images[0])
+        ax.imshow(out.images[0])
+        print(out.images[0].shape)
         #ax.imshow(diffusion_process[30].cpu().numpy().transpose(1, 2, 0))
-        bound_box = [10,30,20,40]
-        mask = torch.zeros_like(diffusion_process[0])
-        mask[:,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]] = 1
-        ax.imshow((diffusion_process[30]*mask).cpu().numpy().transpose(1, 2, 0))
         
-        # draw the bounding box in the plot, with its x value, y value, width and height are bound_box[0], bound_box[1], bound_box[2], bound_box[3]
         
-        rect = patches.Rectangle((bound_box[0], bound_box[1]), bound_box[2], bound_box[3], linewidth=1, edgecolor='r', facecolor='none')
-        ax.add_patch(rect)
+        # bounding box and mask
+        # bound_box = [10,30,20,40]
+        bound_box = bound_box // 8
+        # mask = torch.zeros_like(diffusion_process[0])
+        # mask[:,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]] = 1
+        # ax.imshow((diffusion_process[30]*mask).cpu().numpy().transpose(1, 2, 0))
+        # rect = patches.Rectangle((bound_box[0], bound_box[1]), bound_box[2], bound_box[3], linewidth=1, edgecolor='r', facecolor='none')
+        # ax.add_patch(rect)
+        
         fig.savefig('pic1.png')
         
         ratio40 = [float(torch.norm(projectionalliinone(positive_noises[i],negative_noises[i]))) for i in range(len(positive_noises))]
