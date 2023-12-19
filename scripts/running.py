@@ -129,6 +129,7 @@ if args.wandb:
         config=wandb.config,
     )
 
+
 save_dict = {}
 
 for i,seed in enumerate(iter(seeds)):
@@ -153,6 +154,9 @@ for i,seed in enumerate(iter(seeds)):
         #bounding box and mask
         bound_box = [12,25,25,40]
         mask_latent = torch.zeros_like(diffusion_process[0])
+        print(diffusion_process[0].shape)
+        print(uncond_noises[0].shape)
+        
         mask_latent[:,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]] = 1
         
         bound_box_image = [tmp*8 for tmp in bound_box]
@@ -161,8 +165,11 @@ for i,seed in enumerate(iter(seeds)):
         ax.imshow((out.images[0]*mask_image))
         # rect = patches.Rectangle((bound_box[0], bound_box[1]), bound_box[2], bound_box[3], linewidth=1, edgecolor='r', facecolor='none')
         # ax.add_patch(rect)
+        fig.savefig('picimage.png')
+        fig, ax = plt.subplots()
+        ax.imshow((diffusion_process[30]*mask_latent).cpu().numpy().transpose(1, 2, 0))
+        fig.savefig('piclatent.png')
         
-        fig.savefig('pic3.png')
         
         ratio40 = [float(torch.norm(projectionalliinone(positive_noises[i],negative_noises[i]))) for i in range(len(positive_noises))]
         
@@ -172,12 +179,9 @@ for i,seed in enumerate(iter(seeds)):
             temp = torch.mean(diffusion_process[k],dim=1,keepdim=True)
             temp = torch.cat([temp]*3,dim=1).squeeze(0)
             diffusion_process[k] = temp
-            
-        # show image using a tensor with the shape of (1, 3, height, width)
-        fig, ax = plt.subplots()
-        ax.imshow(diffusion_process[30].cpu().numpy().transpose(1, 2, 0))
-        fig.savefig('pic2.png')
         
+        print(positive_noises[0].shape)
+        print(mask_latent.shape)
         ratio0 = [float(torch.norm(projectionalliinone(positive_noises[i],negative_noises[i]))) for i in range(len(positive_noises))]
         
         diff = [ratio0[i] - ratio40[i] for i in range(len(ratio0))]
