@@ -7,6 +7,7 @@ import os
 import wandb
 import math
 import random
+import numpy as np
     
 #
 parser = argparse.ArgumentParser(description='Diffusion')
@@ -19,6 +20,7 @@ parser.add_argument('--group', type=str, required=True)
 parser.add_argument('--tags', metavar='S', type=str, nargs='+',default='negative prompt')
 parser.add_argument('--steps', type=int, default=30)
 parser.add_argument('--wandb',action='store_true',help='use wandb')
+parser.add_argument('--bound_box',type = int, nargs='+', default=None)
 args = parser.parse_args()
 
 #os.environ["WANDB_MODE"] = "offline"
@@ -34,6 +36,7 @@ negative_prompt = args.negative_prompt
 seeds = args.seed if args.seed[0] != 0 else [random.randint(1, 10000000) for _ in range(5)]
 steps = args.steps
 tags = args.tags
+bound_box = args.bound_box
 
 
 
@@ -43,7 +46,8 @@ if args.wandb:
                     "negative prompt": negative_prompt, 
                     "seeds": seeds,
                     "steps": steps,
-                    "tags": tags
+                    "tags": tags,
+                    "bound box": bound_box,
                     }
     run = wandb.init(
         project=args.project,
@@ -52,18 +56,46 @@ if args.wandb:
         config=wandb.config,
     )
 
+bound_box_image = [tmp*8 for tmp in bound_box]
+
 
 for seed in iter(seeds):
     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
         with trace(pipe) as tc:
-            out = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed))
+            
+            fig, axs = plt.subplots(2, 2, figsize=(10, 10+1))
+            
+            out = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed),output_type='latent')
+            
+            image = pipe.decode_latents(out.images)[0]
+            latent = out.images
+            
+            latent = latent.mean(dim=1,keepdim=True)
+            latent = torch.cat([latent]*3,dim=1)[0]
+            
+            mask_latent = torch.zeros_like(latent).to(device)
+            mask_latent[:,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]] = 1
+            
+            
+            mask_image = np.zeros_like(image)
+            mask_image[bound_box_image[1]:bound_box_image[1]+bound_box_image[3],bound_box_image[0]:bound_box_image[0]+bound_box_image[2],:] = 1
+            
+            
+            axs[0][0].imshow((latent*mask_latent).cpu().numpy().transpose(1, 2, 0))
+            axs[0][0].set_title('Latent')
+            
+            axs[0][1].imshow((image*mask_image))
+            axs[0][1].set_title('Image')
+            
             pos, neg = tc.compute_activation_ratio()
+            print(pos[0])
             
             ratio = [neg[i]/pos[i] for i in range(len(pos))]
             
-            fig, ax = plt.subplots()
-            ax.plot(ratio, label='ratio')
-            ax.set_title('Positive and Negative Series')
-            ax.legend()
+            axs[1][1].plot(ratio, label='ratio')
+            axs[1][1].set_title('Positive and Negative Series')
+            axs[1][1].legend()
             if args.wandb:
                 wandb.log({"Ratio": fig}) 
+            else:
+                fig.savefig('pics/ratio.png')
