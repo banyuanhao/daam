@@ -87,8 +87,7 @@ for seed in iter(seeds):
             axs[0][1].imshow((image*mask_image))
             axs[0][1].set_title('Image')
             
-            pos, neg = tc.compute_activation_ratio()
-            print(pos[0])
+            pos, neg = tc.compute_activation_ratio(bounding_box=bound_box)
             
             ratio = [neg[i]/pos[i] for i in range(len(pos))]
             

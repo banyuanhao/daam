@@ -83,8 +83,8 @@ class DiffusionHeatMapHooker(AggregateHooker):
         )
         
 
-    def compute_activation_ratio(self, prompt=None, negative_prompt=None):
-        # type: (str,  str) -> (List[float], List[float])
+    def compute_activation_ratio(self, prompt=None, negative_prompt=None, bounding_box = None):
+        # type: (str,  str, List) -> (List[float], List[float])
         """
         Compute the global heat map for the given prompt, aggregating across time (inference steps) and space (different
         spatial transformer block heat maps).
@@ -122,15 +122,19 @@ class DiffusionHeatMapHooker(AggregateHooker):
 
         with auto_autocast(dtype=torch.float32):
             for (_, _, _, time), heat_map in heat_maps:
-
+                heat_map = heat_map.unsqueeze(1)
+                heat_map = F.interpolate(heat_map, size=(x, x), mode='bicubic').clamp_(min=0)
+                if bounding_box is not None:
+                    heat_map = heat_map[:,:,bounding_box[1]:bounding_box[1]+bounding_box[3],bounding_box[0]:bounding_box[0]+bounding_box[2]]
                 heat_map_value = heat_map.pow(2).mean()
                 all_merges[time] += heat_map_value.cpu().numpy()
-                # The clamping fixes undershoot.
                 
             
             for (_, _, _, time), negative_heat_map in negative_heat_maps:
-
-                #print(heat_map.shape)
+                negative_heat_map = negative_heat_map.unsqueeze(1)
+                negative_heat_map = F.interpolate(negative_heat_map, size=(x, x), mode='bicubic').clamp_(min=0)
+                if bounding_box is not None:
+                    negative_heat_map = negative_heat_map[:,:,bounding_box[1]:bounding_box[1]+bounding_box[3],bounding_box[0]:bounding_box[0]+bounding_box[2]]
                 negative_heat_map_value = negative_heat_map.pow(2).mean()
                 all_merges_negative[time] += negative_heat_map_value.cpu().numpy()
 
