@@ -212,6 +212,6 @@ for i,seed in enumerate(iter(seeds)):
         if args.wandb:
             wandb.log({f"ratio: {str(seed)}": fig})
         else:
-            plt.savefig('pic.png')
+            plt.savefig('pics/pic.png')
 
             
