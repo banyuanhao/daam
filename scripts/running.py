@@ -122,7 +122,9 @@ if args.wandb:
                     "negative prompt": negative_prompt, 
                     "seeds": seeds,
                     "steps": steps,
-                    "tags": tags
+                    "tags": tags,
+                    "negative time": negative_time,
+                    "bound box": bound_box,
                     }
     run = wandb.init(
         project=args.project,
@@ -133,6 +135,8 @@ if args.wandb:
 
 
 save_dict = {}
+
+
 
 for i,seed in enumerate(iter(seeds)):
     
@@ -145,6 +149,12 @@ for i,seed in enumerate(iter(seeds)):
         out, _, _, _, _ = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=negative_time,output_type='image')
         
         axs[0][0].imshow(out.images[0])
+        
+        bound_box_image = [tmp*8 for tmp in bound_box]
+        mask_image = np.zeros_like(out.images[0])
+        mask_image[bound_box_image[1]:bound_box_image[1]+bound_box_image[3],bound_box_image[0]:bound_box_image[0]+bound_box_image[2],:] = 1
+        axs[0][2].imshow((out.images[0]*mask_image))
+        
         
         ### compute with negative prompt
         out, diffusion_process, negative_noises, positive_noises, uncond_noises = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=40,output_type='image')
@@ -166,49 +176,54 @@ for i,seed in enumerate(iter(seeds)):
 
         axs[1][1].imshow((diffusion_process_draw[30]*mask_latent[0,0:3]).squeeze(0).cpu().numpy().transpose(1, 2, 0))
         
-        bound_box_image = [tmp*8 for tmp in bound_box]
-        mask_image = np.zeros_like(out.images[0])
         mask_image[bound_box_image[1]:bound_box_image[1]+bound_box_image[3],bound_box_image[0]:bound_box_image[0]+bound_box_image[2],:] = 1
         axs[1][2].imshow((out.images[0]*mask_image))
         
         ratiowith = [float(torch.norm(projectionalliinone(positive_noises[k][:, :,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]],negative_noises[k][:, :,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]]))) for k in range(len(positive_noises))]
         
         ### compute without negative prompt
-        out, diffusion_process, negative_noises, positive_noises, uncond_noises = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=0,output_type='image')
+        out, diffusion_process_, negative_noises_, positive_noises_, uncond_noises_ = pipe.negative_accumulate(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed),negative_time=0,output_type='image')
         
         axs[2][0].imshow(out.images[0])
         
-        diffusion_process_draw = []
-        for k in range(len(diffusion_process)):
-            temp = torch.mean(diffusion_process[k],dim=1,keepdim=True)
+        diffusion_process_draw_ = []
+        for k in range(len(diffusion_process_)):
+            temp = torch.mean(diffusion_process_[k],dim=1,keepdim=True)
             temp = torch.cat([temp]*3,dim=1)
             # scale temp to 0-1
             # temp = (temp - torch.min(temp))/(torch.max(temp) - torch.min(temp))
-            diffusion_process_draw.append(temp)
+            diffusion_process_draw_.append(temp)
                     
         ## bounding box and mask
-        mask_latent = torch.zeros_like(diffusion_process[0]).to(device)
-        mask_latent[:, :,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]] = 1
+        mask_latent_ = torch.zeros_like(diffusion_process_[0]).to(device)
+        mask_latent_[:, :,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]] = 1
         
 
-        axs[2][1].imshow((diffusion_process_draw[30]*mask_latent[0,0:3]).squeeze(0).cpu().numpy().transpose(1, 2, 0))
+        axs[2][1].imshow((diffusion_process_draw_[30]*mask_latent_[0,0:3]).squeeze(0).cpu().numpy().transpose(1, 2, 0))
         
-        bound_box_image = [tmp*8 for tmp in bound_box]
-        mask_image = np.zeros_like(out.images[0])
-        mask_image[bound_box_image[1]:bound_box_image[1]+bound_box_image[3],bound_box_image[0]:bound_box_image[0]+bound_box_image[2],:] = 1
+        bound_box_image_= [tmp*8 for tmp in bound_box]
+        mask_image_ = np.zeros_like(out.images[0])
+        mask_image_[bound_box_image[1]:bound_box_image[1]+bound_box_image[3],bound_box_image[0]:bound_box_image[0]+bound_box_image[2],:] = 1
         axs[2][2].imshow((out.images[0]*mask_image))
-        
-        fig.savefig('pic.png')
           
         # rect = patches.Rectangle((bound_box[0], bound_box[1]), bound_box[2], bound_box[3], linewidth=1, edgecolor='r', facecolor='none')
         # ax.add_patch(rect)
-        ratiowithout = [float(torch.norm(projectionalliinone(positive_noises[k][:, :,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]],negative_noises[k][:, :,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]]))) for k in range(len(positive_noises))]
+        ratiowithout = [float(torch.norm(projectionalliinone(positive_noises_[k][:, :,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]],negative_noises_[k][:, :,bound_box[1]:bound_box[1]+bound_box[3],bound_box[0]:bound_box[0]+bound_box[2]]))) for k in range(len(positive_noises))]
         
         diff = [ratiowith[k] - ratiowithout[k] for k in range(len(ratiowithout))]
     
-        axs[0][1].plot(diff[0:15])
+        axs[0][1].plot(diff[0:10])
         print(diff)
-        
+
+        coslist = []
+        for i in range(30):
+        # compute the cosine similarity between negative_noise[i] and positive_noise[i]
+            cos = float(torch.dot(positive_noises[i].view(-1), negative_noises[i].view(-1)) / (torch.norm(positive_noises[i]) * torch.norm(negative_noises[i])))
+            coslist.append(cos)
+            
+        print(coslist)
+            
+                    
         if args.wandb:
             wandb.log({f"ratio: {str(seed)}": fig})
         else:
