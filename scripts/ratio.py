@@ -8,7 +8,7 @@ import wandb
 import math
 import random
     
-
+#
 parser = argparse.ArgumentParser(description='Diffusion')
 parser.add_argument('--prompt', type=str, required=True)
 parser.add_argument('--negative_prompt', type=str, default='')
