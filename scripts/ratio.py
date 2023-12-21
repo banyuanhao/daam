@@ -21,6 +21,7 @@ parser.add_argument('--tags', metavar='S', type=str, nargs='+',default='negative
 parser.add_argument('--steps', type=int, default=30)
 parser.add_argument('--wandb',action='store_true',help='use wandb')
 parser.add_argument('--bound_box',type = int, nargs='+', default=None)
+
 args = parser.parse_args()
 
 #os.environ["WANDB_MODE"] = "offline"
@@ -81,19 +82,22 @@ for seed in iter(seeds):
             mask_image[bound_box_image[1]:bound_box_image[1]+bound_box_image[3],bound_box_image[0]:bound_box_image[0]+bound_box_image[2],:] = 1
             
             
-            axs[0][0].imshow((latent*mask_latent).cpu().numpy().transpose(1, 2, 0))
-            axs[0][0].set_title('Latent')
+            axs[0][0].imshow(image)
+            axs[0][0].set_title('Image')
             
             axs[0][1].imshow((image*mask_image))
             axs[0][1].set_title('Image')
             
-            pos, neg = tc.compute_activation_ratio(bounding_box=bound_box)
-            
+            pos, neg = tc.compute_activation_ratio()
             ratio = [neg[i]/pos[i] for i in range(len(pos))]
+            axs[1][0].plot(ratio, label='ratio')
+            axs[1][0].set_title(f'ratio')
             
+            pos, neg = tc.compute_activation_ratio(bounding_box=bound_box)
+            ratio = [neg[i]/pos[i] for i in range(len(pos))]
             axs[1][1].plot(ratio, label='ratio')
-            axs[1][1].set_title('Positive and Negative Series')
-            axs[1][1].legend()
+            axs[1][1].set_title(f'{bound_box}')
+            
             if args.wandb:
                 wandb.log({"Ratio": fig}) 
             else:
