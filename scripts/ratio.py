@@ -8,6 +8,7 @@ import wandb
 import math
 import random
 import numpy as np
+import cv2
     
 #
 parser = argparse.ArgumentParser(description='Diffusion')

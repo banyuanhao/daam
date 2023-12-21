@@ -164,4 +164,5 @@ cython_debug/
 .idea/
 pics/
 wandb/latest-run
-
+modelpara/
+dataset/
