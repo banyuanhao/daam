@@ -88,7 +88,7 @@ import matplotlib.pyplot as plt
 plt.imshow(image)
 
 # Optional: add a title
-plt.title('My Image')
+#plt.title('My Image')
 
 # Show the figure
 plt.savefig('fig.jpg')
