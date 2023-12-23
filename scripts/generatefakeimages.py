@@ -35,14 +35,14 @@ def set_seed(seed: int) -> torch.Generator:
 model_id = 'stabilityai/stable-diffusion-2-base'
 device = 'cuda'
 
-# pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True).to(device)  
+pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True).to(device)  
 
-pipe = AutoPipelineForText2Image.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True).to("cuda")
+# pipe = AutoPipelineForText2Image.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True).to("cuda")
 
 
 dataset_path = Path('dataset/ODFN')
 
-prompts_path = dataset_path/'prompts'
+prompts_path = dataset_path/'prompts_brief'
 prompts_names = os.listdir(prompts_path)
 
 image_path = dataset_path/'images'
