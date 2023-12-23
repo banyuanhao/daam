@@ -1,4 +1,3 @@
-import argparse
 from diffusers import StableDiffusionPipeline, StableDiffusionXLPipeline, AutoPipelineForText2Image,  StableDiffusionXLImg2ImgPipeline
 import torch
 import random
@@ -6,6 +5,8 @@ import numpy as np
 from typing import TypeVar
 T = TypeVar('T')
 from PIL import Image
+from pathlib import Path
+import os
 
 def auto_device(obj: T = torch.device('cpu')) -> T:
     if isinstance(obj, torch.device):
@@ -26,41 +27,26 @@ def set_seed(seed: int) -> torch.Generator:
     gen.manual_seed(seed)
 
     return gen
-    
-
-parser = argparse.ArgumentParser(description='Diffusion')
-parser.add_argument('--prompt', type=str, required=True)
-parser.add_argument('--negative_prompt', type=str,default=None, nargs='+')
-parser.add_argument('--seed', type=int,default=None)
-parser.add_argument('--steps', type=int, default=30)
-parser.add_argument('--wandb',action='store_true',help='use wandb')
-args = parser.parse_args()
 
 model_id = 'stabilityai/stable-diffusion-2-base'
 device = 'cuda'
 
-# pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True).to(device)
-
-# pipe = StableDiffusionXLPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True).to(device)    
+# pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True).to(device)  
 
 pipe = AutoPipelineForText2Image.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True).to("cuda")
 
-refiner = StableDiffusionXLImg2ImgPipeline.from_pretrained(
-    "stabilityai/stable-diffusion-xl-refiner-1.0", torch_dtype=torch.float16, use_safetensors=True, variant="fp16"
-).to(device)
+
+dataset_path = Path('dataset/ODFN')
+
+prompts_path = os.listdir(dataset_path/'prompts')
+prompts_names = os.listdir(dataset_path)
+prompts_path = [prompts_path/name for name in prompts_names if name.endswith('.txt')]
 
 
-prompt = args.prompt
-prompt = ["a couple walking along the riverside, Effiel Tower", " A fairy-tale-like forest, with deer visible in the distance"]
-steps = args.steps
-negative_prompt = args.negative_prompt
-
-seed = args.seed if args.seed is not None else random.randint(1, 10000000)
+seed = [random.randint(1, 10000000) for _ in range(20)]
 
 
-# with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
-#     out = pipe(prompt=prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed))
 with torch.no_grad():
-    out = pipe(prompt=prompt,negative_prompt = negative_prompt, generator=set_seed(seed), num_inference_steps=steps)
-    out.images[0].save('pics/test2.jpg')
-    out.images[1].save('pics/test3.jpg')
+    out = pipe(prompt=prompt, generator=set_seed(seed), num_inference_steps=30)
+    out.images[0].save('pics/test3.jpg')
+
