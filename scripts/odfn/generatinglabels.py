@@ -50,14 +50,14 @@ for class_name in tqdm(class_names):
         for _, image_ins_name in enumerate(image_ins_names):
             img_path = seed_path/image_ins_name
             result = inference_detector(model, img_path)
-            j = int(image_ins_name[0])
+            j = int(image_ins_name[-5])
             image_id = str(coco_classes_dict[class_name]).zfill(2)+str(seeds_dict[int(seed)]).zfill(3)+str(j).zfill(2)
             
             image = {
                 'id': int(image_id),
                 'width': 512,
                 'height': 512,
-                'file_name': str(img_path),
+                'file_name': str(Path(os.path.join(*img_path.parts[2:]))),
             }
             images.append(image)
             
@@ -74,6 +74,7 @@ for class_name in tqdm(class_names):
                     'bbox': bbox.cpu().numpy().tolist(),
                     'id': int(image_id)*10+p,
                     'rank': p+1,
+                    'area': (bbox[2].item()-bbox[0].item())*(bbox[3].item()-bbox[1].item()),
                 }
                 annotations.append(annotation)
                 
@@ -86,5 +87,5 @@ for class_name in tqdm(class_names):
     import json
     if not os.path.exists('dataset/ODFN/annotations'):
         os.makedirs('dataset/ODFN/annotations')
-    with open('dataset/ODFN/annotations/instances_val2017.json', 'w') as f:
+    with open('dataset/ODFN/annotations/train.json', 'w') as f:
         json.dump(save_dict, f)
