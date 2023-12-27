@@ -166,3 +166,4 @@ pics/
 wandb/latest-run
 modelpara/
 dataset/
+work_dirs/
