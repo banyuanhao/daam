@@ -42,7 +42,7 @@ pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True).to
 
 dataset_path = Path('dataset/ODFN')
 
-prompts_path = dataset_path/'prompts_brief'
+prompts_path = dataset_path/'prompts_brief_strict'
 prompts_names = os.listdir(prompts_path)
 
 image_path = dataset_path/'images'
