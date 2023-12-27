@@ -1,32 +1,25 @@
-# Import the W&B Python Library and log into W&B
-import wandb
+coco_classes = [
+        'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train',
+        'truck', 'boat', 'traffic_light', 'fire_hydrant', 'stop_sign',
+        'parking_meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep',
+        'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella',
+        'handbag', 'tie', 'suitcase', 'frisbee', 'skis', 
+        'snowboard',
+        'sports_ball', 'kite', 'baseball_bat', 'baseball_glove', 'skateboard',
+        'surfboard', 'tennis_racket', 'bottle', 'wine_glass', 'cup', 'fork',
+        'knife', 'spoon', 'bowl', 'banana', 'apple', 'sandwich', 'orange',
+        'broccoli', 'carrot', 'hot_dog', 'pizza', 'donut', 'cake',
+        'chair', 'couch', 
+        'potted_plant', 'bed', 'dining_table', 'toilet', 'tv',
+        'laptop', 'mouse', 'remote', 'keyboard', 'cell_phone', 'microwave',
+        'oven', 
+        
+        'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase',
+        'scissors', 'teddy_bear', 'hair_drier', 'toothbrush'
+    ]
+dic = {}
 
-wandb.login()
-
-
-# 1: Define objective/training function
-def objective(config):
-    score = config.x**3 + config.y
-    return score
-
-
-def main():
-    wandb.init(project="my-first-sweep")
-    score = objective(wandb.config)
-    wandb.log({"score": score})
-
-
-# 2: Define the search space
-sweep_configuration = {
-    "method": "random",
-    "metric": {"goal": "minimize", "name": "score"},
-    "parameters": {
-        "x": {"max": 0.1, "min": 0.01},
-        "y": {"values": [1, 3, 7]},
-    },
-}
-
-# 3: Start the sweep
-sweep_id = wandb.sweep(sweep=sweep_configuration, project="my-first-sweep")
-
-wandb.agent(sweep_id, function=main, count=10)
+for i, seed in enumerate(coco_classes):
+    dic[seed] = i
+    
+print(dic)
