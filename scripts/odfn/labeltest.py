@@ -1,11 +1,10 @@
-from mmdet.apis import init_detector, inference_detector
-from mmengine.visualization import Visualizer
+# test the variance of the labels
+import json
+import torch
 import mmcv
-import torch 
-import os
+from mmengine.visualization import Visualizer
 import cv2
 from pathlib import Path
-from tqdm import tqdm
 
 seeds = [3502948, 2414292, 4013215, 7661395, 2728259, 7977675, 6926097, 8223344, 4338686, 2630916, 3548081, 3710422, 2285361, 9638421, 2837631, 5468982, 7955021, 7197637, 4206420, 1347815, 2957833, 3326072, 1813088, 7965829, 4708029, 452169, 1107126, 8388604, 9481161, 8020003, 2225075, 1440263, 29403, 7099996, 7851895, 1106978, 4053385, 6882390, 3322966, 3668830, 8613167, 1315399, 3121499, 900759, 7739336, 1464588, 1144945, 39451, 3131354, 6971254, 1088493, 1700896, 3760774, 3410488, 3129936, 5309498, 3698823, 5970284, 2569054, 8264031, 8663422, 5174978, 4041203, 1690212, 7695658, 4857840, 4395970, 2970532, 1313178, 7409679, 1242182, 6902329, 4582656, 4123976, 8158709, 3033046, 1634920, 6750562, 6337306, 8317766, 1618731, 1518909, 4798495, 2620399, 2423703, 7285262, 180696, 8432894, 3157912, 7890161, 5509442, 6216034, 7431925, 7774348, 6443781, 6142998, 3686770, 8916284, 9406101, 7637527]
 
@@ -32,59 +31,82 @@ coco_classes = [
     ]
 
 coco_classes_dict = {'person': 0, 'bicycle': 1, 'car': 2, 'motorcycle': 3, 'airplane': 4, 'bus': 5, 'train': 6, 'truck': 7, 'boat': 8, 'traffic_light': 9, 'fire_hydrant': 10, 'stop_sign': 11, 'parking_meter': 12, 'bench': 13, 'bird': 14, 'cat': 15, 'dog': 16, 'horse': 17, 'sheep': 18, 'cow': 19, 'elephant': 20, 'bear': 21, 'zebra': 22, 'giraffe': 23, 'backpack': 24, 'umbrella': 25, 'handbag': 26, 'tie': 27, 'suitcase': 28, 'frisbee': 29, 'skis': 30, 'snowboard': 31, 'sports_ball': 32, 'kite': 33, 'baseball_bat': 34, 'baseball_glove': 35, 'skateboard': 36, 'surfboard': 37, 'tennis_racket': 38, 'bottle': 39, 'wine_glass': 40, 'cup': 41, 'fork': 42, 'knife': 43, 'spoon': 44, 'bowl': 45, 'banana': 46, 'apple': 47, 'sandwich': 48, 'orange': 49, 'broccoli': 50, 'carrot': 51, 'hot_dog': 52, 'pizza': 53, 'donut': 54, 'cake': 55, 'chair': 56, 'couch': 57, 'potted_plant': 58, 'bed': 59, 'dining_table': 60, 'toilet': 61, 'tv': 62, 'laptop': 63, 'mouse': 64, 'remote': 65, 'keyboard': 66, 'cell_phone': 67, 'microwave': 68, 'oven': 69, 'toaster': 70, 'sink': 71, 'refrigerator': 72, 'book': 73, 'clock': 74, 'vase': 75, 'scissors': 76, 'teddy_bear': 77, 'hair_dryer': 78, 'toothbrush': 79}
-annotations = []
-images = []
-config_file = 'modelpara/det/gfl_x101-32x4d-dconv-c4-c5_fpn_ms-2x_coco.py'
-checkpoint_file = 'modelpara/det/gfl_x101_32x4d_fpn_dconv_c4-c5_mstrain_2x_coco_20200630_102002-14a2bf25.pth'
-model = init_detector(config_file, checkpoint_file, device='cuda')
+
+# open the json file and read the data
+with open('dataset/ODFN/annotations/instances_val2017.json', 'r') as f:
+    data = json.load(f)
+    
+annotations = data['annotations']
+images = data['images']
+
+
+# selecting
+## the top 1 bounding box matching the ground truth scores > 0.5
+## the top 1 bounding boxes matching the ground truth
+
+# statistics:
+## constant seed_id                         totally 40  
+## constant seed_id & catergory_id_truth    totally 40*10
+## constant category_id                     totally 80
+## constant category_id_truth               totall  80
+## constant category_id & prompt_id 80      totally 80*10
+## total                                    totally 80*40*10
+
+def get_dict(statics_mode):
+    if statics_mode == 'seed_id':
+        dictionary = {key: [] for key in seeds}
+    elif statics_mode == 'catergory_id_truth':
+        dictionary = {key: [] for key in coco_classes}
+    else:
+        raise ValueError('statics_mode is not defined')
+    return dictionary
+
+def sorting_box(dictionary, category_id_truth, seed_id, prompt_id, category_id, bbox, statics_mode):
+    if statics_mode == 'seed_id':
+        dictionary[seed_id].append(bbox)
+    elif statics_mode == 'catergory_id_truth':
+        dictionary[category_id_truth].append(bbox)
+    else:
+        raise ValueError('statics_mode is not defined')
+    return dictionary
+
+def extract_ground(image_id):
+    class_id = image_id //100000
+    seed_id = image_id // 100 % 1000
+    prompt_id = image_id % 100
+    return class_id, seed_id, prompt_id
 
 dataset_path = Path('dataset/ODFN')
-image_path = dataset_path/'images'
-class_names = os.listdir(image_path)
-for class_name in tqdm(class_names):
-    class_path = image_path/class_name
-    seeds = os.listdir(class_path)
-    for seed in seeds:
-        seed_path = class_path/seed
-        image_ins_names = os.listdir(seed_path)
-        for _, image_ins_name in enumerate(image_ins_names):
-            img_path = seed_path/image_ins_name
-            result = inference_detector(model, img_path)
-            j = int(image_ins_name[0])
-            image_id = str(coco_classes_dict[class_name]).zfill(2)+str(seeds_dict[int(seed)]).zfill(3)+str(j).zfill(2)
-            
-            image = {
-                'id': int(image_id),
-                'width': 512,
-                'height': 512,
-                'file_name': str(img_path),
-            }
-            images.append(image)
-            
-            for p, score in enumerate(result.pred_instances.scores):
-                if p > 5: 
-                    break
-                label = int(result.pred_instances.labels[p])
-                label_name = coco_classes[label]
-                bbox = result.pred_instances.bboxes[p]
-                annotation = {
-                    'image_id': int(image_id),
-                    'score': score.item(),
-                    'category_id': label,
-                    'bbox': bbox.cpu().numpy().tolist(),
-                    'id': int(image_id)*10+p,
-                    'rank': p+1,
-                }
-                annotations.append(annotation)
-                
-    save_dict = {
-        'images': images,
-        'annotations': annotations,
-    }
+select_mode = 'top1'
+statics_mode = 'seed_id'
+count = 0
+dictionary = get_dict(statics_mode)
+for i, annotation in enumerate(annotations):
+    image_id = annotation['image_id']
+    category_id_truth, seed_id, prompt_id = extract_ground(image_id)
+    score = annotation['score']
+    category_id = annotation['category_id']
+    bbox = annotation['bbox']
+    id = annotation['id']
+    rank = annotation['rank']
+    if  category_id == category_id_truth and score > 0.5 and rank == 1:
+        count += 1
+        dictonary = sorting_box(dictionary, category_id_truth, seeds[seed_id], prompt_id, category_id, bbox, statics_mode)
 
-    # save save_dict to json file
-    import json
-    if not os.path.exists('dataset/ODFN/annotations'):
-        os.makedirs('dataset/ODFN/annotations')
-    with open('dataset/ODFN/annotations/instances_val2017.json', 'w') as f:
-        json.dump(save_dict, f)
+print(count)
+
+
+
+
+
+
+
+# img_path = dataset_path/'images'/coco_classes[category_id_truth]/str(seeds[seed_id])/(coco_classes[category_id_truth]+'_'+str(seeds[seed_id])+'_'+str(prompt_id)+'.png')
+# image = mmcv.imread(img_path, channel_order='rgb')
+# visualizer = Visualizer(image=image,save_dir='pics')
+# print(score)
+# visualizer.draw_bboxes(torch.tensor(bbox))
+# visualizer.draw_texts(coco_classes[category_id],torch.tensor(bbox[0:2]))
+# a = visualizer.get_image()
+# cv2.imwrite('pics/a.png',a)
+
