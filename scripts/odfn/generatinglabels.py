@@ -38,7 +38,7 @@ config_file = 'modelpara/det/gfl_x101-32x4d-dconv-c4-c5_fpn_ms-2x_coco.py'
 checkpoint_file = 'modelpara/det/gfl_x101_32x4d_fpn_dconv_c4-c5_mstrain_2x_coco_20200630_102002-14a2bf25.pth'
 model = init_detector(config_file, checkpoint_file, device='cuda')
 
-dataset_path = Path('dataset/ODFN')
+dataset_path = Path('dataset/ODFN/train')
 image_path = dataset_path/'images'
 class_names = os.listdir(image_path)
 for class_name in tqdm(class_names):
@@ -85,7 +85,7 @@ for class_name in tqdm(class_names):
 
     # save save_dict to json file
     import json
-    if not os.path.exists('dataset/ODFN/annotations'):
-        os.makedirs('dataset/ODFN/annotations')
-    with open('dataset/ODFN/annotations/train.json', 'w') as f:
+    if not os.path.exists('dataset/ODFN/train/annotations'):
+        os.makedirs('dataset/ODFN/train/annotations')
+    with open('dataset/ODFN/train/annotations/train.json', 'w') as f:
         json.dump(save_dict, f)
