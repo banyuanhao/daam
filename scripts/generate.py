@@ -61,4 +61,3 @@ seed = args.seed if args.seed is not None else random.randint(1, 10000000)
 with torch.no_grad():
     out = pipe(prompt=prompt,negative_prompt = negative_prompt, generator=set_seed(seed), num_inference_steps=steps)
     out.images[0].save('pics/test3.jpg')
-
