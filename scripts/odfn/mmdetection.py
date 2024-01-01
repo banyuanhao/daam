@@ -26,8 +26,8 @@ coco_classes = [
     
 os.environ['CUDA_VISIBLE_DEVICES'] = '4'
 
-config_file = 'modelpara/det/rtmdet_tiny_8xb32-300e_coco.py'
-checkpoint_file = 'modelpara/det/rtmdet_tiny_8xb32-300e_coco_20220902_112414-78e30dcc.pth'
+config_file = 'modelpara/det/gfl_x101-32x4d-dconv-c4-c5_fpn_ms-2x_coco.py'
+checkpoint_file = 'modelpara/det/gfl_x101_32x4d_fpn_dconv_c4-c5_mstrain_2x_coco_20200630_102002-14a2bf25.pth'
 
 # config_file = 'modelpara/det/gfl_x101-32x4d-dconv-c4-c5_fpn_ms-2x_coco.py'
 # checkpoint_file = 'modelpara/det/gfl_x101_32x4d_fpn_dconv_c4-c5_mstrain_2x_coco_20200630_102002-14a2bf25.pth'
@@ -35,6 +35,8 @@ checkpoint_file = 'modelpara/det/rtmdet_tiny_8xb32-300e_coco_20220902_112414-78e
 img_path = 'dataset/val2017/000000105912.jpg'
 
 model = init_detector(config_file, checkpoint_file, device='cuda:0')  # or device='cuda:0'
+print(model.CLASSES)
+raise ValueError('stop')
 result = inference_detector(model, img_path)
 
 # print(result.pred_instances.labels)

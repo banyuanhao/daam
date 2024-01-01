@@ -5,9 +5,13 @@ import mmcv
 from mmengine.visualization import Visualizer
 import cv2
 from pathlib import Path
+super_class = ['outdoor', 'indoor', 'vehicle', 'person', 'electronic', 'animal', 'food', 'appliance', 'furniture', 'accessory', 'kitchen', 'sports']
+super_dict = {'outdoor': 0, 'indoor': 1, 'vehicle': 2, 'person': 3, 'electronic': 4, 'animal': 5, 'food': 6, 'appliance': 7, 'furniture': 8, 'accessory': 9, 'kitchen': 10, 'sports': 11}
+# vehicle, electrinic, animal, furniture
+category_id_to_superclass_id = {0: 3, 1: 2, 2: 2, 3: 2, 4: 2, 5: 2, 6: 2, 7: 2, 8: 2, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 5, 15: 5, 16: 5, 17: 5, 18: 5, 19: 5, 20: 5, 21: 5, 22: 5, 23: 5, 24: 9, 25: 9, 26: 9, 27: 9, 28: 9, 29: 11, 30: 11, 31: 11, 32: 11, 33: 11, 34: 11, 35: 11, 36: 11, 37: 11, 38: 11, 39: 10, 40: 10, 41: 10, 42: 10, 43: 10, 44: 10, 45: 10, 46: 6, 47: 6, 48: 6, 49: 6, 50: 6, 51: 6, 52: 6, 53: 6, 54: 6, 55: 6, 56: 8, 57: 8, 58: 8, 59: 8, 60: 8, 61: 8, 62: 4, 63: 4, 64: 4, 65: 4, 66: 4, 67: 4, 68: 7, 69: 7, 70: 7, 71: 7, 72: 7, 73: 1, 74: 1, 75: 1, 76: 1, 77: 1, 78: 1, 79: 1}
 
 seeds = [3502948, 2414292, 4013215, 7661395, 2728259, 7977675, 6926097, 8223344, 4338686, 2630916, 3548081, 3710422, 2285361, 9638421, 2837631, 5468982, 7955021, 7197637, 4206420, 1347815, 2957833, 3326072, 1813088, 7965829, 4708029, 452169, 1107126, 8388604, 9481161, 8020003, 2225075, 1440263, 29403, 7099996, 7851895, 1106978, 4053385, 6882390, 3322966, 3668830, 8613167, 1315399, 3121499, 900759, 7739336, 1464588, 1144945, 39451, 3131354, 6971254, 1088493, 1700896, 3760774, 3410488, 3129936, 5309498, 3698823, 5970284, 2569054, 8264031, 8663422, 5174978, 4041203, 1690212, 7695658, 4857840, 4395970, 2970532, 1313178, 7409679, 1242182, 6902329, 4582656, 4123976, 8158709, 3033046, 1634920, 6750562, 6337306, 8317766, 1618731, 1518909, 4798495, 2620399, 2423703, 7285262, 180696, 8432894, 3157912, 7890161, 5509442, 6216034, 7431925, 7774348, 6443781, 6142998, 3686770, 8916284, 9406101, 7637527]
-seeds = seeds[:2]
+seeds = seeds[:40]
 
 seeds_dict = {3502948: 0, 2414292: 1, 4013215: 2, 7661395: 3, 2728259: 4, 7977675: 5, 6926097: 6, 8223344: 7, 4338686: 8, 2630916: 9, 3548081: 10, 3710422: 11, 2285361: 12, 9638421: 13, 2837631: 14, 5468982: 15, 7955021: 16, 7197637: 17, 4206420: 18, 1347815: 19, 2957833: 20, 3326072: 21, 1813088: 22, 7965829: 23, 4708029: 24, 452169: 25, 1107126: 26, 8388604: 27, 9481161: 28, 8020003: 29, 2225075: 30, 1440263: 31, 29403: 32, 7099996: 33, 7851895: 34, 1106978: 35, 4053385: 36, 6882390: 37, 3322966: 38, 3668830: 39, 8613167: 40, 1315399: 41, 3121499: 42, 900759: 43, 7739336: 44, 1464588: 45, 1144945: 46, 39451: 47, 3131354: 48, 6971254: 49, 1088493: 50, 1700896: 51, 3760774: 52, 3410488: 53, 3129936: 54, 5309498: 55, 3698823: 56, 5970284: 57, 2569054: 58, 8264031: 59, 8663422: 60, 5174978: 61, 4041203: 62, 1690212: 63, 7695658: 64, 4857840: 65, 4395970: 66, 2970532: 67, 1313178: 68, 7409679: 69, 1242182: 70, 6902329: 71, 4582656: 72, 4123976: 73, 8158709: 74, 3033046: 75, 1634920: 76, 6750562: 77, 6337306: 78, 8317766: 79, 1618731: 80, 1518909: 81, 4798495: 82, 2620399: 83, 2423703: 84, 7285262: 85, 180696: 86, 8432894: 87, 3157912: 88, 7890161: 89, 5509442: 90, 6216034: 91, 7431925: 92, 7774348: 93, 6443781: 94, 6142998: 95, 3686770: 96, 8916284: 97, 9406101: 98, 7637527: 99}
 
@@ -58,6 +62,8 @@ def get_dict(statics_mode):
         dictionary = {key: [] for key in seeds}
     elif statics_mode == 'category_id_truth':
         dictionary = {key: [] for key in range(80)}
+    elif statics_mode == 'seed_id_superclass':
+        dictionary = {(key1, key2): [] for key1 in seeds for key2 in range(len(super_class))}
     else:
         raise ValueError('statics_mode is not defined')
     return dictionary
@@ -67,6 +73,8 @@ def sorting_box(dictionary, category_id_truth, seed_id, prompt_id, category_id, 
         dictionary[seed_id].append(bbox)
     elif statics_mode == 'category_id_truth':
         dictionary[category_id_truth].append(bbox)
+    elif statics_mode == 'seed_id_superclass':
+        dictionary[(seed_id, category_id_to_superclass_id[category_id_truth])].append(bbox)
     else:
         raise ValueError('statics_mode is not defined')
     return dictionary
@@ -77,9 +85,9 @@ def extract_ground(image_id):
     prompt_id = image_id % 100
     return class_id, seed_id, prompt_id
 
-dataset_path = Path('dataset/ODFN')
+#dataset_path = Path('dataset/ODFN')
 select_mode = 'top1'
-statics_mode = 'category_id_truth'
+statics_mode = 'seed_id'
 #statics_mode = 'seed_id'
 count = 0
 dictionary = get_dict(statics_mode)
@@ -91,12 +99,11 @@ for i, annotation in enumerate(annotations):
     bbox = annotation['bbox']
     id = annotation['id']
     rank = annotation['rank']
-    if  category_id == category_id_truth and score > 0.5 and rank == 1:
+    if  category_id == category_id_truth and score > 0.6 and rank == 1:
         count += 1
         dictionary = sorting_box(dictionary, category_id_truth, seeds[seed_id], prompt_id, category_id, bbox, statics_mode)
         
 statics = {}
-{3502948: [5282.9794921875, 3341.12451171875], 2414292: [7521.18505859375, 3662.854248046875]}
 countx = 0
 county = 0
 for key, value in dictionary.items():
@@ -108,9 +115,31 @@ for key, value in dictionary.items():
         countx += 1
     if tensory > 3300:
         county += 1
+        
+
+key_value_pairs = {key: value[0] for key, value in statics.items()}
+
+# 根据值排序键
+sorted_keys = sorted(key_value_pairs, key=lambda x: key_value_pairs[x])
+
+# 现在 sorted_keys 是一个列表，其中包含按值排序的键
+print(sorted_keys)
+# for i in range(80):
+#     if category_id_to_superclass_id[i] == 6:
+#         print(statics[i])
+
+
+# for i in range(12):
+#     mean = [value  for key, value in statics.items() if key[1] == i]
+#     mean = torch.tensor(mean).mean(dim=0)
+#     print(mean)
+
+# print(statics)
     
-print(countx)
-print(county)
+# print(countx)
+# print(county)
+
+# tensor([5706.6182, 2847.8071])
 
 # print(dictionary)
 # print(count)
