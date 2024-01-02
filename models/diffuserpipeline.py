@@ -52,12 +52,14 @@ EXAMPLE_DOC_STRING = """
         ```
 """
 class NegativeMapOutput: 
-    def __init__(self, image_original, image_withoutneg_1,  image_withneg_1, image_withoutneg_2,  image_withneg_2):
+    def __init__(self, image_original, image_withoutneg_1,  image_withneg_1, image_withoutneg_2,  image_withneg_2, diffusion_process = None, diffusion_process_images = None):
         self.image_original = image_original
         self.image_withoutneg_1 = image_withoutneg_1
         self.image_withneg_1 = image_withneg_1
         self.image_withoutneg_2 = image_withoutneg_2
         self.image_withneg_2 = image_withneg_2
+        self.diffusion_process = diffusion_process
+        self.diffusion_process_images = diffusion_process_images
 
 class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMixin, FromCkptMixin):
     r"""
@@ -1376,7 +1378,7 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
                     if callback is not None and i % callback_steps == 0:
                         callback(i, t, latents)
                         
-        ###TODO new computing
+            ###TODO new computing
             t = timesteps[look_step]
             latent_model_input = torch.cat([latents] * 3) if do_classifier_free_guidance else latents
             latent_model_input = self.scheduler.scale_model_input(latent_model_input, t)
@@ -1403,9 +1405,9 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
             latents_withoutneg = self.scheduler.step(noise_pred_withoutneg, t, latents, **extra_step_kwargs).prev_sample
             
             # storing
-            diffusion_process.append(latents)
+            diffusion_process.append(latents_withneg)
             
-            noises.append(noise_pred)
+            noises.append(noise_pred_withneg)
             
 
             # # call the callback, if provided
@@ -1480,6 +1482,7 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
             latents_withneg_ = self.scheduler.step(noise_pred_withneg, t, latents_withneg, **extra_step_kwargs).prev_sample
             
             latents_withoutneg_ = self.scheduler.step(noise_pred_withoutneg, t, latents_withoutneg, **extra_step_kwargs).prev_sample
+            diffusion_process.append(latents_withneg_)
             
 
 
@@ -1513,6 +1516,8 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
 
             # 9. Run safety checker
             image, has_nsfw_concept = self.run_safety_checker(image, device, prompt_embeds.dtype)
+            
+        diffusion_process_images = [self.decode_latents(latent) for latent in diffusion_process]
 
         # Offload last model to CPU
         if hasattr(self, "final_offload_hook") and self.final_offload_hook is not None:
@@ -1526,6 +1531,6 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         elif look_part == 'image':
             return NegativeMapOutput(image_orgingal, image_withoutneg, image_withneg, image_withoutneg_, image_withneg_)
         elif look_part == 'latent':
-            return NegativeMapOutput(latents, latents_withoutneg, latents_withneg, latents_withoutneg_, latents_withneg_)
+            return NegativeMapOutput(latents, latents_withoutneg, latents_withneg, latents_withoutneg_, latents_withneg_, diffusion_process, diffusion_process_images)
         else:
             raise ValueError("look_part should be either 'image' or 'latent'")
