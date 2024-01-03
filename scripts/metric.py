@@ -94,15 +94,15 @@ if args.negative_time is not None:
 for seed in iter(seeds):
     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
         
-        plt, fig, axs = get_plt(12)
+        plt, fig, axs = get_plt(16)
         
         out = pipe(prompt, negative_prompt=negative_prompt if len(negative_prompt)> 0 else None, num_inference_steps=steps, generator=set_seed(seed))
-        ax = get_axs(axs, 0, 12)
+        ax = get_axs(axs, 0, 16)
         ax.imshow(out.images[0])
         ax.set_title('with N '+look_mode)
         
         out = pipe(prompt, num_inference_steps=steps, generator=set_seed(seed))
-        ax = get_axs(axs, 1, 12)
+        ax = get_axs(axs, 1, 16)
         ax.imshow(out.images[0])
         ax.set_title('without N '+look_part)
         
@@ -113,18 +113,23 @@ for seed in iter(seeds):
             
             difference = (out.image_withneg_2 - out.image_withoutneg_2) * 10 + 0.5
             difference_pre = (out.image_withneg_1 - out.image_withoutneg_1) * 10 + 0.5
-            ax = get_axs(axs, 4 + i, 12) 
+            ax = get_axs(axs, 4 + i, 16) 
             ax.imshow(pipe.numpy_to_pil(difference)[0])
             ax.set_title(f'{time}')
         
-            ax = get_axs(axs, 8 + i, 12) 
+            ax = get_axs(axs, 8 + i, 16) 
             ax.imshow(pipe.numpy_to_pil(difference_pre)[0])
             ax.set_title(f'{time}')
+                        
+            latent = torch.cat([out.diffusion_process[time].mean(dim=1,keepdim = True)]*3, dim=1).cpu().transpose(1,2).transpose(2,3).numpy()
+            ax = get_axs(axs, 12 + i, 16)
+            ax.imshow(pipe.numpy_to_pil(latent)[0])
+            ax.set_title(f'latent {time}')
         
         if args.wandb:
             wandb.log({"pic": fig})
         else:
-            plt.savefig('pic.png')
+            plt.savefig('pics/pic.png')
             
             
             
