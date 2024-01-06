@@ -75,3 +75,6 @@ python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "
 python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "unreal" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
 
 python scripts/ratio.py --prompt "a woman sitting in a cafe" --negative_prompt "animate" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_gen --wandb
+
+
+python scripts/ratio.py --prompt "a yellow balloon on a blue bench" --negative_prompt "yellow bench" --seed 679216 --group ratio01 --bound_box 30 0 25 35

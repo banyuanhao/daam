@@ -1,5 +1,6 @@
 import argparse
-from diffusers import StableDiffusionPipeline, StableDiffusionXLPipeline, AutoPipelineForText2Image,  StableDiffusionXLImg2ImgPipeline
+from diffusers import StableDiffusionPipeline
+# StableDiffusionXLPipeline, AutoPipelineForText2Image,  StableDiffusionXLImg2ImgPipeline
 import torch
 import random
 import numpy as np
@@ -39,17 +40,17 @@ args = parser.parse_args()
 model_id = 'stabilityai/stable-diffusion-2-base'
 device = 'cuda'
 
-# pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True).to(device)
+pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True).to(device)
 
 # pipe = StableDiffusionXLPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True).to(device)    
 
-pipe = AutoPipelineForText2Image.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True).to("cuda")
+# pipe = AutoPipelineForText2Image.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True).to("cuda")
 
-refiner = StableDiffusionXLImg2ImgPipeline.from_pretrained(    "stabilityai/stable-diffusion-xl-refiner-1.0", torch_dtype=torch.float16, use_safetensors=True, variant="fp16").to(device)
+# refiner = StableDiffusionXLImg2ImgPipeline.from_pretrained(    "stabilityai/stable-diffusion-xl-refiner-1.0", torch_dtype=torch.float16, use_safetensors=True, variant="fp16").to(device)
 
 
 prompt = args.prompt
-prompt = ["A toy car lies forgotten under a bed, gathering dust."]
+#prompt = ["glasse"]
 steps = args.steps
 negative_prompt = args.negative_prompt
 

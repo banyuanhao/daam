@@ -52,7 +52,7 @@ EXAMPLE_DOC_STRING = """
         ```
 """
 class NegativeMapOutput: 
-    def __init__(self, image_original, image_withoutneg_1,  image_withneg_1, image_withoutneg_2,  image_withneg_2, diffusion_process = None, diffusion_process_images = None):
+    def __init__(self, image_original, image_withoutneg_1,  image_withneg_1, image_withoutneg_2,  image_withneg_2, diffusion_process = None, diffusion_process_images = None, positive_noises = None, negative_noises = None, uncond_noises = None):
         self.image_original = image_original
         self.image_withoutneg_1 = image_withoutneg_1
         self.image_withneg_1 = image_withneg_1
@@ -60,6 +60,9 @@ class NegativeMapOutput:
         self.image_withneg_2 = image_withneg_2
         self.diffusion_process = diffusion_process
         self.diffusion_process_images = diffusion_process_images
+        self.positive_noises = positive_noises
+        self.negative_noises = negative_noises
+        self.uncond_noises = uncond_noises
 
 class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMixin, FromCkptMixin):
     r"""
@@ -1324,7 +1327,9 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         extra_step_kwargs = self.prepare_extra_step_kwargs(generator, eta)
         
         # 6.5 storing
-        noises = []
+        positive_noises = []
+        negative_noises = []
+        uncond_noises = []
         diffusion_process = []
         diffusion_process.append(latents)
 
@@ -1355,6 +1360,9 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
                 # perform guidance
                 if do_classifier_free_guidance:
                     noise_pred_negative, noise_pred_positive, noise_pred_uncond = noise_pred.chunk(3)
+                    positive_noises.append(noise_pred_positive)
+                    negative_noises.append(noise_pred_negative)
+                    uncond_noises.append(noise_pred_uncond)
                     
                     
                     if negative_time is None:
@@ -1369,7 +1377,7 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
                 
                 # storing
                 diffusion_process.append(latents)
-                noises.append(noise_pred)
+                
                 
 
                 # call the callback, if provided
@@ -1394,10 +1402,11 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
             # perform guidance
             if do_classifier_free_guidance:
                 noise_pred_negative, noise_pred_positive, noise_pred_uncond = noise_pred.chunk(3)
+                positive_noises.append(noise_pred_positive)
+                negative_noises.append(noise_pred_negative)
+                uncond_noises.append(noise_pred_uncond)
 
                 noise_pred_withneg = noise_pred_negative + guidance_scale * (noise_pred_positive - noise_pred_negative)
-                
-
                 noise_pred_withoutneg = noise_pred_uncond + guidance_scale * (noise_pred_positive - noise_pred_uncond)
 
             # compute the previous noisy sample x_t -> x_t-1
@@ -1406,8 +1415,6 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
             
             # storing
             diffusion_process.append(latents_withneg)
-            
-            noises.append(noise_pred_withneg)
             
 
             # # call the callback, if provided
@@ -1444,6 +1451,10 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
                 noise_pred_negative_withneg, noise_pred_positive_withneg, noise_pred_uncond_withneg = noise_pred_withneg.chunk(3)
                 
                 noise_pred_negative_withoutneg, noise_pred_positive_withoutneg, noise_pred_uncond_withoutneg = noise_pred_withoutneg.chunk(3)
+                
+                positive_noises.append(noise_pred_positive_withneg)
+                negative_noises.append(noise_pred_negative_withneg)
+                uncond_noises.append(noise_pred_uncond_withneg)
                 
                 if look_mode is None:
                     raise ValueError("look_mode should be either 'nu' or 'pu' or 'u'")
@@ -1531,6 +1542,6 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         elif look_part == 'image':
             return NegativeMapOutput(image_orgingal, image_withoutneg, image_withneg, image_withoutneg_, image_withneg_)
         elif look_part == 'latent':
-            return NegativeMapOutput(latents, latents_withoutneg, latents_withneg, latents_withoutneg_, latents_withneg_, diffusion_process, diffusion_process_images)
+            return NegativeMapOutput(latents, latents_withoutneg, latents_withneg, latents_withoutneg_, latents_withneg_, diffusion_process, diffusion_process_images, positive_noises = positive_noises, negative_noises = negative_noises, uncond_noises = uncond_noises)
         else:
             raise ValueError("look_part should be either 'image' or 'latent'")

@@ -47,6 +47,8 @@ parser.add_argument('--wandb',action='store_true',help='use wandb')
 parser.add_argument('--look_time', type=int, nargs='+', default=0)
 parser.add_argument('--look_mode', type=str, choices=['nu','pu','u','p','n','pn'], required=True)
 parser.add_argument('--look_part', type=str, choices=['latent','image'], default='image')
+parser.add_argument('--out_file',type=str, default='pics/pic.png')
+parser.add_argument('--visualizer', type=str, default='process', choices=['process','negative','positive','uncond','positive_uncond','negative_uncond'])
 args = parser.parse_args()
 
 wandb.login()
@@ -64,6 +66,8 @@ tags = args.tags
 look_time = args.look_time
 look_mode = args.look_mode
 look_part = args.look_part
+out_file = args.out_file
+visualizer = args.visualizer
 
 
 
@@ -105,6 +109,11 @@ for seed in iter(seeds):
         ax = get_axs(axs, 1, 16)
         ax.imshow(out.images[0])
         ax.set_title('without N '+look_part)
+        ax = get_axs(axs, 2, 16)
+        ax.set_title(negative_prompt)
+        ax = get_axs(axs, 3, 16)
+        ax.set_title(visualizer)
+        #ax.imshow()
         
         for i, time in enumerate(look_time):
 
@@ -117,19 +126,39 @@ for seed in iter(seeds):
             ax.imshow(pipe.numpy_to_pil(difference)[0])
             ax.set_title(f'{time}')
         
-            ax = get_axs(axs, 8 + i, 16) 
+            ax = get_axs(axs, 8 + i, 16)
             ax.imshow(pipe.numpy_to_pil(difference_pre)[0])
             ax.set_title(f'{time}')
-                        
-            latent = torch.cat([out.diffusion_process[time].mean(dim=1,keepdim = True)]*3, dim=1).cpu().transpose(1,2).transpose(2,3).numpy()
-            ax = get_axs(axs, 12 + i, 16)
-            ax.imshow(pipe.numpy_to_pil(latent)[0])
-            ax.set_title(f'latent {time}')
+            
+            if look_part == 'latent':
+                if visualizer == 'process':
+                    latent = torch.cat([out.diffusion_process[time].mean(dim=1,keepdim = True)]*3, dim=1).cpu().transpose(1,2).transpose(2,3).numpy()
+                elif visualizer == 'negative':
+                    latent = torch.cat([out.negative_noises[time].mean(dim=1,keepdim = True)]*3, dim=1).cpu().transpose(1,2).transpose(2,3).numpy()
+                elif visualizer == 'positive':
+                    latent = torch.cat([out.positive_noises[time].mean(dim=1,keepdim = True)]*3, dim=1).cpu().transpose(1,2).transpose(2,3).numpy()
+                elif visualizer == 'uncond':
+                    latent = torch.cat([out.uncond_noises[time].mean(dim=1,keepdim = True)]*3, dim=1).cpu().transpose(1,2).transpose(2,3).numpy()
+                elif visualizer == 'positive_uncond':
+                    latent = torch.cat([7.5*out.positive_noises[time].mean(dim=1,keepdim = True)-6.5*out.uncond_noises[time].mean(dim=1,keepdim = True)]*3, dim=1).cpu().transpose(1,2).transpose(2,3).numpy()
+                elif visualizer == 'negative_uncond':
+                    latent = torch.cat([7.5*out.negative_noises[time].mean(dim=1,keepdim = True)-6.5*out.uncond_noises[time].mean(dim=1,keepdim = True)]*3, dim=1).cpu().transpose(1,2).transpose(2,3).numpy()
+                else:
+                    raise NotImplementedError
+                
+                # latent size:64 64 3
+                # rescale latent to 0-1
+                latent = (latent - latent.min()) / (latent.max() - latent.min())
+                
+                ax = get_axs(axs, 12 + i, 16)
+                ax.imshow(pipe.numpy_to_pil(latent)[0])
+                ax.set_title(f'{time}')
         
         if args.wandb:
             wandb.log({"pic": fig})
         else:
-            plt.savefig('pics/pic.png')
+            negative_prompt = negative_prompt.replace(' ','_') 
+            plt.savefig(out_file.replace('.png',f'_{negative_prompt}_{visualizer}.png'))
             
             
             

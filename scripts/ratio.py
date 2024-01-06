@@ -1,3 +1,5 @@
+# mean activation value of the feature maps
+
 import argparse
 from daam import trace, set_seed
 from diffusers import StableDiffusionPipeline
@@ -102,4 +104,4 @@ for seed in iter(seeds):
             if args.wandb:
                 wandb.log({"Ratio": fig}) 
             else:
-                fig.savefig('pics/ratio.png')
+                fig.savefig(f'pics/ratio_{seed}.png')
