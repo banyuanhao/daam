@@ -134,6 +134,51 @@ export CUDA_VISIBLE_DEVICES=1
 
 # python scripts/daamwandb.py --prompt "A couple walking along the riverbank in Paris" --negative_prompt "Eiffel Tower" --words "couple"  --group metric1 --time_id 2 2 5 5 15 15 25 25 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
 
-python scripts/daamwandb.py --prompt "professional office woman" --negative_prompt "glasses" --words "woman"  --group metric1 --time_id 2 2 5 5 15 15 25 25 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+# python scripts/daamwandb.py --prompt "professional office woman" --negative_prompt "glasses" --words "woman"  --group metric1 --time_id 2 2 5 5 15 15 25 25 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
 
-python scripts/daamwandb.py --prompt "professional office woman" --negative_prompt "glasses" --words "n:glasses"  --group metric1 --time_id 2 2 5 5 15 15 25 25 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+# python scripts/daamwandb.py --prompt "professional office woman" --negative_prompt "glasses" --words "n:glasses"  --group metric1 --time_id 2 2 5 5 15 15 25 25 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+
+# python scripts/daamwandb.py --prompt "professional office woman" --negative_prompt "glasses" --words "n:glasses"  --group metric1 --time_id 2 2 5 5 15 15 25 25 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+
+
+
+# Seared medium-rare steak on a board with herbs and visible seasonings.
+
+# python scripts/daamwandb.py --prompt "Seared medium-rare steak on a board with herbs and visible seasonings." --words "n:glasses"  --group  --time_id 2 2 5 5 15 15 25 25 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+
+# asymmetrical
+# badly
+# cooked
+# black
+# and
+# white
+# blurry
+# burnt
+# cartoon
+# cgi
+# cold
+# dark
+# distorted
+# expired
+# grainy
+# human
+# parts
+# incomplete
+# low
+# resolution
+# lowres
+# moldy
+# mutated
+# overcooked
+# oversaturated
+# rotten
+# sculpture
+# sketch
+# soggy
+# sour
+# stale
+# undercooked
+# unfocused
+# unrealistic
+# upside
+# down
