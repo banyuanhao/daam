@@ -47,26 +47,26 @@ prompts_names = os.listdir(prompts_path)
 
 image_path = dataset_path/'images'
 
-with torch.no_grad():
-    for prompt_name in prompts_names:
-        prompt_path = prompts_path/prompt_name
-        image_class_path = image_path/prompt_name[0:-4]
+# with torch.no_grad():
+#     for prompt_name in prompts_names:
+#         prompt_path = prompts_path/prompt_name
+#         image_class_path = image_path/prompt_name[0:-4]
         
-        if not os.path.exists(image_class_path):
-            os.makedirs(image_class_path)
+#         if not os.path.exists(image_class_path):
+#             os.makedirs(image_class_path)
             
-        for seed in seeds:
-            image_seed_path = image_class_path/str(seed)
-            if not os.path.exists(image_seed_path):
-                os.makedirs(image_seed_path)
+#         for seed in seeds:
+#             image_seed_path = image_class_path/str(seed)
+#             if not os.path.exists(image_seed_path):
+#                 os.makedirs(image_seed_path)
             
-            with open(prompt_path, 'r') as f:
-                prompts = f.read()
-                prompts = prompts.split('\n')
-                name = prompts[0]
-                prompts = prompts[1:]
+#             with open(prompt_path, 'r') as f:
+#                 prompts = f.read()
+#                 prompts = prompts.split('\n')
+#                 name = prompts[0]
+#                 prompts = prompts[1:]
                 
-            for k, prompt in enumerate(prompts):
-                out = pipe(prompt=prompt, generator=set_seed(seed))
-                out.images[0].save(image_seed_path/f'{name}_{seed}_{k}.png')
+#             for k, prompt in enumerate(prompts):
+#                 out = pipe(prompt=prompt, generator=set_seed(seed))
+#                 out.images[0].save(image_seed_path/f'{name}_{seed}_{k}.png')
 

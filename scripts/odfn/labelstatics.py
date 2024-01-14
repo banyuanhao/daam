@@ -3,6 +3,7 @@ import json
 import torch
 import mmcv
 from mmengine.visualization import Visualizer
+import math
 import cv2
 from pathlib import Path
 super_class = ['outdoor', 'indoor', 'vehicle', 'person', 'electronic', 'animal', 'food', 'appliance', 'furniture', 'accessory', 'kitchen', 'sports']
@@ -64,6 +65,8 @@ def get_dict(statics_mode):
         dictionary = {key: [] for key in range(80)}
     elif statics_mode == 'seed_id_superclass':
         dictionary = {(key1, key2): [] for key1 in seeds for key2 in range(len(super_class))}
+    elif statics_mode == 'category_id_prompt':
+        dictionary = {(key1, key2): [] for key1 in range(80) for key2 in range(10)}
     else:
         raise ValueError('statics_mode is not defined')
     return dictionary
@@ -75,6 +78,8 @@ def sorting_box(dictionary, category_id_truth, seed_id, prompt_id, category_id, 
         dictionary[category_id_truth].append(bbox)
     elif statics_mode == 'seed_id_superclass':
         dictionary[(seed_id, category_id_to_superclass_id[category_id_truth])].append(bbox)
+    elif statics_mode == 'category_id_prompt':
+        dictionary[(category_id_truth, prompt_id)].append(bbox)
     else:
         raise ValueError('statics_mode is not defined')
     return dictionary
@@ -87,7 +92,7 @@ def extract_ground(image_id):
 
 #dataset_path = Path('dataset/ODFN')
 select_mode = 'top1'
-statics_mode = 'seed_id'
+statics_mode = 'category_id_prompt'
 #statics_mode = 'seed_id'
 count = 0
 dictionary = get_dict(statics_mode)
@@ -107,6 +112,8 @@ statics = {}
 countx = 0
 county = 0
 for key, value in dictionary.items():
+    if len(value) == 0:
+        continue
     tensor = torch.tensor(value)
     tensorx = tensor[:,[0,2]].mean(dim=1).var().item()
     tensory = tensor[:,[1,3]].mean(dim=1).var().item()
@@ -117,23 +124,22 @@ for key, value in dictionary.items():
         county += 1
         
 
-key_value_pairs = {key: value[0] for key, value in statics.items()}
+# key_value_pairs = {key: value[0] for key, value in statics.items()}
 
-# 根据值排序键
-sorted_keys = sorted(key_value_pairs, key=lambda x: key_value_pairs[x])
+# # 根据值排序键
+# sorted_keys = sorted(key_value_pairs, key=lambda x: key_value_pairs[x])
 
-# 现在 sorted_keys 是一个列表，其中包含按值排序的键
-print(sorted_keys)
+# # 现在 sorted_keys 是一个列表，其中包含按值排序的键
+# print(sorted_keys)
 # for i in range(80):
 #     if category_id_to_superclass_id[i] == 6:
 #         print(statics[i])
+print(statics)
 
 
-# for i in range(12):
-#     mean = [value  for key, value in statics.items() if key[1] == i]
-#     mean = torch.tensor(mean).mean(dim=0)
-#     print(mean)
-
+mean = [value  for key, value in statics.items() if not math.isnan(value[0]) and not math.isnan(value[1])]
+mean = torch.mean(torch.tensor(mean), dim=0)
+print(mean)
 # print(statics)
     
 # print(countx)
