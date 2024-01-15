@@ -8,6 +8,9 @@ import random
 from tqdm import tqdm
 from scipy.stats import norm
 T = TypeVar('T')
+import mmdet.datasets.coco
+from mmdet.datasets.transforms import PackDetInputs
+from mmcv.transforms import RandomResize,RandomFlip
 
 def auto_device(obj: T = torch.device('cpu')) -> T:
     if isinstance(obj, torch.device):
