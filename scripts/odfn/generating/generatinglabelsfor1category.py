@@ -1,3 +1,4 @@
+# generating dataset with noise to labels mapping, only for 1 category
 import json
 from mmdet.apis import init_detector, inference_detector
 from mmengine.visualization import Visualizer
@@ -85,39 +86,3 @@ data['categories'] = [{'id': 0, 'name': 'object', 'supercategory': 'object'}]
 # save annotations_for_80_category
 with open(f'dataset/ODFN/{spilt}/annotations/{spilt}_for_1_category.json', 'w') as f:
     json.dump(data, f)
-
-    
-# cateset = set()
-# for annotation in annotations:
-#     cateset.add(annotation['category_id'])
-    
-# print(cateset)
-# print(len(cateset))
-    
-# raise ValueError('stop')
-# count_up = 0
-# count_down = 0
-# for annotation in annotations:
-
-#     category_id = annotation['category_id']
-#     bbox = annotation['bbox']
-#     score = annotation['score']
-#     rank = annotation['rank']
-    
-#     if rank == 1:
-#         for image in images:
-#             if image['id'] == annotation['image_id']:
-#                 img_path = 'dataset/ODFN/' + image['file_name']
-#                 print(img_path)
-#                 break
-    
-
-# image = mmcv.imread(img_path)
-
-# visualizer = Visualizer(image=image,save_dir='pics')
-
-# visualizer.draw_bboxes(torch.tensor(bbox))
-# visualizer.draw_texts(coco_classes[category_id],torch.tensor(bbox)[0:2])
-# a = visualizer.get_image()
-# cv2.imwrite('pics/a.png',a)
-#visualizer.add_image('demo', a)
