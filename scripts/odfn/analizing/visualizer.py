@@ -3,6 +3,7 @@ import torch
 from mmdet.apis import init_detector, inference_detector
 from mmengine.visualization import Visualizer
 import cv2
+from utils_odfn import coco_classes
 
 
 

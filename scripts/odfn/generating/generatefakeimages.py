@@ -1,5 +1,4 @@
 # file to generate images from prompts and seeds
-spilt = 'test'
 
 from diffusers import StableDiffusionPipeline, StableDiffusionXLPipeline, AutoPipelineForText2Image,  StableDiffusionXLImg2ImgPipeline
 import torch
@@ -10,10 +9,14 @@ T = TypeVar('T')
 from PIL import Image
 from pathlib import Path
 import os
-from utils_odfn import seeds
+from utils_odfn import seeds_plus as seeds
+from tqdm import tqdm
 
-
-seeds = seeds[35:40]
+spilt = 'train'
+seeds = seeds[17500:20000]
+print('seeds 17500:20000')
+class_names = ['sports_ball.txt']
+print(f'classes: {class_names}')
 
 
 def auto_device(obj: T = torch.device('cpu')) -> T:
@@ -44,12 +47,11 @@ pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True).to
 # pipe = AutoPipelineForText2Image.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True).to("cuda")
 
 
-dataset_path = Path('dataset/ODFN/test')
-
-prompts_path = dataset_path/'prompts_brief_strict'
+dataset_path = Path(f'dataset/ODFN/version_2')
+prompts_path = dataset_path/'prompts_10000_5_5'
 prompts_names = os.listdir(prompts_path)
-
-image_path = dataset_path/'images'
+prompts_names = class_names
+image_path = dataset_path/spilt/'images'
 
 with torch.no_grad():
     for prompt_name in prompts_names:
@@ -59,7 +61,7 @@ with torch.no_grad():
         if not os.path.exists(image_class_path):
             os.makedirs(image_class_path)
             
-        for seed in seeds:
+        for seed in tqdm(seeds):
             image_seed_path = image_class_path/str(seed)
             if not os.path.exists(image_seed_path):
                 os.makedirs(image_seed_path)
@@ -72,5 +74,5 @@ with torch.no_grad():
                 
             for k, prompt in enumerate(prompts):
                 out = pipe(prompt=prompt, generator=set_seed(seed))
-                out.images[0].save(image_seed_path/f'{name}_{seed}_{k}.png')
+                out.images[0].save(image_seed_path/f'{name}_{seed}_{k}.jpg')
 
