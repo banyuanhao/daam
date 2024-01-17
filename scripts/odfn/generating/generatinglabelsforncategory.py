@@ -23,7 +23,7 @@ with open(f'dataset/ODFN/{version}/{spilt}/annotations/{spilt}.json', 'r') as f:
     annotations = data['annotations']
     categories = data['categories']
 
-annotations_for_1_category = []
+annotations_for_n_category = []
 for annotation in annotations:
     image_id = annotation['image_id']
     category_id_truth, seed_id, prompt_id = extract_ground(image_id)
@@ -35,28 +35,28 @@ for annotation in annotations:
     if  category_id == category_id_truth and score > 0.8 and rank == 1:
         dict_tmp= {}
         dict_tmp['image_id'] = seed_id
-        dict_tmp['category_id'] = 0
+        dict_tmp['category_id'] = category_id
         dict_tmp['bbox'] = [i/8 for i in bbox]
         dict_tmp['score'] = score
         dict_tmp['rank'] = rank
         dict_tmp['id'] = id
         dict_tmp['iscrowd'] = 0
         dict_tmp['area'] = annotation['area'] / 64
-        annotations_for_1_category.append(dict_tmp)
-data['annotations'] = annotations_for_1_category
+        annotations_for_n_category.append(dict_tmp)
+data['annotations'] = annotations_for_n_category
 
-images_for_1_category = []
+images_for_n_category = []
 for seed in seeds_sub:
     image_tmp = {}
     image_tmp['id'] = seeds_dict[seed]
     image_tmp['file_name'] = f'{spilt}/noises/' + str(seed) + '.npy'
     image_tmp['width'] = 512 / 8
     image_tmp['height'] = 512 / 8
-    images_for_1_category.append(image_tmp)
-data['images'] = images_for_1_category
+    images_for_n_category.append(image_tmp)
+data['images'] = images_for_n_category
 
-data['categories'] = [{'id': 0, 'name': 'object', 'supercategory': 'object'}]
+data['categories'] = categories
 
 # save annotations_for_80_category
-with open(f'dataset/ODFN/{version}/{spilt}/annotations/{spilt}_for_1_category.json', 'w') as f:
+with open(f'dataset/ODFN/{version}/{spilt}/annotations/{spilt}_for_n_category.json', 'w') as f:
     json.dump(data, f)
