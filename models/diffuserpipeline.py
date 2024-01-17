@@ -632,7 +632,6 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
             # Here we concatenate the unconditional and text embeddings into a single batch
             # to avoid doing two forward passes
             prompt_embeds = torch.cat([negative_prompt_embeds, prompt_embeds, uncond_prompt_embeds])
-            #print(prompt_embeds.shape)
         return prompt_embeds
 
     def run_safety_checker(self, image, device, dtype):
@@ -852,7 +851,25 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
         do_classifier_free_guidance = guidance_scale > 1.0
 
         # 3. Encode input prompt
-        prompt_embeds = self._encode_prompt(
+        # prompt_embeds = self._encode_prompt(
+        #     prompt,
+        #     device,
+        #     num_images_per_prompt,
+        #     do_classifier_free_guidance,
+        #     negative_prompt,
+        #     prompt_embeds=prompt_embeds,
+        #     negative_prompt_embeds=negative_prompt_embeds,
+        # )
+        # if negative_time is not None:
+        #     prompt_embeds_later = self._encode_prompt(
+        #         prompt,
+        #         device,
+        #         num_images_per_prompt,
+        #         do_classifier_free_guidance,
+        #     )
+        
+        # negative, positive, uncond
+        prompt_embeds = self._encode_prompt_total(
             prompt,
             device,
             num_images_per_prompt,
@@ -861,13 +878,6 @@ class StableDiffusionPipelineForNegativePrompts(DiffusionPipeline, TextualInvers
             prompt_embeds=prompt_embeds,
             negative_prompt_embeds=negative_prompt_embeds,
         )
-        if negative_time is not None:
-            prompt_embeds_later = self._encode_prompt(
-                prompt,
-                device,
-                num_images_per_prompt,
-                do_classifier_free_guidance,
-            )
         # 4. Prepare timesteps
         self.scheduler.set_timesteps(num_inference_steps, device=device)
         timesteps = self.scheduler.timesteps

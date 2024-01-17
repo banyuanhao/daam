@@ -320,11 +320,42 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
         ret = hk_self.monkey_super('_encode_prompt', prompt, *args, **kwargs)
         #print(ret.shape)
         return ret
+    
+    def _hooked_encode_prompt_total(hk_self, _: StableDiffusionPipeline, prompt: Union[str, List[str]], *args, **kwargs):
+        #print(prompt)
+        # TODO: fix this 
+        if not isinstance(prompt, str) and len(prompt) > 1:
+            raise ValueError('Only single prompt generation is supported for heat map computation.')
+        elif not isinstance(prompt, str):
+            last_prompt = prompt[0]
+        else:
+            last_prompt = prompt
+            
+        # TODO: fix this 
+        if args[-1] is not None:
+            if not isinstance(args[-1], str) and len(args[-1]) > 1:
+                raise ValueError('Only single prompt generation is supported for heat map computation.')
+            elif not isinstance(args[-1], str):
+                last_negative_prompt = args[-1][0]
+            else:
+                last_negative_prompt = args[-1]
+        else:
+            last_negative_prompt = ''
+                
+                
+        #print(last_prompt)
+        hk_self.heat_maps.clear()
+        hk_self.negative_heat_maps.clear()
+        hk_self.parent_trace.last_prompt = last_prompt
+        hk_self.parent_trace.last_negative_prompt = last_negative_prompt
+        ret = hk_self.monkey_super('_encode_prompt_total', prompt, *args, **kwargs)
+        #print(ret.shape)
+        return ret
 
     def _hook_impl(self):
         self.monkey_patch('run_safety_checker', self._hooked_run_safety_checker)
         self.monkey_patch('_encode_prompt', self._hooked_encode_prompt)
-        
+        #self.monkey_patch('_encode_prompt_total', self._hooked_encode_prompt)
 
 
 class UNetCrossAttentionHooker(ObjectHooker[Attention]):
