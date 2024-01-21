@@ -114,13 +114,6 @@ print(county)
 
 # print(dictionary)
 # print(count)
-
-
-
-
-
-
-
 # img_path = dataset_path/'images'/coco_classes[category_id_truth]/str(seeds[seed_id])/(coco_classes[category_id_truth]+'_'+str(seeds[seed_id])+'_'+str(prompt_id)+'.png')
 # image = mmcv.imread(img_path, channel_order='rgb')
 # visualizer = Visualizer(image=image,save_dir='pics')
@@ -129,4 +122,3 @@ print(county)
 # visualizer.draw_texts(coco_classes[category_id],torch.tensor(bbox[0:2]))
 # a = visualizer.get_image()
 # cv2.imwrite('pics/a.png',a)
-
