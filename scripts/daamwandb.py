@@ -1,6 +1,7 @@
 import argparse
 from daam import trace, set_seed
 from diffusers import StableDiffusionPipeline
+from models.diffuserpipeline import StableDiffusionPipelineForNegativePrompts
 import torch
 import matplotlib.pyplot as plt
 import os
@@ -43,6 +44,7 @@ parser.add_argument('--words', type=str,required=True)
 parser.add_argument('--tags', metavar='S', type=str, nargs='+',default='negative prompt')
 parser.add_argument('--steps', type=int, default=30)
 parser.add_argument('--wandb',action='store_true',help='use wandb')
+parser.add_argument('--negative_time', type=int, nargs='+',  default=None)
 args = parser.parse_args()
 
 #os.environ["WANDB_MODE"] = "offline"
@@ -51,6 +53,7 @@ wandb.login()
 model_id = 'stabilityai/stable-diffusion-2-base'
 device = 'cuda'
 pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True)
+# pipe = StableDiffusionPipelineForNegativePrompts.from_pretrained(model_id, use_auth_token=True)
 pipe = pipe.to(device)
 
 prompt = args.prompt
@@ -64,8 +67,7 @@ layer_id = args.layer_id
 factors = args.factors
 time_id = args.time_id
 head_id = args.head_id
-
-
+negative_time = args.negative_time
 
 if args.wandb:
     wandb.login()
@@ -78,7 +80,8 @@ if args.wandb:
                     "time_id": time_id,
                     "head_id": head_id,
                     "steps": steps,
-                    "tags": tags
+                    "tags": tags,
+                    "negative_time": negative_time
                     }
     run = wandb.init(
         project=args.project,
@@ -96,7 +99,7 @@ for seed in iter(seeds):
     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
         with trace(pipe) as tc:
             if len(negative_prompt)> 0:
-                out = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed))
+                out = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed), negative_time=negative_time)
             else:
                 out = pipe(prompt, num_inference_steps=steps, generator=set_seed(seed))
                 

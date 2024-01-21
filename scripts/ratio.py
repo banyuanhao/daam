@@ -1,14 +1,13 @@
+# mean activation value of the feature maps
+
 import argparse
 from daam import trace, set_seed
 from diffusers import StableDiffusionPipeline
 import torch
 import matplotlib.pyplot as plt
-import os
 import wandb
-import math
 import random
 import numpy as np
-import cv2
     
 #
 parser = argparse.ArgumentParser(description='Diffusion')
@@ -94,12 +93,16 @@ for seed in iter(seeds):
             axs[1][0].plot(ratio, label='ratio')
             axs[1][0].set_title(f'ratio')
             
-            pos, neg = tc.compute_activation_ratio(bounding_box=bound_box)
-            ratio = [neg[i]/pos[i] for i in range(len(pos))]
-            axs[1][1].plot(ratio, label='ratio')
+            # pos, neg = tc.compute_activation_ratio(bounding_box=bound_box)
+            # ratio = [neg[i]/pos[i] for i in range(len(pos))]
+            # axs[1][1].plot(ratio, label='ratio')
+            # axs[1][1].set_title(f'{bound_box}')
+            
+            axs[1][1].plot(neg, label='ratio')
+            axs[1][1].plot(pos, label='ratio')
             axs[1][1].set_title(f'{bound_box}')
             
             if args.wandb:
                 wandb.log({"Ratio": fig}) 
             else:
-                fig.savefig('pics/ratio.png')
+                fig.savefig(f'pics/ratio_{seed}.png')

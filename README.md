@@ -106,3 +106,13 @@ If clicking the link doesn't work on your browser, copy and paste it in a new ta
     url = "https://aclanthology.org/2023.acl-long.310",
 }
 ```
+
+tmux new-session -s odfn_card_7b
+
+setw -g mode-mouse on
+set -g mouse-resize-pane on
+set -g mouse-select-pane on
+set -g mouse-select-window on
+tmux source-file ~/.tmux.conf
+export CUDA_VISIBLE_DEVICES="7"
+python scripts/odfn/generating/generatefakeimages.py

@@ -1,4 +1,4 @@
-# a script to test the changing of the negative prompt
+# a script to test 
 import argparse
 from daam import set_seed, trace
 from models.diffuserpipeline import StableDiffusionPipelineForNegativePrompts

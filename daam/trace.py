@@ -175,9 +175,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
             factors = {0, 1, 2, 4, 8, 16, 32, 64}
         else:
             factors = set(factors)
-            
-        # print(len(heat_maps.ids_to_heatmaps))
-        # raise ValueError('The shape of maps and negative_maps are not the same.')
+        
 
         all_merges = []
         all_merges_negative = []
@@ -304,7 +302,6 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
             
         # TODO: fix this 
         if args[-1] is not None:
-            #print(args[-1])
             if not isinstance(args[-1], str) and len(args[-1]) > 1:
                 raise ValueError('Only single prompt generation is supported for heat map computation.')
             elif not isinstance(args[-1], str):
@@ -323,11 +320,42 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
         ret = hk_self.monkey_super('_encode_prompt', prompt, *args, **kwargs)
         #print(ret.shape)
         return ret
+    
+    def _hooked_encode_prompt_total(hk_self, _: StableDiffusionPipeline, prompt: Union[str, List[str]], *args, **kwargs):
+        #print(prompt)
+        # TODO: fix this 
+        if not isinstance(prompt, str) and len(prompt) > 1:
+            raise ValueError('Only single prompt generation is supported for heat map computation.')
+        elif not isinstance(prompt, str):
+            last_prompt = prompt[0]
+        else:
+            last_prompt = prompt
+            
+        # TODO: fix this 
+        if args[-1] is not None:
+            if not isinstance(args[-1], str) and len(args[-1]) > 1:
+                raise ValueError('Only single prompt generation is supported for heat map computation.')
+            elif not isinstance(args[-1], str):
+                last_negative_prompt = args[-1][0]
+            else:
+                last_negative_prompt = args[-1]
+        else:
+            last_negative_prompt = ''
+                
+                
+        #print(last_prompt)
+        hk_self.heat_maps.clear()
+        hk_self.negative_heat_maps.clear()
+        hk_self.parent_trace.last_prompt = last_prompt
+        hk_self.parent_trace.last_negative_prompt = last_negative_prompt
+        ret = hk_self.monkey_super('_encode_prompt_total', prompt, *args, **kwargs)
+        #print(ret.shape)
+        return ret
 
     def _hook_impl(self):
         self.monkey_patch('run_safety_checker', self._hooked_run_safety_checker)
         self.monkey_patch('_encode_prompt', self._hooked_encode_prompt)
-        
+        #self.monkey_patch('_encode_prompt_total', self._hooked_encode_prompt)
 
 
 class UNetCrossAttentionHooker(ObjectHooker[Attention]):
@@ -386,22 +414,9 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
                 #print(map_.shape)
                 map_ = map_.view(map_.size(0), h, w)
                 
-                #TODO: fix this
-                # size = map_.size(0)
-                # # 计算中间索引
-                # mid = size // 2
-
-                # # 利用索引分割张量为两半
-                # indices = torch.arange(size).to(map_.device)
-                # indices = torch.cat((indices[mid:], indices[:mid]))
-                
-                # # 根据指定的维度进行索引，以重新排序各部分
-                # map_.index_select(0, indices)
-                
                 # original code
                 pos_map_ = map_[map_.size(0) // 2:]  # Filter out unconditional
                 negative_map_ = map_[:map_.size(0) // 2]
-                # end TODO
                 #print(map_.shape)
                 maps.append(pos_map_)
                 negative_maps.append(negative_map_)
@@ -428,22 +443,16 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
     ):
         """Capture attentions and aggregate them."""
         batch_size, sequence_length, _ = hidden_states.shape
-        #print(hidden_states.shape)
         attention_mask = attn.prepare_attention_mask(attention_mask, sequence_length, batch_size)
         #print('hidden_states',hidden_states.shape)
         query = attn.to_q(hidden_states)
-        #print(query.shape)
 
         if encoder_hidden_states is None:
             encoder_hidden_states = hidden_states
         elif attn.norm_cross is not None:
             encoder_hidden_states = attn.norm_cross(encoder_hidden_states)
-
         key = attn.to_k(encoder_hidden_states)
-        #print('key',key.shape)
         value = attn.to_v(encoder_hidden_states)
-        #print(value.shape)
-
         query = attn.head_to_batch_dim(query)
         #print(query.shape)
         key = attn.head_to_batch_dim(key)
