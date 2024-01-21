@@ -13,9 +13,9 @@ from utils_odfn import seeds_plus as seeds
 from tqdm import tqdm
 
 spilt = 'train'
-seeds = seeds[17500:20000]
-print('seeds 17500:20000')
-class_names = ['sports_ball.txt']
+seeds = seeds[18750:20000]
+print('seeds 18750:20000')
+class_names = ['baseball_glove.txt']
 print(f'classes: {class_names}')
 
 
