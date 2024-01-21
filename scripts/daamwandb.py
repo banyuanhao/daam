@@ -53,7 +53,7 @@ wandb.login()
 model_id = 'stabilityai/stable-diffusion-2-base'
 device = 'cuda'
 pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True)
-pipe = StableDiffusionPipelineForNegativePrompts.from_pretrained(model_id, use_auth_token=True)
+# pipe = StableDiffusionPipelineForNegativePrompts.from_pretrained(model_id, use_auth_token=True)
 pipe = pipe.to(device)
 
 prompt = args.prompt
