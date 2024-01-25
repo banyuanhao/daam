@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from tqdm import tqdm
 import json
-from utils_odfn import coco_classes,seeds, coco_classes_dict, categories_origin, seeds_dict, version_2_classes
+from utils_odfn import coco_classes,seeds, coco_classes_dict, categories_origin, seeds_dict, seeds_plus_dict, version_2_classes, version_1_classes
     
 version = 'version_2'
 spilt = 'test'
@@ -46,7 +46,7 @@ for class_name in class_names:
             if version == 'version_1':
                 image_id = str(coco_classes_dict[class_name]).zfill(2)+str(seeds_dict[int(seed)]).zfill(3)+str(j).zfill(2)
             elif version == 'version_2':
-                image_id = str(coco_classes_dict[class_name]).zfill(2)+str(seeds_dict[int(seed)]).zfill(5)+str(j).zfill(1)
+                image_id = str(coco_classes_dict[class_name]).zfill(2)+str(seeds_plus_dict[int(seed)]).zfill(5)+str(j).zfill(1)
             else:
                 raise ValueError('version should be version_1 or version_2')
             
