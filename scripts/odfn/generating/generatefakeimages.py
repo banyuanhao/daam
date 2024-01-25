@@ -15,6 +15,7 @@ from tqdm import tqdm
 spilt = 'train'
 seeds = seeds[8750:10000]
 print('seeds 8750:10000')
+
 class_names = ['baseball_glove.txt']
 print(f'classes: {class_names}')
 
