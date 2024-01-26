@@ -39,13 +39,18 @@ coco_classes = [
 coco_classes_dict = {'person': 0, 'bicycle': 1, 'car': 2, 'motorcycle': 3, 'airplane': 4, 'bus': 5, 'train': 6, 'truck': 7, 'boat': 8, 'traffic_light': 9, 'fire_hydrant': 10, 'stop_sign': 11, 'parking_meter': 12, 'bench': 13, 'bird': 14, 'cat': 15, 'dog': 16, 'horse': 17, 'sheep': 18, 'cow': 19, 'elephant': 20, 'bear': 21, 'zebra': 22, 'giraffe': 23, 'backpack': 24, 'umbrella': 25, 'handbag': 26, 'tie': 27, 'suitcase': 28, 'frisbee': 29, 'skis': 30, 'snowboard': 31, 'sports_ball': 32, 'kite': 33, 'baseball_bat': 34, 'baseball_glove': 35, 'skateboard': 36, 'surfboard': 37, 'tennis_racket': 38, 'bottle': 39, 'wine_glass': 40, 'cup': 41, 'fork': 42, 'knife': 43, 'spoon': 44, 'bowl': 45, 'banana': 46, 'apple': 47, 'sandwich': 48, 'orange': 49, 'broccoli': 50, 'carrot': 51, 'hot_dog': 52, 'pizza': 53, 'donut': 54, 'cake': 55, 'chair': 56, 'couch': 57, 'potted_plant': 58, 'bed': 59, 'dining_table': 60, 'toilet': 61, 'tv': 62, 'laptop': 63, 'mouse': 64, 'remote': 65, 'keyboard': 66, 'cell_phone': 67, 'microwave': 68, 'oven': 69, 'toaster': 70, 'sink': 71, 'refrigerator': 72, 'book': 73, 'clock': 74, 'vase': 75, 'scissors': 76, 'teddy_bear': 77, 'hair_dryer': 78, 'toothbrush': 79}
 
 # open the json file and read the data
-with open('dataset/ODFN/train/annotations/train.json', 'r') as f:
+with open('/home/banyh2000/diffusion/daam/dataset/coco/annotations/instances_train2017.json', 'r') as f:
     data = json.load(f)
     
 annotations = data['annotations']
 images = data['images']
 
-
+area = []
+for image in images:
+    area.append(image['width']*image['height'])
+area = torch.tensor(area).float()
+print(area.mean())
+raise ValueError('stop')
 # selecting
 ## the top 1 bounding box matching the ground truth scores > 0.5
 ## the top 1 bounding boxes matching the ground truth
@@ -62,7 +67,7 @@ def get_dict(statics_mode):
     if statics_mode == 'seed_id':
         dictionary = {key: [] for key in seeds}
     elif statics_mode == 'category_id_truth':
-        dictionary = {key: [] for key in range(80)}
+        dictionary = {key: [] for key in range(91)}
     elif statics_mode == 'seed_id_superclass':
         dictionary = {(key1, key2): [] for key1 in seeds for key2 in range(len(super_class))}
     elif statics_mode == 'category_id_prompt':
@@ -92,21 +97,16 @@ def extract_ground(image_id):
 
 #dataset_path = Path('dataset/ODFN')
 select_mode = 'top1'
-statics_mode = 'category_id_prompt'
+statics_mode = 'category_id_truth'
 #statics_mode = 'seed_id'
 count = 0
 dictionary = get_dict(statics_mode)
 for i, annotation in enumerate(annotations):
-    image_id = annotation['image_id']
-    category_id_truth, seed_id, prompt_id = extract_ground(image_id)
-    score = annotation['score']
     category_id = annotation['category_id']
     bbox = annotation['bbox']
     id = annotation['id']
-    rank = annotation['rank']
-    if  category_id == category_id_truth and score > 0.6 and rank == 1:
-        count += 1
-        dictionary = sorting_box(dictionary, category_id_truth, seeds[seed_id], prompt_id, category_id, bbox, statics_mode)
+    count += 1
+    dictionary = sorting_box(dictionary, category_id, 0, 0, category_id, bbox, statics_mode)
         
 statics = {}
 countx = 0

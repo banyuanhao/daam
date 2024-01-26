@@ -1,24 +1,29 @@
-import cv2
-from mmcv.transforms.loading import LoadImageFromNPY
-from mmdet.datasets.transforms.loading import LoadMultiChannelImageFromFiles
-import numpy as np
-import mmcv
-import random
-seeds = [3502948, 2414292, 4013215, 7661395, 2728259, 7977675, 6926097, 8223344, 4338686, 2630916, 3548081, 3710422, 2285361, 9638421, 2837631, 5468982, 7955021, 7197637, 4206420, 1347815, 2957833, 3326072, 1813088, 7965829, 4708029, 452169, 1107126, 8388604, 9481161, 8020003, 2225075, 1440263, 29403, 7099996, 7851895, 1106978, 4053385, 6882390, 3322966, 3668830, 8613167, 1315399, 3121499, 900759, 7739336, 1464588, 1144945, 39451, 3131354, 6971254, 1088493, 1700896, 3760774, 3410488, 3129936, 5309498, 3698823, 5970284, 2569054, 8264031, 8663422, 5174978, 4041203, 1690212, 7695658, 4857840, 4395970, 2970532, 1313178, 7409679, 1242182, 6902329, 4582656, 4123976, 8158709, 3033046, 1634920, 6750562, 6337306, 8317766, 1618731, 1518909, 4798495, 2620399, 2423703, 7285262, 180696, 8432894, 3157912, 7890161, 5509442, 6216034, 7431925, 7774348, 6443781, 6142998, 3686770, 8916284, 9406101, 7637527] 
+import os
+import shutil
+from mmcv.transforms import LoadImageFromFile
+import json
 
-# seeds_plus = random.sample(range(1, 1000001), 19900)
+path = '/home/banyh2000/diffusion/daam/daam/dataset/ODFN/version_2/val/annotations/val_for_5_category_5_class_1_prompt.json'
+# open json file
+with open(path, 'r') as f:
+    data = json.load(f)
+    images = data['images']
+    annotations = data['annotations']
+    categories = data['categories']
+print(categories)
 
-# seeds = seeds + seeds_plus
-# seeds_ = set(seeds)
-# print(len(seeds_))
-# # save seeds as numpy array
-# np.save('seeds.npy', seeds)
-# load seeds from numpy array
-seeds = np.load('seeds.npy')
-seeds_dict = {}
-for i, seed in enumerate(seeds):
-    seeds_dict[seed] = i
-# save dict
-np.save('seeds_dict.npy', seeds_dict)
+# src_dir = "/home/banyh2000/diffusion/daam/dataset/ODFN/version_2/train/home/baseball_glove"
+# dst_dir = "/home/banyh2000/diffusion/daam/dataset/ODFN/version_2/train/images/baseball_glove"
 
-print(seeds_dict[7637527])
+# # 确保目标目录存在
+# os.makedirs(dst_dir, exist_ok=True)
+
+# # 遍历源目录中的所有文件和文件夹
+# for item in os.listdir(src_dir):
+#     # 创建源和目标的完整路径
+#     src_item = os.path.join(src_dir, item)
+#     dst_item = os.path.join(dst_dir, item)
+
+#     # 如果是文件夹，就移动它
+#     if os.path.isdir(src_item):
+#         shutil.move(src_item, dst_item)

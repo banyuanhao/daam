@@ -14,7 +14,7 @@ for i, seed in enumerate(seeds_plus):
 seeds_plus_shuffled = np.load('scripts/odfn/generating/seeds_plus_shuffle.npy').tolist()
 seeds_plus_shuffled_dict = {}
 for i in range(len(seeds_plus)):
-    seeds_plus_shuffled_dict[seeds_plus[i]] = seeds_plus_shuffled[i]
+    seeds_plus_shuffled_dict[seeds_plus_shuffled[i]] = seeds_plus[i]
 
     
 # print(seeds_plus_dict)
