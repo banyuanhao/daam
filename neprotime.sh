@@ -182,3 +182,46 @@ export CUDA_VISIBLE_DEVICES=1
 # unrealistic
 # upside
 # down
+
+# python scripts/daamwandb.py --prompt "Professional office woman" --negative_prompt "glasses" --words "n:glasses" --group testing --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --negative_time 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
+
+
+# python scripts/daamwandb.py --prompt "Professional office woman" --negative_prompt "glasses" --words "n:glasses" --group testing --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --negative_time 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
+
+# python scripts/daamwandb.py --prompt "Professional office woman" --negative_prompt "glasses" --words "n:glasses" --group testing --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --negative_time 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
+
+# python scripts/daamwandb.py --prompt "Professional office woman" --negative_prompt "glasses" --words "n:glasses" --group testing --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --negative_time  20 21 22 23 24 25 26 27 28 29
+
+# python scripts/daamwandb.py --prompt "Professional office woman" --negative_prompt "glasses" --words "n:glasses" --group testing --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --negative_time   25 26 27 28 29
+
+# python scripts/daamwandb.py --prompt "Professional office woman" --negative_prompt "glasses" --words "n:glasses" --group testing --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --negative_prompt 100
+
+# python scripts/daamwandb.py --prompt "a girl walking along the riverside" --words "girl" --group testing --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+
+# python scripts/daamwandb.py --prompt "a girl walking along the riverside with trees" --words "trees" --group testing --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+
+# python scripts/daamwandb.py --prompt "a girl walking along the riverside" --negative_prompt "trees" --words "n:trees" --group testing --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+
+# python scripts/daamwandb.py --prompt "a wooden picture frame and a fluffy sweater" --words "wooden" --group testing --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+# python scripts/daamwandb.py --prompt "a wooden picture frame and a fluffy sweater" --words "fluffy" --group testing --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+
+# python scripts/daamwandb.py --prompt "a b c d e f" --words "a, b, c, d, e, f" --group testing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
+
+# python scripts/daamwandb.py --prompt "a yellow hat and a red sock" --words "yellow" --group testing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --time_id 1 2 3 4 5 6 7 10 11 15 16 20 21 25 26 30
+# python scripts/daamwandb.py --prompt "a yellow hat and a red sock" --words "hat" --group testing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --time_id 1 2 3 4 5 6 7 10 11 15 16 20 21 25 26 30
+# python scripts/daamwandb.py --prompt "a yellow hat and a red sock" --words "red" --group testing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --time_id 1 2 3 4 5 6 7 10 11 15 16 20 21 25 26 30
+# python scripts/daamwandb.py --prompt "a yellow hat and a red sock" --words "sock" --group testing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --time_id 1 2 3 4 5 6 7 10 11 15 16 20 21 25 26 30
+
+#a rubber tire and a glass table
+
+# python scripts/daamwandb.py --prompt "a wooden apple" --words "wooden" --group testing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --time_id 1 3 4 6 7 10 11 15 16 20 21 25 26 30
+
+# python scripts/daamwandb.py --prompt "a wooden apple" --words "apple" --group testing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --time_id 1 3 4 6 7 10 11 15 16 20 21 25 26 30
+
+
+python scripts/daamwandb.py --prompt "a red bowl and a blue orange" --words "red" --group testing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --time_id 1 3 4 6 7 10 11 15 16 20 21 25 26 30
+python scripts/daamwandb.py --prompt "a red bowl and a blue orange" --words "bowl" --group testing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --time_id 1 3 4 6 7 10 11 15 16 20 21 25 26 30
+python scripts/daamwandb.py --prompt "a red bowl and a blue orange" --words "blue" --group testing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --time_id 1 3 4 6 7 10 11 15 16 20 21 25 26 30
+python scripts/daamwandb.py --prompt "a red bowl and a blue orange" --words "orange" --group testing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --time_id 1 3 4 6 7 10 11 15 16 20 21 25 26 30
+
+python scripts/daamwandb.py --prompt "a red bowl and a blue orange" --words "orange" --group testing --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --time_id 1 3 4 6 7 10 11 15 16 20 21 25 26 30

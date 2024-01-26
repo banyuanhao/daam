@@ -30,6 +30,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
     ):
         self.all_heat_maps = RawHeatMapCollection()
         self.all_negative_heat_maps = RawHeatMapCollection()
+        self.all_uncond_heat_maps = RawHeatMapCollection()
         h = (pipeline.unet.config.sample_size * pipeline.vae_scale_factor)
         self.latent_hw = 4096 if h == 512 else 9216  # 64x64 or 96x96 depending on if it's 2.0-v or 2.0
         locate_middle = load_heads or save_heads
@@ -281,6 +282,7 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
         super().__init__(pipeline)
         self.heat_maps = parent_trace.all_heat_maps
         self.negative_heat_maps = parent_trace.all_negative_heat_maps
+        self.uncond_heat_maps = parent_trace.all_uncond_heat_maps
         self.parent_trace = parent_trace
 
     def _hooked_run_safety_checker(hk_self, self: StableDiffusionPipeline, image, *args, **kwargs):
@@ -346,6 +348,7 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
         #print(last_prompt)
         hk_self.heat_maps.clear()
         hk_self.negative_heat_maps.clear()
+        hk_self.uncond_heat_maps.clear()
         hk_self.parent_trace.last_prompt = last_prompt
         hk_self.parent_trace.last_negative_prompt = last_negative_prompt
         ret = hk_self.monkey_super('_encode_prompt_total', prompt, *args, **kwargs)
@@ -355,7 +358,8 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
     def _hook_impl(self):
         self.monkey_patch('run_safety_checker', self._hooked_run_safety_checker)
         self.monkey_patch('_encode_prompt', self._hooked_encode_prompt)
-        #self.monkey_patch('_encode_prompt_total', self._hooked_encode_prompt)
+        if hasattr(self.module, '_encode_prompt_total'):
+            self.monkey_patch('_encode_prompt_total', self._hooked_encode_prompt_total)
 
 
 class UNetCrossAttentionHooker(ObjectHooker[Attention]):
@@ -373,6 +377,7 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
         super().__init__(module)
         self.heat_maps = parent_trace.all_heat_maps
         self.negative_heat_maps = parent_trace.all_negative_heat_maps
+        self.uncond_heat_maps = parent_trace.all_uncond_heat_maps
         self.context_size = context_size
         self.layer_idx = layer_idx
         self.latent_hw = latent_hw
@@ -414,9 +419,13 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
                 #print(map_.shape)
                 map_ = map_.view(map_.size(0), h, w)
                 
-                # original code
-                pos_map_ = map_[map_.size(0) // 2:]  # Filter out unconditional
-                negative_map_ = map_[:map_.size(0) // 2]
+                if map_.size(0) % 3 == 0:
+                    pos_map_ = map_[map_.size(0) // 3:map_.size(0) // 3 *2]
+                    negative_map_ = map_[:map_.size(0) // 3]
+                else:
+                    # original code
+                    pos_map_ = map_[map_.size(0) // 2:]  # Filter out unconditional
+                    negative_map_ = map_[:map_.size(0) // 2]
                 #print(map_.shape)
                 maps.append(pos_map_)
                 negative_maps.append(negative_map_)

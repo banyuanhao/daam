@@ -77,4 +77,4 @@
 
 # python scripts/ratio.py --prompt "a yellow balloon on a blue bench" --negative_prompt "yellow bench" --seed 679216 --group ratio01 --bound_box 30 0 25 35
 
-python scripts/ratio.py --prompt "a cat running across the yard" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --group ratio_del --bound_box 0 0 25 25
+python scripts/ratio.py --prompt "close-up fashion photo of a smiling boy" --negative_prompt "tooth" --seed 646 --group ratio_del --bound_box 0 0 25 25

@@ -91,22 +91,33 @@ if args.wandb:
 
 # with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
 #     out = pipe(prompt=prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed))
-fig, axs = plt.subplots(len(estimated_time),len(negative_time)) 
+if len(negative_time) == 1:
+    fig, axs = plt.subplots(len(negative_time),len(estimated_time)) 
+    axs = axs.reshape(1,-1)
+else:
+    fig, axs = plt.subplots(len(estimated_time),len(negative_time)) 
 # set the spacing between axes.
 fig.subplots_adjust(wspace=.1, hspace=.2)
-fig.set_size_inches(len(estimated_time)*5, len(negative_time)*5)
+fig.set_size_inches(len(estimated_time)*10, len(negative_time)*10)
 for seed in seeds:
     for i, estimated_t in enumerate(estimated_time):
         for j, negative_t in enumerate(negative_time):
-            if estimated_t >= negative_t:
-                with torch.no_grad():
-                    out = pipe.one_step_estimation(prompt=prompt,negative_prompt = negative_prompt, generator=set_seed(seed), num_inference_steps=steps,estimate_time=estimated_t,negative_time=negative_t)
+            with torch.no_grad():
+                if estimated_t >= negative_t and len(negative_time) == 1:
+                    continue
+                out = pipe.one_step_estimation(prompt=prompt,negative_prompt = negative_prompt, generator=set_seed(seed), num_inference_steps=steps,estimate_time=estimated_t,negative_time=negative_t)
+                if len(negative_time) == 1:
+                    axs[j][i].axis('off')
+                    axs[j][i].imshow(out.images[0])
+                    axs[j][i].set_title(f"{estimated_t} {negative_t}",fontsize=20)
+                else:      
                     axs[i][j].axis('off')
                     axs[i][j].imshow(out.images[0])
-                    axs[i][j].set_title(f"{estimated_t} {negative_t}",fontsize=40)
-                
-if args.wandb:
-    wandb.log({"plt": fig}) 
-else:
-    # save image fig
-    fig.savefig(f"plt.png")
+                    axs[i][j].set_title(f"{estimated_t} {negative_t}",fontsize=20)
+                    
+            
+    if args.wandb:
+        wandb.log({"plt": fig}) 
+    else:
+        # save image fig
+        fig.savefig(f"plt.png")
