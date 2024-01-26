@@ -66,5 +66,5 @@ for spilt in ['train', 'val', 'test']:
     data['categories'] = [{'id': 0, 'name': 'object', 'supercategory': 'object'}]
 
     # save annotations
-    with open(f'dataset/ODFN/{version}/{spilt}/annotations/{spilt}_for_1_category.json', 'w') as f:
+    with open(f'dataset/ODFN/{version}/{spilt}/annotations/{spilt}_for_1_category_1_classes.json', 'w') as f:
         json.dump(data, f)
