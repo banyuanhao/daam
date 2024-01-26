@@ -182,3 +182,5 @@ export CUDA_VISIBLE_DEVICES=1
 # unrealistic
 # upside
 # down
+
+python scripts/daamwandb.py --prompt "A couple walking along the riverbank in Paris, with Eiffel Tower in the distance" --words "Eiffel Tower" --group testing --time_id 1 5 6 10 11 15 16 20 21 25 26 30 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb

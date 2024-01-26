@@ -13,8 +13,9 @@ from utils_odfn import seeds_plus as seeds
 from tqdm import tqdm
 
 spilt = 'train'
-seeds = seeds[18750:20000]
-print('seeds 18750:20000')
+seeds = seeds[8750:10000]
+print('seeds 8750:10000')
+
 class_names = ['baseball_glove.txt']
 print(f'classes: {class_names}')
 
@@ -75,4 +76,3 @@ with torch.no_grad():
             for k, prompt in enumerate(prompts):
                 out = pipe(prompt=prompt, generator=set_seed(seed))
                 out.images[0].save(image_seed_path/f'{name}_{seed}_{k}.jpg')
-
