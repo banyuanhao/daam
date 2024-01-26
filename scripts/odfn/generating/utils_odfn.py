@@ -5,9 +5,15 @@ import torch
 import random
 import pickle
 seeds_plus = np.load('scripts/odfn/generating/seeds.npy').tolist()
+
 seeds_plus_dict = {}
 for i, seed in enumerate(seeds_plus):
     seeds_plus_dict[seed] = i
+seeds_plus_shuffled = np.load('scripts/odfn/generating/seeds_plus_shuffle.npy').tolist()
+seeds_plus_shuffled_dict = {}
+for i in range(len(seeds_plus)):
+    seeds_plus_shuffled_dict[seeds_plus_shuffled[i]] = seeds_plus[i]
+
     
 # print(seeds_plus_dict)
 # raise ValueError('stop')
