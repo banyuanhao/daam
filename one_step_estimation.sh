@@ -13,7 +13,7 @@ export CUDA_VISIBLE_DEVICES=1
 
 # python scripts/generate.py --prompt "a yellow balloon on a blue bench"   --negative_prompt "yellow bench" --group one_step_estimation  --seed 679216 --wandb --negative_time 3 5 7 9 11 13 15 --estimated_time 3 5 7 9 11 13 15
 
-python scripts/generate.py --prompt "a yellow balloon on a blue bench"   --negative_prompt "yellow bench" --group one_step_estimation  --seed 4343903 --wandb --negative_time 0 1 2 3 --estimated_time 2 3 4 10
+# python scripts/generate.py --prompt "a ballon on the bench" --negative_prompt "yellow bench" --group one_step_estimation  --seed 4343903 --wandb --negative_time 0 1 2 3 --estimated_time 2 3 4 10
 
 # python scripts/generate.py --prompt "a woman sitting in a cafe" --negative_prompt "unreal" --group one_step_estimation  --seed 679216 --wandb --negative_time 3 5 7 9 11 13 15 --estimated_time 3 5 7 9 11 13 15
 
@@ -25,4 +25,10 @@ python scripts/generate.py --prompt "a yellow balloon on a blue bench"   --negat
 
 # python scripts/generate.py --prompt "a white horse and a brown fence" --negative_prompt "white fence" --group one_step_estimation  --seed 6463344 --wandb --negative_time 3 5 7 9 11 13 15 --estimated_time 3 5 7 9 11 13 15
 
-# python scripts/generate.py --prompt "a white horse and a brown fence" --negative_prompt "white fence" --group one_step_estimation  --seed 6463344 --wandb --negative_time 3 5 7 9 11 13 15 --estimated_time 15 17 19 21 23 25
+# python scripts/generate.py --prompt "a white horse and a brown fence" --negative_prompt "white fence" --group one_step_estimation  --seed 6463344 --wandb --negative_time 3 5 7 9 11 13 15 --estimated_time 15 17
+
+# python scripts/generate.py --prompt "a cube banana" --group one_step_estimation  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --negative_time 0 --estimated_time 1 3 5 7 9 30
+
+# python scripts/generate.py --prompt "a woman sitting in a cafe" --negative_prompt "old" --group one_step_estimation --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --negative_time 40 --estimated_time 1 3 5 7 9 30
+
+python scripts/generate.py --prompt "a plastic bowl" --negative_prompt "plastic" --group one_step_estimation --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb --negative_time 40 --estimated_time 1 3 5 7 9 30

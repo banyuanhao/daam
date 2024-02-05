@@ -50,16 +50,19 @@ args = parser.parse_args()
 #os.environ["WANDB_MODE"] = "offline"
 wandb.login()
 
-model_id = 'stabilityai/stable-diffusion-2-base'
-device = 'cuda'
-pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True)
-# pipe = StableDiffusionPipelineForNegativePrompts.from_pretrained(model_id, use_auth_token=True)
-pipe = pipe.to(device)
-
 prompt = args.prompt
 negative_prompt = args.negative_prompt
 seeds = args.seed if args.seed[0] != 0 else [random.randint(1, 10000000) for _ in range(5)]
 steps = args.steps
+
+model_id = 'stabilityai/stable-diffusion-2-base'
+device = 'cuda'
+if negative_prompt != '':
+    pipe = StableDiffusionPipelineForNegativePrompts.from_pretrained(model_id, use_auth_token=True)
+else:
+    print('no negative prompt')
+    pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True)
+pipe = pipe.to(device)
 
 words = args.words.split(', ')
 tags = args.tags
@@ -105,6 +108,7 @@ for seed in iter(seeds):
                 
             if layer_id is None and time_id is None:
                 plt, fig, axs = get_plt(len(words)+1)
+                fig.suptitle(f'{negative_time}')
                 if len(words) < 4:
                     axs[0].imshow(out.images[0])
                 else:
