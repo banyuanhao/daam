@@ -247,5 +247,6 @@ python scripts/daamwandb.py --prompt "a big teddy bear and a small toy car" --ne
 python scripts/daamwandb.py --prompt "a big teddy bear and a small toy car" --negative_prompt "big toy car" --words "n:toy car" --time_id 1 3 4 6 7 9 10 12 13 15 16 18 19 21 22 24 25 27 28 30 --group critical_step_shape  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
 python scripts/daamwandb.py --prompt "a big teddy bear and a small toy car" --negative_prompt "big toy car" --words "small" --time_id 1 3 4 6 7 9 10 12 13 15 16 18 19 21 22 24 25 27 28 30 --group critical_step_shape  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
 
-python scripts/daamwandb.py --prompt "professional office woman" --words woman --time_id 1 3 4 6 --group critical_step_color  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072
 
+
+python scripts/daamwandbxl.py --prompt "a big teddy bear and a small toy car" --negative_prompt "big toy car" --words "small" --time_id 1 3 4 6 7 9 10 12 13 15 16 18 19 21 22 24 25 27 28 30 --group critical_step_shape  --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb

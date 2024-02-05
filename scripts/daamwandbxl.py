@@ -1,10 +1,9 @@
 import argparse
 from daam import trace, set_seed
-from diffusers import StableDiffusionPipeline, StableDiffusionXLPipeline
+from diffusers import StableDiffusionXLPipeline
 from models.diffuserpipeline import StableDiffusionPipelineForNegativePrompts
 import torch
 import matplotlib.pyplot as plt
-import os
 import wandb
 import math
 import random
