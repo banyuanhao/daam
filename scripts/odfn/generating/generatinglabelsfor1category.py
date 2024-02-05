@@ -57,7 +57,7 @@ for spilt in ['train', 'val', 'test']:
     for seed in tqdm(seeds_sub):
         image_tmp = {}
         image_tmp['id'] = seeds_dict[seed]
-        image_tmp['file_name'] = f'{spilt}/noises/' + str(seed) + '.npy'
+        image_tmp['file_name'] = f'{spilt}/noises/' + str(seed) + '.png'
         image_tmp['width'] = 512 / 8
         image_tmp['height'] = 512 / 8
         images_for_1_category.append(image_tmp)
@@ -66,5 +66,5 @@ for spilt in ['train', 'val', 'test']:
     data['categories'] = [{'id': 0, 'name': 'object', 'supercategory': 'object'}]
 
     # save annotations
-    with open(f'dataset/ODFN/{version}/{spilt}/annotations/{spilt}_for_1_category_1_classes.json', 'w') as f:
+    with open(f'dataset/ODFN/{version}/{spilt}/annotations/{spilt}_for_1_category_1_class_png.json', 'w') as f:
         json.dump(data, f)

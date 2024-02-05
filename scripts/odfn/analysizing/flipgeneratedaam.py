@@ -19,7 +19,7 @@ pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True).to
 dataset_path = Path(f'dataset/ODFN/version_2')
 prompts_path = dataset_path/'prompts_10000_5_5'
 prompt_path = prompts_path/class_names
-latents = pipe.get_latents(prompt='chuchu', generator=set_seed(seed))
+latents = pipe.get_latents(prompt='none', generator=set_seed(seed))
 
 with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
     with trace(pipe) as tc:
