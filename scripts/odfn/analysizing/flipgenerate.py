@@ -1,6 +1,7 @@
 # file to generate images from prompts and seeds
 
-from diffusers import StableDiffusionPipeline, StableDiffusionXLPipeline, AutoPipelineForText2Image,  StableDiffusionXLImg2ImgPipeline
+from diffusers import StableDiffusionPipeline
+from models.diffuserpipeline import StableDiffusionPipelineForNegativePrompts
 import torch
 import random
 import numpy as np

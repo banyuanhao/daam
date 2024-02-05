@@ -57,11 +57,8 @@ steps = args.steps
 
 model_id = 'stabilityai/stable-diffusion-2-base'
 device = 'cuda'
-if negative_prompt != '':
-    pipe = StableDiffusionPipelineForNegativePrompts.from_pretrained(model_id, use_auth_token=True)
-else:
-    print('no negative prompt')
-    pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True)
+
+pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True)
 pipe = pipe.to(device)
 
 words = args.words.split(', ')
@@ -134,6 +131,7 @@ for seed in iter(seeds):
                     axs[0][0].set_title(words[0])
                     
                 for i, layer_i in enumerate(layer_id):
+                    fig.suptitle(f'{prompt} {negative_prompt}')
                     heat_map = tc.compute_global_heat_map(factors=factors, layer_idx=layer_i)
                     heat_map_word = heat_map.compute_word_heat_map(words[0])
                     if len(layer_id) < 4:
@@ -170,5 +168,5 @@ for seed in iter(seeds):
             if args.wandb:
                 wandb.log({"pic": fig})
             else:
-                plt.savefig('pic.png')
+                plt.savefig('pics/pic.png')
                     
