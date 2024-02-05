@@ -1,6 +1,7 @@
 import argparse
-from daam import trace, set_seed
-from diffusers import StableDiffusionXLPipeline
+from daam import set_seed
+from daam.tracexl import trace
+from diffusers import StableDiffusionXLPipeline, StableDiffusionPipeline
 from models.diffuserpipeline import StableDiffusionPipelineForNegativePrompts
 import torch
 import matplotlib.pyplot as plt
@@ -96,7 +97,7 @@ time_id = None if time_id is None else [list(range(time_id_[0], time_id_[1] + 1)
 
 for seed in iter(seeds):
     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
-        with trace(pipe) as tc:
+        #with trace(pipe) as tc:
             if len(negative_prompt)> 0:
                 out = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed), negative_time=negative_time)
             else:
