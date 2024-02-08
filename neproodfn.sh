@@ -1,0 +1,2 @@
+# A stop sign stands at the entrance to a neighborhood. seed 32881
+python scripts/daamwandb.py --prompt "A stop sign stands at the entrance to a neighborhood." --words "stop sign" --group neproodfn --time_id 1 3 --seed 32881 --wandb

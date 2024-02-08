@@ -105,4 +105,4 @@ for seed in iter(seeds):
             if args.wandb:
                 wandb.log({"Ratio": fig}) 
             else:
-                fig.savefig(f'pics/ratio_{seed}.png')
+                fig.savefig(f'pics/ratio.png')

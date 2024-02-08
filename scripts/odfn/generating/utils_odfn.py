@@ -4,6 +4,8 @@ T = TypeVar('T')
 import torch
 import random
 import pickle
+import math
+import matplotlib.pyplot as plt
 seeds_plus = np.load('scripts/odfn/generating/seeds.npy').tolist()
 
 seeds_plus_dict = {}
@@ -101,3 +103,20 @@ def set_seed(seed: int) -> torch.Generator:
     gen.manual_seed(seed)
 
     return gen
+
+def get_plt(num):
+    plt.clf()
+    plt.rcParams.update({'font.size': 12})
+    if num < 5:
+        fig, axs = plt.subplots(1, num , figsize=(5*num, 5+1))
+        for ax in axs:
+            ax.axis('off')
+    else:
+        fig, axs = plt.subplots(math.ceil(num / 4),4)
+
+        for i in range(math.ceil(num / 4)):
+            for j in range(4):
+                ax = axs[i][j]
+                ax.axis('off')
+    plt.subplots_adjust(top=0.95)  
+    return plt, fig, axs
