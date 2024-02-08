@@ -1,6 +1,7 @@
 import os
 import shutil
 import json
+from mmcv.transforms import LoadImageFromFile
 
 path = '/home/banyh2000/diffusion/daam/daam/dataset/ODFN/version_2/val/annotations/val_for_5_category_5_class_1_prompt.json'
 # open json file
