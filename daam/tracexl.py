@@ -303,7 +303,7 @@ class PipelineHooker(ObjectHooker[StableDiffusionXLPipeline]):
             last_prompt = prompt
             
         # TODO: fix this 
-        if 'negative_prompt' in kwargs.keys():
+        if 'negative_prompt' in kwargs.keys() and kwargs['negative_prompt'] is not None:
             if not isinstance(kwargs['negative_prompt'], str) and len(kwargs['negative_prompt']) > 1:
                 raise ValueError('Only single prompt generation is supported for heat map computation.')
             elif not isinstance(kwargs['negative_prompt'], str):
