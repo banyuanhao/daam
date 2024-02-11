@@ -47,7 +47,7 @@ def gpt4_vision_compare(image_paths, prompt_text):
   )
   return(response.choices[0].message.content)
 
-text_prompt = 'tell me \'yes\' if the woman in the picture is wearing a pair of glasses, otherwise, tell me \'no\'.'
+text_prompt = f'tell me \'yes\' if there is {negative_prompt} in the picture, otherwise, tell me \'no\'.'
 
 compare_answers = []
 # with open('compare_answers_6_12_fb.json', 'r') as f:
