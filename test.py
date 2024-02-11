@@ -70,17 +70,17 @@
 # plt.imsave("pics/pic.png",image)
 
 
-import matplotlib.pyplot as plt
-import numpy as np
-#  0 1  2  3  4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
-# 11 9 13 11 10 9 9 10 11 13 12 17 -1 -1 -1 -1 -1 -1 -1 -1 -1
+# import matplotlib.pyplot as plt
+# import numpy as np
+# #  0 1  2  3  4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+# # 11 9 13 11 10 9 9 10 11 13 12 17 -1 -1 -1 -1 -1 -1 -1 -1 -1
 
-#  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
-#  9 10 10 11 10 11 11 12 13 16 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
-stop = [11, 9, 13, 11, 10, 9, 9, 10, 11, 13, 12, 17]
-stop = [9, 10, 10, 11, 10, 11, 11, 12, 13, 16]
-pos = np.arange(15)
+# #  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+# #  9 10 10 11 10 11 11 12 13 16 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+# stop = [11, 9, 13, 11, 10, 9, 9, 10, 11, 13, 12, 17]
+# stop = [9, 10, 10, 11, 10, 11, 11, 12, 13, 16]
+# pos = np.arange(15)
 
-plt.plot(pos[:len(stop)],stop - pos[:len(stop)])
-plt.savefig("pics/pic.png")
+# plt.plot(pos[:len(stop)],stop - pos[:len(stop)])
+# plt.savefig("pics/pic.png")
 
