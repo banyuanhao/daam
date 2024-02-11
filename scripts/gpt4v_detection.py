@@ -47,18 +47,13 @@ def gpt4_vision_compare(image_paths, prompt_text):
   )
   return(response.choices[0].message.content)
 
-text_prompt = 'which pic looks more similar to the first one, please answer with \'the second one\' or \'the third one\'.'
-
-# text_prompt = 'Please answer three questions: Question one, considering the appearance, posture, and attire of the characters in the second and third pictures, which one resembles the first picture the most? Question two, considering the objects in the background of the second and third pictures, as well as their colors and arrangements, which one resembles the first picture the most? Question three, taking into account both of the above factors, which picture resembles the first picture the most? Please answer with "\'first\' or \'second\'," separated by a comma..'
-
-
-
+text_prompt = 'tell me \'yes\' if the woman in the picture is wearing a pair of glasses, otherwise, tell me \'no\'.'
 
 compare_answers = []
 # with open('compare_answers_6_12_fb.json', 'r') as f:
 #     compare_answers = json.load(f)
 
-for i in tqdm(range(10)):
+for i in tqdm(range(1000)):
   if str(i) in compare_answers:
     continue
   compare_answers.append(str(i))
@@ -66,17 +61,15 @@ for i in tqdm(range(10)):
     compare_answers.append('NA')
   else:
     image_paths = [
-      f'pics/removing/glasses/no_negative/{i}.png',
-      f"pics/removing/glasses/negative/{i}.png",
-      f'pics/removing/glasses/negative_6_12/{i}.png'
+      f'pics/removing/glasses/negative_6_12/{i}.png',
     ]
     try :
       context = gpt4_vision_compare(image_paths, text_prompt)
-      compare_answers.append(context)
+      compare_answers.append(context.lower())
     except:
       compare_answers.append('bad image')
       
     
 # save compare_answers to file
-  with open('compare_answers_6_12_fb.json', 'w') as f:
+  with open('glasses_negative_6_12.json', 'w') as f:
       json.dump(compare_answers, f)

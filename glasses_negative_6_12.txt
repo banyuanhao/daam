@@ -1,0 +1,1000 @@
+ yes
+ yes
+ yes
+NA
+ yes
+NA
+NA
+NA
+NA
+ yes
+ no
+NA
+NA
+NA
+ yes
+NA
+ yes
+ yes
+ no
+NA
+NA
+ yes
+NA
+ no
+NA
+ yes
+ yes
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+NA
+ yes
+ no
+NA
+NA
+NA
+ no
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+ yes
+ yes
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ no
+ yes
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+ yes
+ yes
+ yes
+NA
+NA
+ yes
+NA
+ yes
+NA
+ no
+ yes
+ no
+NA
+ yes
+NA
+NA
+NA
+ no
+NA
+ no
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+ no
+NA
+NA
+ yes
+ no
+ no
+NA
+NA
+ no
+ yes
+NA
+ no
+NA
+NA
+ no
+NA
+NA
+ no
+NA
+NA
+NA
+ no
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ no
+NA
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+ yes
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ yes
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+ yes
+NA
+NA
+ no
+NA
+ no
+ no
+NA
+NA
+NA
+NA
+NA
+ no.
+ yes
+ yes
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+ yes
+ yes
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+ yes
+ yes
+NA
+NA
+ yes
+ yes
+NA
+NA
+ no
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ no
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+ yes
+NA
+ yes
+ yes
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ no
+NA
+ yes
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+ yes
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+ yes
+ no
+NA
+ yes
+NA
+NA
+NA
+ no
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+ yes
+NA
+NA
+ yes
+ no
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+ yes
+ no
+NA
+ no
+NA
+NA
+NA
+NA
+ yes
+NA
+ yes
+ yes
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+ yes
+ no
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+ no
+NA
+ yes
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+ yes
+ yes
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+ yes
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+ no
+ yes
+ no
+ no
+NA
+NA
+ yes
+ yes
+ yes
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+ no
+NA
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+ yes
+ yes
+NA
+NA
+NA
+ no
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+ yes
+ yes
+NA
+NA
+NA
+ yes
+ yes
+NA
+ yes
+NA
+ yes
+NA
+ no
+NA
+ yes
+ no
+NA
+ yes
+NA
+NA
+NA
+ yes
+ yes
+NA
+NA
+NA
+ no
+NA
+NA
+ yes
+ yes
+NA
+ yes
+NA
+NA
+NA
+NA
+ yes
+ no
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ yes
+NA
+ no
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ no
+NA
+NA
+ yes
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+ no
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+ yes
+ yes
+NA
+ yes
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+ yes
+NA
+ yes
+NA
+NA
+NA
+ yes
+ yes
+ yes
+ yes
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+ yes
+NA
+ yes
+ yes
+NA
+NA
+ yes
+ yes
+ yes
+ yes
+NA
+ yes
+NA
+NA
+NA
+ yes
+ no
+NA
+NA
+ no
+NA
+NA
+NA
+ yes
+ yes
+NA
+NA
+ no
+NA
+ yes
+NA
+NA
+ yes
+NA
+NA
+ yes
+ no
+ no
+NA
+NA
+NA
+ no
+ no
+NA
+NA
+ no
+NA
+ yes
+ no
+ yes
+NA
+NA
+NA
+NA
+NA
+ yes
+ yes
+ no
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ yes
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+NA
+ no
+NA
+ yes
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+ yes
+ yes
+NA
+NA
+ yes
+ no
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ yes
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+ yes
+NA
+NA
+ no
+NA
+NA
+NA
+ yes
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ no
+ yes
+ yes
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+ no
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+ no
+NA
+ no.
+NA
+NA
+NA
+ yes
+NA
+NA
+NA
+ no
+NA
+ yes
+NA
+NA
+ no
+NA
+NA
+ yes
+NA
+NA
+NA
+ yes
+NA
+ yes
+NA
+NA
+ no
+ yes
+NA
+NA
+NA
+NA
+NA
+NA
+ no
+ yes
+NA
+NA
+NA
+NA
+NA
+ no.
+NA
+NA
+NA
+NA
+NA
+ yes
+NA
+NA
+ yes
+NA
+ yes
+ yes
+ yes
+NA
+NA
+ yes
+ no
+NA
+ no
+NA
+NA
+NA
+ yes
+NA
+NA
+ no
+ yes
+NA
+NA
+ yes
+ yes
+NA
+NA
+NA
+NA
+ yes
+ yes
+NA
+NA
+ yes
+ yes
+NA
+NA
+NA
+ no
+ no
+ no
+NA
+NA
+NA
+NA
+NA
+NA
+ no.
+ yes
+NA
+ no
+NA
+NA
+NA
+ yes
+ yes
+ no
+NA
+NA
+ yes
+NA
+NA
+ no
+ yes
+NA
+ yes
+NA
+NA
