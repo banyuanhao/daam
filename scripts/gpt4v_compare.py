@@ -2,81 +2,79 @@ from openai import OpenAI
 import base64
 import json
 from tqdm import tqdm
+from gpt4v_utils import gpt4_vision
+import os
+import argparse
+
+parser = argparse.ArgumentParser(description='Diffusion')
+parser.add_argument('--negative_prompt', type=str, default=None)
+parser.add_argument('--negative_time', type=int, nargs = '+', default=None)
+parser.add_argument('--seed_num', type=int, default=1000)
+args = parser.parse_args()
+negative_prompt = args.negative_prompt
+negative_time = args.negative_time
+seed_num = args.seed_num
+
+target = f'negative_{negative_time[0]}_{negative_time[1]}'
+
+base_path = "pics/removing/"
+negative_path = base_path + negative_prompt.replace(" ","_")
+class_names = ['no_negative', 'negative_0_30', target]
+class_paths = [negative_path + '/' + class_name for class_name in class_names]
 
 # read glasses.json
-with open('glasses.json', 'r') as f:
+no_negative_id = None
+if os.path.exists(f'{negative_path}/file.json'):
+  print('loading no_negative_id')
+  with open(f'{negative_path}/file.json', 'r') as f:
     data = json.load(f)
-answers_id_no_negative = data['no_negative']
+    no_negative_id = data['no_negative_id']
 
-# read api key from ~/openaiapi.txt
-with open('/home/banyh2000/openaiapi.txt') as file:
-    OPENAI_API_KEY = file.read()
-client = OpenAI(api_key=OPENAI_API_KEY)
+compare_answers = []
+compare_answers_results = []
+
+if os.path.exists(f'{negative_path}/{target}.json'):
+  with open(f'{negative_path}/{target}.json', 'r') as f:
+    data = json.load(f)
+    compare_answers = data['compare_answers']
+    length = len(compare_answers)//2
+    compare_answers_results = data['compare_answers_results']
+    compare_answers_results = compare_answers_results[:length]
     
-# Function to encode the image
-def encode_image(image_path):
-  with open(image_path, "rb") as image_file:
-    return base64.b64encode(image_file.read()).decode('utf-8')
-
-def gpt4_vision_compare(image_paths, prompt_text):
-  base64_images = [encode_image(image_path) for image_path in image_paths]
-  content = [
-  {
-      "type": "text",
-      "text": prompt_text
-  }
-  ]
-
-  for base64_image in base64_images:
-      content.append({
-          "type": "image_url",
-          "image_url": {
-          "url": f"data:image/jpeg;base64,{base64_image}"
-          }
-      })
-      
-  response = client.chat.completions.create(
-    model="gpt-4-vision-preview",
-    messages=[
-      {
-        "role": "user",
-        "content": content
-      }
-    ],
-    max_tokens=300,
-  )
-  return(response.choices[0].message.content)
+    
+dict_save = {}
+dict_save['compare_answers'] = compare_answers
+dict_save['compare_answers_results'] = compare_answers_results
 
 text_prompt = 'which pic looks more similar to the first one, please answer with \'the second one\' or \'the third one\'.'
 
-# text_prompt = 'Please answer three questions: Question one, considering the appearance, posture, and attire of the characters in the second and third pictures, which one resembles the first picture the most? Question two, considering the objects in the background of the second and third pictures, as well as their colors and arrangements, which one resembles the first picture the most? Question three, taking into account both of the above factors, which picture resembles the first picture the most? Please answer with "\'first\' or \'second\'," separated by a comma..'
 
-
-
-
-compare_answers = []
-# with open('compare_answers_6_12_fb.json', 'r') as f:
-#     compare_answers = json.load(f)
-
-for i in tqdm(range(10)):
+for i in tqdm(range(seed_num)):
   if str(i) in compare_answers:
     continue
   compare_answers.append(str(i))
-  if answers_id_no_negative[i] == 0:
+  if no_negative_id != None and no_negative_id[i] == 0:
     compare_answers.append('NA')
+    compare_answers_results.append(0)
   else:
-    image_paths = [
-      f'pics/removing/glasses/no_negative/{i}.png',
-      f"pics/removing/glasses/negative/{i}.png",
-      f'pics/removing/glasses/negative_6_12/{i}.png'
-    ]
-    try :
-      context = gpt4_vision_compare(image_paths, text_prompt)
-      compare_answers.append(context)
-    except:
-      compare_answers.append('bad image')
+    image_paths = [f'{class_path}/{i}.png' for class_path in class_paths]
+    #try :
+    context = gpt4_vision(image_paths, text_prompt)
+    compare_answers.append(context)
+    if 'second' in context:
+      compare_answers_results.append(2)
+    elif 'third' in context:
+      compare_answers_results.append(3)
+    else:
+      raise ValueError('bad image')  
+    # except:
+    #   compare_answers.append('bad image')
       
     
 # save compare_answers to file
-  with open('compare_answers_6_12_fb.json', 'w') as f:
-      json.dump(compare_answers, f)
+  with open(f'{negative_path}/{target}.json', 'w') as f:
+      json.dump(dict_save, f)
+      
+      
+      
+# text_prompt = 'Please answer three questions: Question one, considering the appearance, posture, and attire of the characters in the second and third pictures, which one resembles the first picture the most? Question two, considering the objects in the background of the second and third pictures, as well as their colors and arrangements, which one resembles the first picture the most? Question three, taking into account both of the above factors, which picture resembles the first picture the most? Please answer with "\'first\' or \'second\'," separated by a comma..'

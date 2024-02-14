@@ -33,7 +33,7 @@ device = 'cuda'
 
 pipe = StableDiffusionPipelineForNegativePrompts.from_pretrained(model_id, use_auth_token=True).to(device)
 
-def generate_image(prompt, negative_prompt, steps, seed, negative_time):
+def generate_image(prompt, negative_prompt, seed, negative_time = None, steps=30):
     with torch.no_grad():
         output = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed), negative_time=negative_time)
     image = output.images[0]

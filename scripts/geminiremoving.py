@@ -1,5 +1,5 @@
-from geminieval import GeminiAPIWrapper, GeminiVisionAPIWrapper
-from geminieval import genai
+from scripts.gemini_detection import GeminiAPIWrapper, GeminiVisionAPIWrapper
+from scripts.gemini_detection import genai
 import PIL.Image as Image
 from tqdm import tqdm
 with open('/home/banyh2000/googleapi.txt') as file:

@@ -3,10 +3,13 @@ import base64
 import io
 from PIL import Image
 
+with open('/home/banyh2000/openaiorgkey.txt') as file:
+    OPENAI_ORG = file.read()
 # read api key from ~/openaiapi.txt
 with open('/home/banyh2000/openaiapi.txt') as file:
     OPENAI_API_KEY = file.read()
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=OPENAI_API_KEY,organization=OPENAI_ORG)
+
     
 # Function to encode the image
 def encode_image(image_path):
@@ -44,6 +47,34 @@ def gpt4_vision(images, prompt_text):
       {
         "role": "user",
         "content": content
+      }
+    ],
+    max_tokens=300,
+  )
+  return(response.choices[0].message.content)
+
+def gpt3_5_turbo(prompt_text):
+      
+  response = client.chat.completions.create(
+    model="gpt-3.5-turbo-0125",
+    messages=[
+      {
+        "role": "user",
+        "content": prompt_text
+      }
+    ],
+    max_tokens=300,
+  )
+  return(response.choices[0].message.content)
+
+def gpt4(prompt_text):
+      
+  response = client.chat.completions.create(
+    model="gpt-4",
+    messages=[
+      {
+        "role": "user",
+        "content": prompt_text
       }
     ],
     max_tokens=300,
