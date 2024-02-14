@@ -40,17 +40,29 @@ def gpt4_vision(images, prompt_text):
           "url": f"data:image/jpeg;base64,{base64_image}"
           }
       })
-      
-  response = client.chat.completions.create(
-    model="gpt-4-vision-preview",
-    messages=[
-      {
-        "role": "user",
-        "content": content
-      }
-    ],
-    max_tokens=300,
-  )
+  
+  # if error occurs, retry until success
+  
+  
+  for i in range(3):
+      try:
+          response = client.chat.completions.create(
+              model="gpt-4-vision-preview",
+              messages=[
+                  {
+                      "role": "user",
+                      "content": content
+                  }
+              ],
+              max_tokens=300,
+          )
+          # if the request is successful, break the loop
+          break
+      except:
+          # if this is the third try, raise the exception
+          if i == 3:
+              raise
+  
   return(response.choices[0].message.content)
 
 def gpt3_5_turbo(prompt_text):

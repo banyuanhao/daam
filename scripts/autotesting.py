@@ -3,16 +3,26 @@ from generate_tools import generate_image
 from PIL import Image
 import json
 import numpy as np
-
+import os
 seed = 0
 verbose = True
 save = True
-image_save = True
-
+image_save = False
+prompt_name = 'add2'
+dict_class = {}
+dict = {}
+if save:
+    if os.path.exists(f'result_{seed}_{prompt_name}.json'):
+        with open(f'result_{seed}_{prompt_name}.json', 'r') as f:
+            dict = json.load(f)
+    if os.path.exists(f'result_{seed}_class_{prompt_name}.json'):
+        with open(f'result_{seed}_class_{prompt_name}.json', 'r') as f:
+            dict_class = json.load(f)
+        
 with open('/home/banyh2000/diffusion/daam/daam/dataset/annotations/captions_train2017.json', 'r') as f:
     data = json.load(f)
 
-with open('prompts.txt', 'r') as f:
+with open(f'prompts_{prompt_name}.txt', 'r') as f:
     captions = f.readlines()
     captions = [caption.strip() for caption in captions]
     print(captions)
@@ -104,6 +114,8 @@ def experoment_one(id, seed):
     if len(objects) == 0:
         return 0, 0, 0, 0
     
+    
+    
     context_total = 0
     context_time_total = 0
     compare_total = 0
@@ -113,6 +125,14 @@ def experoment_one(id, seed):
             image_remove.save(f'pics/image_remove.png')
             image_remove_time.save(f'pics/image_remove_time.png')
         context, context_time = get_check(image, image_remove, image_remove_time, object)
+        if object+'_negative' in dict_class.keys():
+            dict_class[object+'_negative'] += context
+            dict_class[object+'_negative_time'] += context_time
+            dict_class[object+'_total'] +=1
+        else:
+            dict_class[object+'_negative'] = context
+            dict_class[object+'_negative_time'] = context_time
+            dict_class[object+'_total'] = 1
         if verbose:
             print(context, context_time)
         compare = get_compare(image, image_remove, image_remove_time)
@@ -124,16 +144,16 @@ def experoment_one(id, seed):
             
     return context_total, context_time_total, compare_total, len(objects)
 
-dict = {}
-
 np.random.seed(seed)
 for i in range(80):
+    if str(i) in dict.keys():
+        continue
     id = i
     context_total, context_time_total, compare_total, total = 0, 0, 0, 0
     for j in range(5):
-        seed = np.random.randint(0, 1000000)
+        seed_for_image = np.random.randint(0, 1000000)
         
-        context, context_time, compare, total_ = experoment_one(id, seed)
+        context, context_time, compare, total_ = experoment_one(id, seed_for_image)
         context_total += context
         context_time_total += context_time
         compare_total += compare
@@ -142,8 +162,10 @@ for i in range(80):
         
     # save dict as json
     if save:
-        with open(f'result_{seed}.json', 'w') as f:
+        with open(f'result_{seed}_{prompt_name}.json', 'w') as f:
             json.dump(dict, f)
+        with open(f'result_{seed}_class_{prompt_name}.json', 'w') as f:
+            json.dump(dict_class, f)
         
     
 
