@@ -85,9 +85,12 @@ def get_removing_images(caption, negative_prompt, seed, negative_start=5, negati
     return image_remove, image_remove_time
 
 def get_check(image_ori, image_remove, image_remove_time, negative_prompt):
-    text_check = f'tell me \'yes\' if the second image has removed at least one of the {negative_prompt} from the first image, otherwise, tell me \'no\'.'
-    context = gpt4_vision([image_ori, image_remove], text_check)
-    context_time = gpt4_vision([image_ori, image_remove_time], text_check)
+    #text_check = f'tell me \'yes\' if the second image has removed at least one of the {negative_prompt} from the first image, otherwise, tell me \'no\'.'
+    # context = gpt4_vision([image_ori, image_remove], text_check)
+    # context_time = gpt4_vision([image_ori, image_remove_time], text_check)
+    text_check = f'tell me \'yes\' if the image contains the {negative_prompt}, otherwise, tell me \'no\'.'
+    context = gpt4_vision([image_remove], text_check)
+    context_time = gpt4_vision([image_remove_time], text_check)
     context = 1 if 'yes' in context.lower() else 0
     context_time = 1 if 'yes' in context_time.lower() else 0
     return context, context_time
