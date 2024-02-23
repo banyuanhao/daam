@@ -14,6 +14,7 @@ base_path = "pics/removing/"+negative_prompt+'/'
 
 class_names = os.listdir(base_path)
 
+class_names = [class_name for class_name in class_names if 'json' not in class_name]
 # Define the file paths of the six PNG images
 file_paths = [
     base_path + class_name +'/' +str(seed)+'.png' for class_name in class_names

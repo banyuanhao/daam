@@ -8,15 +8,16 @@ seed = 0
 verbose = True
 save = True
 image_save = False
-prompt_name = 'add2'
+prompt_name = 'add13'
+time = [5,15]
 dict_class = {}
 dict = {}
 if save:
-    if os.path.exists(f'result_{seed}_{prompt_name}.json'):
-        with open(f'result_{seed}_{prompt_name}.json', 'r') as f:
+    if os.path.exists(f'result_{seed}_{prompt_name}_{time[0]}_{time[1]}.json'):
+        with open(f'result_{seed}_{prompt_name}_{time[0]}_{time[1]}.json', 'r') as f:
             dict = json.load(f)
-    if os.path.exists(f'result_{seed}_class_{prompt_name}.json'):
-        with open(f'result_{seed}_class_{prompt_name}.json', 'r') as f:
+    if os.path.exists(f'result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json'):
+        with open(f'result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json', 'r') as f:
             dict_class = json.load(f)
         
 with open('/home/banyh2000/diffusion/daam/daam/dataset/annotations/captions_train2017.json', 'r') as f:
@@ -85,14 +86,20 @@ def get_removing_images(caption, negative_prompt, seed, negative_start=5, negati
     return image_remove, image_remove_time
 
 def get_check(image_ori, image_remove, image_remove_time, negative_prompt):
-    #text_check = f'tell me \'yes\' if the second image has removed at least one of the {negative_prompt} from the first image, otherwise, tell me \'no\'.'
+    # text_check = f'tell me \'yes\' if the second image has removed at least one of the {negative_prompt} from the first image, otherwise, tell me \'no\'.'
     # context = gpt4_vision([image_ori, image_remove], text_check)
     # context_time = gpt4_vision([image_ori, image_remove_time], text_check)
+    # context = 1 if 'yes' in context.lower() else 0
+    # context_time = 1 if 'yes' in context_time.lower() else 0
+    
     text_check = f'tell me \'yes\' if the image contains the {negative_prompt}, otherwise, tell me \'no\'.'
     context = gpt4_vision([image_remove], text_check)
     context_time = gpt4_vision([image_remove_time], text_check)
     context = 1 if 'yes' in context.lower() else 0
     context_time = 1 if 'yes' in context_time.lower() else 0
+    context = 1 - context
+    context_time = 1 - context_time
+    
     return context, context_time
 
 def get_compare(image_ori, image_negative, image_negative_time):
@@ -123,7 +130,7 @@ def experoment_one(id, seed):
     context_time_total = 0
     compare_total = 0
     for object in objects:
-        image_remove, image_remove_time = get_removing_images(caption, object, seed)
+        image_remove, image_remove_time = get_removing_images(caption, object, seed, time[0], time[1])
         if image_save:
             image_remove.save(f'pics/image_remove.png')
             image_remove_time.save(f'pics/image_remove_time.png')
@@ -165,9 +172,9 @@ for i in range(80):
         
     # save dict as json
     if save:
-        with open(f'result_{seed}_{prompt_name}.json', 'w') as f:
+        with open(f'result_{seed}_{prompt_name}_{time[0]}_{time[1]}.json', 'w') as f:
             json.dump(dict, f)
-        with open(f'result_{seed}_class_{prompt_name}.json', 'w') as f:
+        with open(f'result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json', 'w') as f:
             json.dump(dict_class, f)
         
     
