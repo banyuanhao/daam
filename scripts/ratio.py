@@ -93,14 +93,14 @@ for seed in iter(seeds):
             axs[1][0].plot(ratio, label='ratio')
             axs[1][0].set_title(f'ratio')
             
-            # pos, neg = tc.compute_activation_ratio(bounding_box=bound_box)
-            # ratio = [neg[i]/pos[i] for i in range(len(pos))]
-            # axs[1][1].plot(ratio, label='ratio')
-            # axs[1][1].set_title(f'{bound_box}')
-            
-            axs[1][1].plot(neg, label='ratio')
-            axs[1][1].plot(pos, label='ratio')
+            pos, neg = tc.compute_activation_ratio(bounding_box=bound_box)
+            ratio = [neg[i]/pos[i] for i in range(len(pos))]
+            axs[1][1].plot(ratio, label='ratio')
             axs[1][1].set_title(f'{bound_box}')
+            
+            # axs[1][1].plot(neg, label='ratio')
+            # axs[1][1].plot(pos, label='ratio')
+            # axs[1][1].set_title(f'{bound_box}')
             
             if args.wandb:
                 wandb.log({"Ratio": fig}) 
