@@ -10,7 +10,7 @@ args = parser.parse_args()
 seed = args.seed
 negative_prompt = args.negative_prompt
 
-base_path = "pics/removing/"+negative_prompt+'/'
+base_path = "/mnt/data0/banyuanhao/dataset/removing/"+negative_prompt+'/'
 
 class_names = os.listdir(base_path)
 
@@ -26,7 +26,7 @@ fig, axs = plt.subplots(2, 3)
 # set the size of the figure
 fig.set_size_inches(30, 20)
 # set the h v space of the figure
-plt.subplots_adjust(hspace=0.1, wspace=0.1)
+plt.subplots_adjust(hspace=0.1, wspace=0.1)  
 
 # Loop through the file paths and plot each image on a subplot
 for i, file_path in enumerate(file_paths):
@@ -36,4 +36,4 @@ for i, file_path in enumerate(file_paths):
     axs.flat[i].set_title(class_names[i])
 
 # Save the figure
-plt.savefig(f"pics/removing/pic.png")
+plt.savefig(f"pics/pic.png")
