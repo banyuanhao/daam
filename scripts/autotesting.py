@@ -177,7 +177,3 @@ for i in range(80):
         with open(f'result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json', 'w') as f:
             json.dump(dict_class, f)
         
-    
-
-
-
