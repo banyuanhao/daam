@@ -214,14 +214,6 @@ for i,seed in enumerate(iter(seeds)):
     
         axs[0][1].plot(diff[0:10])
         print(diff)
-
-        # coslist = []
-        # for i in range(30):
-        # # compute the cosine similarity between negative_noise[i] and positive_noise[i]
-        #     cos = float(torch.dot(positive_noises[i].view(-1), negative_noises[i].view(-1)) / (torch.norm(positive_noises[i]) * torch.norm(negative_noises[i])))
-        #     coslist.append(cos)
-            
-        # print(coslist)
             
                     
         if args.wandb:
