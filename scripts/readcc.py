@@ -15,4 +15,3 @@ for j in range(10):
     with open(os.path.expanduser(f'~/diffusion/daam/daam/prompts_add{j+1}_cc.txt'), 'w') as f:
         for line in lines[j*100:(j+1)*100]:
             f.write(line+'\n')
-        

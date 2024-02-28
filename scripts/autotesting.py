@@ -8,27 +8,24 @@ seed = 0
 verbose = True
 save = True
 image_save = False
-prompt_name = 'add13'
+prompt_name = 'add8_places'
 time = [5,15]
 dict_class = {}
 dict = {}
-if save:
-    if os.path.exists(f'result_{seed}_{prompt_name}_{time[0]}_{time[1]}.json'):
-        with open(f'result_{seed}_{prompt_name}_{time[0]}_{time[1]}.json', 'r') as f:
-            dict = json.load(f)
-    if os.path.exists(f'result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json'):
-        with open(f'result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json', 'r') as f:
-            dict_class = json.load(f)
-        
-with open('/home/banyh2000/diffusion/daam/daam/dataset/annotations/captions_train2017.json', 'r') as f:
-    data = json.load(f)
-
-with open(f'prompts_{prompt_name}.txt', 'r') as f:
+base_path = 'wrapupdata/remove/remove_data/'
+with open(f'{base_path}prompts_{prompt_name}.txt', 'r') as f:
     captions = f.readlines()
     captions = [caption.strip() for caption in captions]
     print(captions)
     
-lenghth = len(data['annotations'])
+    
+if save:
+    if os.path.exists(f'{base_path}result_{seed}_{prompt_name}_{time[0]}_{time[1]}.json'):
+        with open(f'{base_path}result_{seed}_{prompt_name}_{time[0]}_{time[1]}.json', 'r') as f:
+            dict = json.load(f)
+    if os.path.exists(f'{base_path}result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json'):
+        with open(f'{base_path}result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json', 'r') as f:
+            dict_class = json.load(f)
     
 text_generate = f'# Task Assuming you are an object detector, please tell me the prominent foreground objects appears in the given image. The objects should be a part out of the coco detection dataset # Output Format Please directly respond with the names of the objects without adding any additional content or period. If there are multiple objects, please separate them with a comma. If there are no objects at all, please respond with none. # Example Input: A image Output: cat, potted plant Input: A image Output: none'
 
@@ -132,8 +129,8 @@ def experoment_one(id, seed):
     for object in objects:
         image_remove, image_remove_time = get_removing_images(caption, object, seed, time[0], time[1])
         if image_save:
-            image_remove.save(f'pics/image_remove.png')
-            image_remove_time.save(f'pics/image_remove_time.png')
+            image_remove.save(f'{base_path}/image_remove.png')
+            image_remove_time.save(f'{base_path}/image_remove_time.png')
         context, context_time = get_check(image, image_remove, image_remove_time, object)
         if object+'_negative' in dict_class.keys():
             dict_class[object+'_negative'] += context
@@ -172,8 +169,8 @@ for i in range(80):
         
     # save dict as json
     if save:
-        with open(f'result_{seed}_{prompt_name}_{time[0]}_{time[1]}.json', 'w') as f:
+        with open(f'{base_path}result_{seed}_{prompt_name}_{time[0]}_{time[1]}.json', 'w') as f:
             json.dump(dict, f)
-        with open(f'result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json', 'w') as f:
+        with open(f'{base_path}result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json', 'w') as f:
             json.dump(dict_class, f)
         
