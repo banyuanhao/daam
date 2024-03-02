@@ -1,39 +1,32 @@
 from gpt4v_utils import gpt4_vision, gpt3_5_turbo, gpt4
-from generate_tools import generate_image
 from PIL import Image
-import json
+from daam import trace, set_seed
 import numpy as np
-import os
+from diffusers import StableDiffusionPipeline
+import torch
+import matplotlib.pyplot as plt
+import json
 seed = 0
 verbose = True
 save = True
 image_save = False
-prompt_name = 'add1'
+prompt_name = 'add2'
 time = [5,15]
-dict_class = {}
-dict = {}
-if save:
-    if os.path.exists(f'result_{seed}_{prompt_name}_{time[0]}_{time[1]}.json'):
-        with open(f'result_{seed}_{prompt_name}_{time[0]}_{time[1]}.json', 'r') as f:
-            dict = json.load(f)
-    if os.path.exists(f'result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json'):
-        with open(f'result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json', 'r') as f:
-            dict_class = json.load(f)
-        
-with open('/home/banyh2000/diffusion/daam/daam/dataset/annotations/captions_train2017.json', 'r') as f:
-    data = json.load(f)
+model_id = 'stabilityai/stable-diffusion-2-base'
+device = 'cuda'
+pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True).to(device)
 
-with open(f'prompts_{prompt_name}.txt', 'r') as f:
+base_path = '/home/banyh2000/diffusion/daam/wrapupdata/remove/remove_data'
+with open(f'{base_path}/prompts_{prompt_name}.txt', 'r') as f:
     captions = f.readlines()
     captions = [caption.strip() for caption in captions]
     print(captions)
     
-lenghth = len(data['annotations'])
     
 text_generate = f'# Task Assuming you are an object detector, please tell me the prominent foreground objects appears in the given image. The objects should be a part out of the coco detection dataset # Output Format Please directly respond with the names of the objects without adding any additional content or period. If there are multiple objects, please separate them with a comma. If there are no objects at all, please respond with none. # Example Input: A image Output: cat, potted plant Input: A image Output: none'
 
-
-text_compare = 'which pic looks more similar to the first one, please answer with \'the second one\' or \'the third one\'.'
+dict_failed = []
+dict_success = []
 
 def filter_objects(caption, objects):
     # remove repeated objects
@@ -65,9 +58,6 @@ def get_caption(id):
     image_caption = captions[id]
     return image_caption
 
-def get_original_image(caption, seed):
-    image_ori = generate_image(prompt=caption, seed=seed, negative_prompt=None)
-    return image_ori
 
 def get_objects(image, caption):
     '''Get the objects in the image.'''
@@ -80,12 +70,7 @@ def get_objects(image, caption):
     #         context.remove(con) 
     return context
 
-def get_removing_images(caption, negative_prompt, seed, negative_start=5, negative_end=15):
-    image_remove_time = generate_image(prompt=caption, negative_prompt=negative_prompt, seed=seed, negative_time=list(range(negative_start,negative_end+1)))
-    image_remove = generate_image(prompt=caption, negative_prompt=negative_prompt, seed=seed)
-    return image_remove, image_remove_time
-
-def get_check(image_ori, image_remove, image_remove_time, negative_prompt):
+def get_check(image_remove, negative_prompt):
     # text_check = f'tell me \'yes\' if the second image has removed at least one of the {negative_prompt} from the first image, otherwise, tell me \'no\'.'
     # context = gpt4_vision([image_ori, image_remove], text_check)
     # context_time = gpt4_vision([image_ori, image_remove_time], text_check)
@@ -94,86 +79,77 @@ def get_check(image_ori, image_remove, image_remove_time, negative_prompt):
     
     text_check = f'tell me \'yes\' if the image contains the {negative_prompt}, otherwise, tell me \'no\'.'
     context = gpt4_vision([image_remove], text_check)
-    context_time = gpt4_vision([image_remove_time], text_check)
     context = 1 if 'yes' in context.lower() else 0
-    context_time = 1 if 'yes' in context_time.lower() else 0
     context = 1 - context
-    context_time = 1 - context_time
     
-    return context, context_time
+    return context
 
-def get_compare(image_ori, image_negative, image_negative_time):
-    context = gpt4_vision([image_ori, image_negative, image_negative_time], text_compare)
-    return 0 if 'second' in context else 1
-
+def get_related_words(prompt, word):
+    text = f'Which word in the context of the "{prompt}" is most related to the word "{word}"?. Output the exact word without any additional content, without comma or period.'
+    context = gpt4(text)
+    return context
+    
 def experoment_one(id, seed):
     caption = get_caption(id)
     if verbose:
         print(caption)
-    image = get_original_image(caption, seed)
-    if image_save:
-        image.save('pics/image.png')
+    with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
+        output = pipe(caption, num_inference_steps=30, generator=set_seed(seed))
+    image = output.images[0]
+    
     objects = get_objects(image, caption)
-    if verbose:
-        print(objects)
-    if len(objects) == 0:
-        return 0, 0, 0, 0
     objects = filter_objects(caption, objects)
     if verbose:
         print(objects)
-    if len(objects) == 0:
-        return 0, 0, 0, 0
     
-    
-    
-    context_total = 0
-    context_time_total = 0
-    compare_total = 0
     for object in objects:
-        image_remove, image_remove_time = get_removing_images(caption, object, seed, time[0], time[1])
-        if image_save:
-            image_remove.save(f'pics/image_remove.png')
-            image_remove_time.save(f'pics/image_remove_time.png')
-        context, context_time = get_check(image, image_remove, image_remove_time, object)
-        if object+'_negative' in dict_class.keys():
-            dict_class[object+'_negative'] += context
-            dict_class[object+'_negative_time'] += context_time
-            dict_class[object+'_total'] +=1
+        time_id = [[0,3],[4,7],[8,11],[12,15],[16,19],[20,23],[24,27]]
+        fig, axs = plt.subplots(2, len(time_id)+1, figsize=((len(time_id)+1)* 5,5*2))
+        for row in axs:
+            for ax in row:
+                ax.axis('off')
+        fig.tight_layout()
+        anchor = get_related_words(caption, object)
+        if anchor not in caption:
+            continue
+        with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
+            with trace(pipe) as tc:
+                out = pipe(caption, num_inference_steps=30, generator=set_seed(seed))
+                axs[0][0].imshow(out.images[0])
+                for i, time_i in enumerate(time_id):
+                    heat_map = tc.compute_global_heat_map(time_idx=time_i)
+                    heat_map_word = heat_map.compute_word_heat_map(anchor)
+                    heat_map_word.plot_overlay(out.images[0], ax=axs[0][i+1])
+        with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
+            with trace(pipe) as tc:
+                out = pipe(caption, negative_prompt=object, num_inference_steps=30, generator=set_seed(seed))
+                axs[1][0].imshow(out.images[0])
+                for i, time_i in enumerate(time_id):
+                    heat_map = tc.compute_global_heat_map(time_idx=time_i)
+                    heat_map_word = heat_map.compute_word_heat_map('n:'+object)
+                    # convert 2D tensor heat_map_word.heatmap to PIL.Image
+                    heat_map_word.plot_overlay(out.images[0], ax=axs[1][i+1])
+        context = get_check(image, object)
+        
+        if context == 0:
+            fig.savefig(f'{base_path}/images/failed/remove_{id}_{object}_{anchor}_{seed}.png')
+            dict_failed.append({'id':id, 'caption':caption,'seed':seed, 'object':object, 'context':context})
+            with open(f'{base_path}/images/failed.json', 'w') as f:
+                json.dump(dict_failed, f)
         else:
-            dict_class[object+'_negative'] = context
-            dict_class[object+'_negative_time'] = context_time
-            dict_class[object+'_total'] = 1
+            fig.savefig(f'{base_path}/images/success/remove_{id}_{object}_{anchor}_{seed}.png')
+            dict_success.append({'id':id, 'caption':caption,'seed':seed, 'object':object, 'context':context})
+            with open(f'{base_path}/images/success.json', 'w') as f:
+                json.dump(dict_success, f)
         if verbose:
-            print(context, context_time)
-        compare = get_compare(image, image_remove, image_remove_time)
-        if verbose:
-            print(compare)
-        context_total += context
-        context_time_total += context_time
-        compare_total += compare
+            print(context)
             
-    return context_total, context_time_total, compare_total, len(objects)
+        # clear matplotlib plots
+        plt.close(fig)
 
 np.random.seed(seed)
 for i in range(80):
-    if str(i) in dict.keys():
-        continue
-    id = i
-    context_total, context_time_total, compare_total, total = 0, 0, 0, 0
-    for j in range(5):
+    for j in range(3):
         seed_for_image = np.random.randint(0, 1000000)
-        
-        context, context_time, compare, total_ = experoment_one(id, seed_for_image)
-        context_total += context
-        context_time_total += context_time
-        compare_total += compare
-        total += total_
-    dict[id] = {'context_total': context_total, 'context_time_total': context_time_total, 'compare_total': compare_total, 'total': total, 'seed': seed}
-        
-    # save dict as json
-    if save:
-        with open(f'result_{seed}_{prompt_name}_{time[0]}_{time[1]}.json', 'w') as f:
-            json.dump(dict, f)
-        with open(f'result_{seed}_class_{prompt_name}_{time[0]}_{time[1]}.json', 'w') as f:
-            json.dump(dict_class, f)
+        experoment_one(i, seed_for_image)
         

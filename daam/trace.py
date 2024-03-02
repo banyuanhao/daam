@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import List, Type, Any, Dict, Tuple, Union
 import math
-
 from diffusers import StableDiffusionPipeline
 from diffusers.models.attention_processor import Attention
 import numpy as np
@@ -9,7 +8,7 @@ import PIL.Image as Image
 import torch
 import torch.nn.functional as F
 
-from .utils import cache_dir, auto_autocast
+from .utils import cache_dir, auto_autocast, compute_token_merge_indices
 from .experiment import GenerationExperiment
 from .heatmap import RawHeatMapCollection, GlobalHeatMap
 from .hook import ObjectHooker, AggregateHooker, UNetCrossAttentionLocator
@@ -82,10 +81,68 @@ class DiffusionHeatMapHooker(AggregateHooker):
             path=path,
             tokenizer=self.pipe.tokenizer,
         )
+    def compute_activation_ratio_spec(self, prompt=None, negative_prompt=None, bounding_box = None, token=None):
+        # type: (str,  str, List, str)  -> Tuple[List, List]
+        """
+        Compute the global heat map for the given prompt, aggregating across time (inference steps) and space (different
+        spatial transformer block heat maps).
+
+        Args:
+            prompt: The prompt to compute the heat map for. If none, uses the last prompt that was used for generation.
+            factors: Restrict the application to heat maps with spatial factors in this set. If `None`, use all sizes.
+            head_idx: Restrict the application to heat maps with this head index. If `None`, use all heads.
+            layer_idx: Restrict the application to heat maps with this layer index. If `None`, use all layers.
+            time_idx: Restrict the application to heat maps with this time index. If `None`, use all time steps.
+
+        Returns:
+            A heat map object for computing word-level heat maps.
+        """
+        #print(self.time_idx)
+        heat_maps = self.all_heat_maps
+        negative_heat_maps = self.all_negative_heat_maps
+        #print(negative_heat_maps)
+        #print(len(heat_maps.ids_to_heatmaps))
         
 
-    def compute_activation_ratio(self, prompt=None, negative_prompt=None, bounding_box = None):
-        # type: (str,  str, List) -> (List[float], List[float])
+        if prompt is None:
+            prompt = self.last_prompt
+            #print(self.last_prompt)
+        if negative_prompt is None:
+            negative_prompt = self.last_negative_prompt
+            
+        # print(len(heat_maps.ids_to_heatmaps))
+        # raise ValueError('The shape of maps and negative_maps are not the same.')
+
+        all_merges = [0]*31
+        all_merges_negative = [0]*31
+        
+        x = int(np.sqrt(self.latent_hw))
+        
+        merge_idxs_, _ = compute_token_merge_indices(self.pipe.tokenizer, prompt, token)
+        merge_idxs_negative, _ = compute_token_merge_indices(self.pipe.tokenizer, negative_prompt, negative_prompt)
+        
+        with auto_autocast(dtype=torch.float32):
+            for (_, _, _, time), heat_map in heat_maps:
+                heat_map = heat_map.unsqueeze(1)
+                heat_map = F.interpolate(heat_map, size=(x, x), mode='bicubic').clamp_(min=0)
+                if bounding_box is not None:
+                    heat_map = heat_map[merge_idxs_,:,bounding_box[1]:bounding_box[1]+bounding_box[3],bounding_box[0]:bounding_box[0]+bounding_box[2]]
+                heat_map_value = heat_map.pow(2).mean()
+                all_merges[time] += heat_map_value.cpu().numpy()
+                
+            
+            for (_, _, _, time), negative_heat_map in negative_heat_maps:
+                negative_heat_map = negative_heat_map.unsqueeze(1)
+                negative_heat_map = F.interpolate(negative_heat_map, size=(x, x), mode='bicubic').clamp_(min=0)
+                if bounding_box is not None:
+                    negative_heat_map = negative_heat_map[merge_idxs_negative,:,bounding_box[1]:bounding_box[1]+bounding_box[3],bounding_box[0]:bounding_box[0]+bounding_box[2]]
+                negative_heat_map_value = negative_heat_map.pow(2).mean()
+                all_merges_negative[time] += negative_heat_map_value.cpu().numpy()
+                
+        return all_merges, all_merges_negative
+    
+    def compute_activation_ratio(self, prompt=None, negative_prompt=None, bounding_box = None, token=None):
+        # type: (str,  str, List, str)  -> Tuple[List, List]
         """
         Compute the global heat map for the given prompt, aggregating across time (inference steps) and space (different
         spatial transformer block heat maps).

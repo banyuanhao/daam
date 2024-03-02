@@ -39,5 +39,12 @@ def generate_image(prompt, negative_prompt, seed, negative_time = None, steps=30
     image = output.images[0]
     return image
 
+def generate_image_with_heatmaps(prompt, negative_prompt, seed, negative_time = None, steps=30):
+    with torch.no_grad():
+        output = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed), negative_time=negative_time)
+    image = output.images[0]
+    heatmaps = output.heatmaps[0]
+    return image, heatmaps
+
 
 

@@ -144,4 +144,3 @@ export CUDA_VISIBLE_DEVICES=7
 # python scripts/daamwandb.py --prompt "an armchair in the shape of an avocado" --words "armchair, avocado" --group new3 --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 --wandb
 
 # python scripts/daamwandb.py --prompt "a male nurse" --words "male, nurse" --group bias --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb
-

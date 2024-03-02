@@ -1,5 +1,6 @@
 experiment/
 wandb/
+wrapupdata/remove/remove_data/images
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
