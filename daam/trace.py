@@ -377,7 +377,7 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
         hk_self.negative_heat_maps.clear()
         hk_self.parent_trace.last_prompt = last_prompt
         hk_self.parent_trace.last_negative_prompt = last_negative_prompt
-        ret = hk_self.monkey_super('encode_prompt', prompt, *args, **kwargs)
+        ret = hk_self.monkey_super('_encode_prompt', prompt, *args, **kwargs)
         #print(ret.shape)
         return ret
     
@@ -409,15 +409,15 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
         hk_self.uncond_heat_maps.clear()
         hk_self.parent_trace.last_prompt = last_prompt
         hk_self.parent_trace.last_negative_prompt = last_negative_prompt
-        ret = hk_self.monkey_super('encode_prompt_total', prompt, *args, **kwargs)
+        ret = hk_self.monkey_super('_encode_prompt_total', prompt, *args, **kwargs)
         #print(ret.shape)
         return ret
 
     def _hook_impl(self):
         self.monkey_patch('run_safety_checker', self._hooked_run_safety_checker)
-        self.monkey_patch('encode_prompt', self._hooked_encode_prompt)
-        if hasattr(self.module, 'encode_prompt_total'):
-            self.monkey_patch('encode_prompt_total', self._hooked_encode_prompt_total)
+        self.monkey_patch('_encode_prompt', self._hooked_encode_prompt)
+        if hasattr(self.module, '_encode_prompt_total'):
+            self.monkey_patch('_encode_prompt_total', self._hooked_encode_prompt_total)
 
 
 class UNetCrossAttentionHooker(ObjectHooker[Attention]):

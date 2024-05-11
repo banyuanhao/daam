@@ -17,3 +17,6 @@ python scripts/wrapup_ratio_gpt4v.py --prompt "A musician playing guitar on a ci
 python scripts/wrapup_ratio_gpt4v.py --prompt "A group of teenagers playing basketball in an urban court." --negative_prompt "bad art" --group wrapup_adj --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb 
 
 python scripts/wrapup_ratio_gpt4v.py --prompt "A charming woman walking in the street" --negative_prompt "disfigured" --group wrapup_adj --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072 --wandb 
+
+
+python scripts/wrapup_ratio.py --prompt "A charming woman walking in the street" --negative_prompt "disfigured" --seed 6463344 7056021 679216 4343903 8577767 8152514 6793668 5088744 7995971 6007072

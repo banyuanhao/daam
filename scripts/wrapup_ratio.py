@@ -3,13 +3,10 @@
 import argparse
 from daam import trace, set_seed
 from diffusers import StableDiffusionPipeline
+# from models.diffuserpipeline import StableDiffusionPipeline
 import torch
 import matplotlib.pyplot as plt
 import wandb
-import random
-import numpy as np
-import json
-    
 #
 parser = argparse.ArgumentParser(description='Diffusion')
 parser.add_argument('--prompt', type=str, required=True)
@@ -24,7 +21,8 @@ parser.add_argument('--wandb',action='store_true',help='use wandb')
 
 args = parser.parse_args()
 
-wandb.login()
+if args.wandb:
+    wandb.login()
 
 model_id = 'stabilityai/stable-diffusion-2-base'
 device = 'cuda'
@@ -67,11 +65,10 @@ for seed in iter(seeds):
             
             ratio_list.append(ratio)
 
-
-with open('wrapupdata/ratio_adj.json','r') as f:
-    data = json.load(f)
+# with open('wrapupdata/ratio_adj.json','r') as f:
+#     data = json.load(f)
     
-data.append({'prompt':prompt, 'negative_prompt':negative_prompt, 'seeds':seeds, 'steps':steps, 'ratio':ratio_list})
+# data.append({'prompt':prompt, 'negative_prompt':negative_prompt, 'seeds':seeds, 'steps':steps, 'ratio':ratio_list})
 
-with open('wrapupdata/ratio_adj.json', 'w') as f:
-    json.dump(data, f)
+# with open('wrapupdata/ratio_adj.json', 'w') as f:
+#     json.dump(data, f)

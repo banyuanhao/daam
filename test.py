@@ -84,3 +84,5 @@
 # plt.plot(pos[:len(stop)],stop - pos[:len(stop)])
 # plt.savefig("pics/pic.png")
 
+from torchvision.models import resnet50
+print(resnet50())
