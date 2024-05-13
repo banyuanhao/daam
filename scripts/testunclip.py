@@ -28,5 +28,5 @@ pipe = StableUnCLIPPipeline.from_pretrained(
 pipe = pipe.to("cuda")
 wave_prompt = "dramatic wave, the Oceans roar, Strong wave spiral across the oceans as the waves unfurl into roaring crests; perfect wave form; perfect wave shape; dramatic wave shape; wave shape unbelievable; wave; wave shape spectacular"
 
-image = pipe(prompt=wave_prompt).images[0]
+image = pipe(prompt=wave_prompt,negative_prompt='').images[0]
 image.save("wave.png")

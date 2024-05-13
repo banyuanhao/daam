@@ -70,9 +70,13 @@ for seed in iter(seeds):
             #print(ratio_list)
             ratio_list.append(ratio)
 
-with open('wrapupdata/ratio_noun_spec.json','r') as f:
-    data = json.load(f)
-    
+import os
+
+if os.path.exists('wrapupdata/ratio_noun_spec.json'):
+    with open('wrapupdata/ratio_noun_spec.json','r') as f:
+        data = json.load(f)
+else:
+    data = []
 data.append({'prompt':prompt, 'negative_prompt':negative_prompt, 'seeds':seeds, 'steps':steps, 'ratio':ratio_list})
 
 with open('wrapupdata/ratio_noun_spec.json', 'w') as f:

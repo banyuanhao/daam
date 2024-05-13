@@ -1,33 +1,22 @@
-# mean activation value of the feature maps
-
 import argparse
-from daam import trace, set_seed
-from diffusers import UnCLIPPipeline
-# from models.diffuserpipeline import StableDiffusionPipeline
-import torch
-import matplotlib.pyplot as plt
-import wandb
-#
-parser = argparse.ArgumentParser(description='Diffusion')
-parser.add_argument('--prompt', type=str, required=True)
-parser.add_argument('--negative_prompt', type=str, default='')
-parser.add_argument('--seed', type=int,nargs='+', default=[0])
-parser.add_argument('--project', type=str, default='negative prompt')
-parser.add_argument('--note', type=str, default='negative prompt')
-parser.add_argument('--group', type=str, required=True)
-parser.add_argument('--tags', metavar='S', type=str, nargs='+',default='negative prompt')
-parser.add_argument('--steps', type=int, default=30)
-parser.add_argument('--wandb',action='store_true',help='use wandb')
-
-args = parser.parse_args()
-
-if args.wandb:
-    wandb.login()
-
+import sys
+sys.path.append('~/diffusion/daam')
+from daam import trace
+from daam import set_seed
 import torch
 from diffusers import UnCLIPScheduler, DDPMScheduler, StableUnCLIPPipeline
 from diffusers.models import PriorTransformer
 from transformers import CLIPTokenizer, CLIPTextModelWithProjection
+from matplotlib import pyplot as plt
+
+parser = argparse.ArgumentParser(description='Diffusion')
+parser.add_argument('--prompt', type=str)
+parser.add_argument('--negative_prompt', type=str, default='')
+parser.add_argument('--seed', type=int,nargs='+', default=[0])
+parser.add_argument('--steps', type=int, default=30)
+parser.add_argument('--device', type=str, default='cuda')
+parser.add_argument('--group', type=str)
+args = parser.parse_args()
 
 prior_model_id = "kakaobrain/karlo-v1-alpha"
 data_type = torch.float16
@@ -52,51 +41,42 @@ pipe = StableUnCLIPPipeline.from_pretrained(
 )
 
 pipe = pipe.to("cuda")
-wave_prompt = "dramatic wave, the Oceans roar, Strong wave spiral across the oceans as the waves unfurl into roaring crests; perfect wave form; perfect wave shape; dramatic wave shape; wave shape unbelievable; wave; wave shape spectacular"
+prompt = "A dog runs across the field"
+negative_prompt = "grass"
 
-image = pipe(prompt=wave_prompt).images[0]
-image.save("wave.png")
-
+with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
+    with trace(pipe) as tc:
+        out = pipe(prompt, num_inference_steps=30, negative_prompt=negative_prompt)
+        heat_map = tc.compute_global_heat_map()
+        heat_map = heat_map.compute_word_heat_map('n:grass')
+        heat_map.plot_overlay(out.images[0],ax = plt.gca())
+        heat_ = tc.return_heat_map()
+        
+print(heat_)
+        
+plt.savefig('wave_heatmap.png')
 prompt = args.prompt
 negative_prompt = args.negative_prompt
 seeds = args.seed
 steps = args.steps
-tags = args.tags
 
+# ratio_list = []
 
-
-if args.wandb:
-    wandb.login()
-    wandb.config = {"prompt": prompt,
-                    "negative prompt": negative_prompt, 
-                    "seeds": seeds,
-                    "steps": steps,
-                    "tags": tags,
-                    }
-    run = wandb.init(
-        project=args.project,
-        notes=args.note,
-        group=args.group,
-        config=wandb.config,
-    )
-
-ratio_list = []
-
-for seed in iter(seeds):
-    with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
-        with trace(pipe) as tc:
+# for seed in iter(seeds):
+#     with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
+#         with trace(pipe) as tc:
             
-            out = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed),output_type='latent')
+#             out = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed),output_type='latent')
             
-            pos, neg = tc.compute_activation_ratio()
-            ratio = [neg[i]/pos[i] for i in range(len(pos))]
+#             pos, neg = tc.compute_activation_ratio()
+#             ratio = [neg[i]/pos[i] for i in range(len(pos))]
             
-            ratio_list.append(ratio)
+#             ratio_list.append(ratio)
 
-# with open('wrapupdata/ratio_adj.json','r') as f:
-#     data = json.load(f)
+# # with open('wrapupdata/ratio_adj.json','r') as f:
+# #     data = json.load(f)
     
-# data.append({'prompt':prompt, 'negative_prompt':negative_prompt, 'seeds':seeds, 'steps':steps, 'ratio':ratio_list})
+# # data.append({'prompt':prompt, 'negative_prompt':negative_prompt, 'seeds':seeds, 'steps':steps, 'ratio':ratio_list})
 
-# with open('wrapupdata/ratio_adj.json', 'w') as f:
-#     json.dump(data, f)
+# # with open('wrapupdata/ratio_adj.json', 'w') as f:
+# #     json.dump(data, f)

@@ -14,14 +14,14 @@ from .heatmap import RawHeatMapCollection, GlobalHeatMap
 from .hook import ObjectHooker, AggregateHooker, UNetCrossAttentionLocator
 
 
-__all__ = ['trace', 'DiffusionHeatMapHooker', 'GlobalHeatMap']
+__all__ = ['traceunclip', 'DiffusionHeatMapHookerunclip', 'GlobalHeatMap']
 
 
-class DiffusionHeatMapHooker(AggregateHooker):
+class DiffusionHeatMapHookerunclip(AggregateHooker):
     def __init__(
             self,
             pipeline:
-            StableDiffusionPipeline,
+            StableUnCLIPPipeline,
             low_memory: bool = False,
             load_heads: bool = False,
             save_heads: bool = False,
@@ -216,6 +216,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
         Returns:
             A heat map object for computing word-level heat maps.
         """
+        # print(self.module)
         #print(self.time_idx)
         heat_maps = self.all_heat_maps
         negative_heat_maps = self.all_negative_heat_maps
@@ -263,7 +264,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
                 if head_idx is not None or layer_idx is not None:
                     raise RuntimeError('No heat maps found for the given parameters.')
                 else:
-                    raise RuntimeError('No heat maps found. Did you forget to call `with trace(...)` during generation?')
+                    raise RuntimeError('No heat maps found. Did you forget to call `with traceunclip(...)` during generation?')
 
             # TODO: fix this
             #print(maps.shape)
@@ -315,7 +316,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
                 if head_idx is not None or layer_idx is not None:
                     raise RuntimeError('No heat maps found for the given parameters.')
                 else:
-                    raise RuntimeError('No heat maps found. Did you forget to call `with trace(...)` during generation?')
+                    raise RuntimeError('No heat maps found. Did you forget to call `with traceunclip(...)` during generation?')
 
             # TODO: fix this
             #print(maps.shape)
@@ -334,30 +335,30 @@ class DiffusionHeatMapHooker(AggregateHooker):
         
 
 
-class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
-    def __init__(self, pipeline: StableDiffusionPipeline, parent_trace: 'trace'):
+class PipelineHooker(ObjectHooker[StableUnCLIPPipeline]):
+    def __init__(self, pipeline: StableUnCLIPPipeline, parent_traceunclip: 'traceunclip'):
         super().__init__(pipeline)
-        self.heat_maps = parent_trace.all_heat_maps
-        self.negative_heat_maps = parent_trace.all_negative_heat_maps
-        self.uncond_heat_maps = parent_trace.all_uncond_heat_maps
-        self.parent_trace = parent_trace
+        self.heat_maps = parent_traceunclip.all_heat_maps
+        self.negative_heat_maps = parent_traceunclip.all_negative_heat_maps
+        self.uncond_heat_maps = parent_traceunclip.all_uncond_heat_maps
+        self.parent_traceunclip = parent_traceunclip
 
-    def _hooked_run_safety_checker(hk_self, self: StableDiffusionPipeline, image, *args, **kwargs):
+    def _hooked_run_safety_checker(hk_self, self: StableUnCLIPPipeline, image, *args, **kwargs):
         image, has_nsfw = hk_self.monkey_super('run_safety_checker', image, *args, **kwargs)
         # convert tensor to numpy
         image_copy = image.cpu().squeeze(0).permute(1,2,0).numpy()
         pil_image = self.numpy_to_pil(image_copy)
-        hk_self.parent_trace.last_image = pil_image[0]
+        hk_self.parent_traceunclip.last_image = pil_image[0]
 
         return image, has_nsfw
     
-    def _hooked_hook_image(hk_self, self: StableDiffusionPipeline, image):
+    def _hooked_hook_image(hk_self, self: StableUnCLIPPipeline, image):
         hk_self.monkey_super('hook_image', image)
         image_copy = image.copy()
         pil_image = self.numpy_to_pil(image_copy)
-        hk_self.parent_trace.last_image = pil_image[0]
+        hk_self.parent_traceunclip.last_image = pil_image[0]
 
-    def _hooked_encode_prompt(hk_self, _: StableDiffusionPipeline, prompt: Union[str, List[str]], *args, **kwargs):
+    def _hooked_encode_prompt(hk_self, _: StableUnCLIPPipeline, prompt: Union[str, List[str]], *args, **kwargs):
         #print(prompt)
         # TODO: fix this 
         if not isinstance(prompt, str) and len(prompt) > 1:
@@ -392,13 +393,13 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
         #print(last_prompt)
         hk_self.heat_maps.clear()
         hk_self.negative_heat_maps.clear()
-        hk_self.parent_trace.last_prompt = last_prompt
-        hk_self.parent_trace.last_negative_prompt = last_negative_prompt
+        hk_self.parent_traceunclip.last_prompt = last_prompt
+        hk_self.parent_traceunclip.last_negative_prompt = last_negative_prompt
         ret = hk_self.monkey_super('_encode_prompt', prompt, *args, **kwargs)
         #print(ret.shape)
         return ret
     
-    def _hooked_encode_prompt_total(hk_self, _: StableDiffusionPipeline, prompt: Union[str, List[str]], *args, **kwargs):
+    def _hooked_encode_prompt_total(hk_self, _: StableUnCLIPPipeline, prompt: Union[str, List[str]], *args, **kwargs):
         #print(prompt)
         # TODO: fix this 
         if not isinstance(prompt, str) and len(prompt) > 1:
@@ -424,8 +425,8 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
         hk_self.heat_maps.clear()
         hk_self.negative_heat_maps.clear()
         hk_self.uncond_heat_maps.clear()
-        hk_self.parent_trace.last_prompt = last_prompt
-        hk_self.parent_trace.last_negative_prompt = last_negative_prompt
+        hk_self.parent_traceunclip.last_prompt = last_prompt
+        hk_self.parent_traceunclip.last_negative_prompt = last_negative_prompt
         ret = hk_self.monkey_super('_encode_prompt_total', prompt, *args, **kwargs)
         #print(ret.shape)
         return ret
@@ -434,7 +435,7 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
         if isinstance(self.module, StableUnCLIPPipeline):
             self.monkey_patch('hook_image', self._hooked_hook_image)
             pass
-        elif isinstance(self.module, StableDiffusionPipeline):
+        elif isinstance(self.module, StableUnCLIPPipeline):
             self.monkey_patch('run_safety_checker', self._hooked_run_safety_checker)
         else:
             raise ValueError('Unknown pipeline type.')
@@ -448,7 +449,7 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
     def __init__(
             self,
             module: Attention,
-            parent_trace: 'trace',
+            parent_traceunclip: 'traceunclip',
             context_size: int = 77,
             layer_idx: int = 0,
             latent_hw: int = 9216,
@@ -457,16 +458,16 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
             data_dir: Union[str, Path] = None,
     ):
         super().__init__(module)
-        self.heat_maps = parent_trace.all_heat_maps
-        self.negative_heat_maps = parent_trace.all_negative_heat_maps
-        self.uncond_heat_maps = parent_trace.all_uncond_heat_maps
+        self.heat_maps = parent_traceunclip.all_heat_maps
+        self.negative_heat_maps = parent_traceunclip.all_negative_heat_maps
+        self.uncond_heat_maps = parent_traceunclip.all_uncond_heat_maps
         self.context_size = context_size
         self.layer_idx = layer_idx
         self.latent_hw = latent_hw
 
         self.load_heads = load_heads
         self.save_heads = save_heads
-        self.trace = parent_trace
+        self.traceunclip = parent_traceunclip
 
         if data_dir is not None:
             data_dir = Path(data_dir)
@@ -520,10 +521,10 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
         return maps.permute(1, 0, 2, 3).contiguous(), negative_maps.permute(1, 0, 2, 3).contiguous()  # shape: (heads, tokens, height, width)
 
     def _save_attn(self, attn_slice: torch.Tensor):
-        torch.save(attn_slice, self.data_dir / f'{self.trace._gen_idx}.pt')
+        torch.save(attn_slice, self.data_dir / f'{self.traceunclip._gen_idx}.pt')
 
     def _load_attn(self) -> torch.Tensor:
-        return torch.load(self.data_dir / f'{self.trace._gen_idx}.pt')
+        return torch.load(self.data_dir / f'{self.traceunclip._gen_idx}.pt')
 
     def __call__(
             self,
@@ -563,7 +564,7 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
 
         # compute shape factor
         factor = int(math.sqrt(self.latent_hw // attention_probs.shape[1]))
-        #print(self.trace._gen_idx//15)
+        #print(self.traceunclip._gen_idx//15)
         # print(attention_probs.shape)
 
         # skip if too large
@@ -580,9 +581,9 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
             # TODO
             for head_idx, heatmap in enumerate(maps):
                 #print('hit')
-                self.heat_maps.update(factor, self.layer_idx, head_idx, self.trace._gen_idx//15, heatmap)
+                self.heat_maps.update(factor, self.layer_idx, head_idx, self.traceunclip._gen_idx//15, heatmap)
             for head_idx, negative_heatmap in enumerate(negative_maps):
-                self.negative_heat_maps.update(factor, self.layer_idx, head_idx, self.trace._gen_idx//15, negative_heatmap)
+                self.negative_heat_maps.update(factor, self.layer_idx, head_idx, self.traceunclip._gen_idx//15, negative_heatmap)
 
         hidden_states = torch.bmm(attention_probs, value)
         hidden_states = attn.batch_to_head_dim(hidden_states)
@@ -595,7 +596,7 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
         # import sys
         # sys.exit(1)
         
-        self.trace._gen_idx += 1
+        self.traceunclip._gen_idx += 1
 
         return hidden_states
 
@@ -607,4 +608,4 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
         return len(next(iter(self.heat_maps.values())))
 
 
-trace: Type[DiffusionHeatMapHooker] = DiffusionHeatMapHooker
+traceunclip: Type[DiffusionHeatMapHookerunclip] = DiffusionHeatMapHookerunclip

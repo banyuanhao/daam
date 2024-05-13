@@ -84,5 +84,12 @@
 # plt.plot(pos[:len(stop)],stop - pos[:len(stop)])
 # plt.savefig("pics/pic.png")
 
-from torchvision.models import resnet50
-print(resnet50())
+def int_token(negative_prompt, int):
+    token = negative_prompt.split(' ')
+    if int == 0 and len(token) == 2:
+        return token[0]
+    elif int == 0 and len(token) == 3:
+        return ' '.join(token[:2])
+    else:
+        return token[-1]
+print(int_token("drawn face", 0))
