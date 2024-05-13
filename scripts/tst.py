@@ -1,14 +1,13 @@
-import argparse
-import sys
-sys.path.append('~/diffusion/daam')
-from daam import trace
-from daam import set_seed
-import torch
-from diffusers import UnCLIPScheduler, DDPMScheduler, StableUnCLIPPipeline
-from diffusers.models import PriorTransformer
-from transformers import CLIPTokenizer, CLIPTextModelWithProjection
-from matplotlib import pyplot as plt
+# mean activation value of the feature maps
 
+import argparse
+from daam import trace, set_seed
+from diffusers import UnCLIPPipeline
+# from models.diffuserpipeline import StableDiffusionPipeline
+import torch
+import matplotlib.pyplot as plt
+import wandb
+#
 parser = argparse.ArgumentParser(description='Diffusion')
 parser.add_argument('--prompt', type=str)
 parser.add_argument('--negative_prompt', type=str, default='')
@@ -17,6 +16,11 @@ parser.add_argument('--steps', type=int, default=30)
 parser.add_argument('--device', type=str, default='cuda')
 parser.add_argument('--group', type=str)
 args = parser.parse_args()
+
+import torch
+from diffusers import UnCLIPScheduler, DDPMScheduler, StableUnCLIPPipeline
+from diffusers.models import PriorTransformer
+from transformers import CLIPTokenizer, CLIPTextModelWithProjection
 
 prior_model_id = "kakaobrain/karlo-v1-alpha"
 data_type = torch.float16
@@ -41,25 +45,39 @@ pipe = StableUnCLIPPipeline.from_pretrained(
 )
 
 pipe = pipe.to("cuda")
-prompt = "A dog runs across the field"
-negative_prompt = "grass"
+prompt = "dramatic wave, the Oceans roar, Strong wave spiral across the oceans as the waves unfurl into roaring crests; perfect wave form; perfect wave shape; dramatic wave shape; wave shape unbelievable; wave; wave shape spectacular"
 
-# with torch.cuda.amp.autocast(dtype=torch.float16), torch.no_grad():
 with torch.no_grad():
     with trace(pipe) as tc:
-        out = pipe(prompt, num_inference_steps=30, negative_prompt=negative_prompt)
+        image = pipe(prompt=prompt,negative_prompt='water').images[0]
+        image.save("wave.png")
         heat_map = tc.compute_global_heat_map()
         heat_map = heat_map.compute_word_heat_map('n:grass')
-        heat_map.plot_overlay(out.images[0],ax = plt.gca())
+        heat_map.plot_overlay(image.images[0],ax = plt.gca())
         heat_ = tc.return_heat_map()
-        
-print(heat_)
-        
-plt.savefig('wave_heatmap.png')
-prompt = args.prompt
-negative_prompt = args.negative_prompt
-seeds = args.seed
-steps = args.steps
+
+# prompt = args.prompt
+# negative_prompt = args.negative_prompt
+# seeds = args.seed
+# steps = args.steps
+# tags = args.tags
+
+
+
+# if args.wandb:
+#     wandb.login()
+#     wandb.config = {"prompt": prompt,
+#                     "negative prompt": negative_prompt, 
+#                     "seeds": seeds,
+#                     "steps": steps,
+#                     "tags": tags,
+#                     }
+#     run = wandb.init(
+#         project=args.project,
+#         notes=args.note,
+#         group=args.group,
+#         config=wandb.config,
+#     )
 
 # ratio_list = []
 

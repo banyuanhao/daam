@@ -576,10 +576,9 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
                 raise ValueError('The shape of maps and negative_maps are not the same.')
             # print(maps.shape)
             #print('factor')
-            
             # TODO
             for head_idx, heatmap in enumerate(maps):
-                #print('hit')
+                # print(heatmap)
                 self.heat_maps.update(factor, self.layer_idx, head_idx, self.trace._gen_idx//15, heatmap)
             for head_idx, negative_heatmap in enumerate(negative_maps):
                 self.negative_heat_maps.update(factor, self.layer_idx, head_idx, self.trace._gen_idx//15, negative_heatmap)
