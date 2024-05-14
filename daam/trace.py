@@ -245,7 +245,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
         with auto_autocast(dtype=torch.float32):
             for (factor, layer, head, time), heat_map in heat_maps:
                 #print(type(heat_maps))
-                #print(factor, layer, head, time, 'heat_map',heat_map)
+                # print(factor, layer, head, time,)
                 if factor in factors and (head_idx is None or head in head_idx) and (layer_idx is None or layer in layer_idx) and (time_idx is None or time in time_idx):
                     #print(heat_map.shape)
                     heat_map = heat_map.unsqueeze(1)
@@ -585,7 +585,6 @@ class UNetCrossAttentionHooker(ObjectHooker[Attention]):
             #print('factor')
             # TODO
             for head_idx, heatmap in enumerate(maps):
-                # print(heatmap)
                 self.heat_maps.update(factor, self.layer_idx, head_idx, self.trace._gen_idx//15, heatmap)
             for head_idx, negative_heatmap in enumerate(negative_maps):
                 self.negative_heat_maps.update(factor, self.layer_idx, head_idx, self.trace._gen_idx//15, negative_heatmap)

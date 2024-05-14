@@ -18,7 +18,8 @@ parser.add_argument('--group', type=str, required=True,
                     choices=['noun_removal', 'noun_style', 'noun_general', 'noun_abstract',
                              'adj_noun','adj_noun_0','adj_noun_1',
                              'adj_general','adj_specific',
-                             'steps_adj','steps_noun'])
+                             'steps_adj','steps_noun',
+                             'unclip_noun','unclip_adj'])
 parser.add_argument('--token',type=int, default=None)
 args = parser.parse_args()
 
