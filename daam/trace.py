@@ -113,20 +113,21 @@ class DiffusionHeatMapHooker(AggregateHooker):
         # print(len(heat_maps.ids_to_heatmaps))
         # raise ValueError('The shape of maps and negative_maps are not the same.')
 
-        all_merges = [0]*31
-        all_merges_negative = [0]*31
+        all_merges = [0]*(self.steps +1)
+        all_merges_negative = [0]*(self.steps +1)
         
         x = int(np.sqrt(self.latent_hw))
         
         merge_idxs_, _ = compute_token_merge_indices(self.pipe.tokenizer, prompt, prompt)
         merge_idxs_negative, _ = compute_token_merge_indices(self.pipe.tokenizer, negative_prompt, token)
-        
         with auto_autocast(dtype=torch.float32):
             for (_, _, _, time), heat_map in heat_maps:
                 heat_map = heat_map.unsqueeze(1)
                 heat_map = F.interpolate(heat_map, size=(x, x), mode='bicubic').clamp_(min=0)
                 if bounding_box is not None:
                     heat_map = heat_map[merge_idxs_,:,bounding_box[1]:bounding_box[1]+bounding_box[3],bounding_box[0]:bounding_box[0]+bounding_box[2]]
+                else:
+                    heat_map = heat_map[merge_idxs_]
                 heat_map_value = heat_map.pow(2).mean()
                 all_merges[time] += heat_map_value.cpu().numpy()
                 
@@ -136,6 +137,8 @@ class DiffusionHeatMapHooker(AggregateHooker):
                 negative_heat_map = F.interpolate(negative_heat_map, size=(x, x), mode='bicubic').clamp_(min=0)
                 if bounding_box is not None:
                     negative_heat_map = negative_heat_map[merge_idxs_negative,:,bounding_box[1]:bounding_box[1]+bounding_box[3],bounding_box[0]:bounding_box[0]+bounding_box[2]]
+                else:
+                    negative_heat_map = negative_heat_map[merge_idxs_negative]
                 negative_heat_map_value = negative_heat_map.pow(2).mean()
                 all_merges_negative[time] += negative_heat_map_value.cpu().numpy()
                 
@@ -173,8 +176,8 @@ class DiffusionHeatMapHooker(AggregateHooker):
         # print(len(heat_maps.ids_to_heatmaps))
         # raise ValueError('The shape of maps and negative_maps are not the same.')
 
-        all_merges = [0]*31
-        all_merges_negative = [0]*31
+        all_merges = [0]*(self.steps +1)
+        all_merges_negative = [0]*(self.steps +1)
         
         x = int(np.sqrt(self.latent_hw))
 
@@ -296,7 +299,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
         # print(len(heat_maps.ids_to_heatmaps))
         # raise ValueError('The shape of maps and negative_maps are not the same.')
 
-        all_merges_negative = [[] for i in range(31)]
+        all_merges_negative = [[] for i in range((self.steps +1))]
         x = int(np.sqrt(self.latent_hw))
 
         with auto_autocast(dtype=torch.float32):            
@@ -356,9 +359,12 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
         image_copy = image.copy()
         pil_image = self.numpy_to_pil(image_copy)
         hk_self.parent_trace.last_image = pil_image[0]
+        
+    def _hooked_get_steps(hk_self, self: StableDiffusionPipeline, steps: int):
+        hk_self.monkey_super('get_steps', steps)
+        hk_self.parent_trace.steps = steps
 
     def _hooked_encode_prompt(hk_self, _: StableDiffusionPipeline, prompt: Union[str, List[str]], *args, **kwargs):
-        #print(prompt)
         # TODO: fix this 
         if not isinstance(prompt, str) and len(prompt) > 1:
             raise ValueError('Only single prompt generation is supported for heat map computation.')
@@ -440,6 +446,7 @@ class PipelineHooker(ObjectHooker[StableDiffusionPipeline]):
             raise ValueError('Unknown pipeline type.')
         
         self.monkey_patch('_encode_prompt', self._hooked_encode_prompt)
+        self.monkey_patch('get_steps', self._hooked_get_steps)
         if hasattr(self.module, '_encode_prompt_total'):
             self.monkey_patch('_encode_prompt_total', self._hooked_encode_prompt_total)
 

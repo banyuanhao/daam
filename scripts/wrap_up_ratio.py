@@ -50,7 +50,7 @@ for seed in iter(seeds):
         with trace(pipe) as tc:
             
             out = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, generator=set_seed(seed),output_type='latent')
-            if args.group != 'adj_noun_0' or args.group != 'adj_noun_1':
+            if args.group != 'adj_noun_0' and args.group != 'adj_noun_1':
                 pos, neg = tc.compute_activation_ratio()
             else:
                 pos, neg = tc.compute_activation_ratio_spec(token = int_token(negative_prompt, args.token))
