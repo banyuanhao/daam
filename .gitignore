@@ -1,6 +1,8 @@
 experiment/
 wandb/
 wrapupdata/remove/remove_data/images
+wrapupdata/moreusage/FID/generatedimage
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -168,4 +170,8 @@ wandb/latest-run
 modelpara/
 dataset/
 work_dirs/
-wrapupdata/moreusage/FID/generatedimage
+wrapupdata/moreusage/FID/natural
+wrapupdata/moreusage/FID/normalize
+wrapupdata/moreusage/FID/cafe
+wrapupdata/moreusage/FID/cat
+wrapupdata/moreusage/FID/cafe

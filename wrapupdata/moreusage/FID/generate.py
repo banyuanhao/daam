@@ -1,7 +1,6 @@
 # mean activation value of the feature maps
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "4"
 import argparse
+import os
 from diffusers import StableDiffusionPipeline
 import torch
 from daam import set_seed
@@ -14,16 +13,20 @@ device = 'cuda'
 pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True)
 pipe = pipe.to(device)
 
-prompt = "a woman sittng in a cafe"
-negative_time = -1
+prompt = "a cat on the sofa"
+negative_time = 31
+# negative_prompt = ['blurry',
+#               'distorted',
+#               'unfocused',
+#               'deformed',
+#               'disfigured',
+#               'ugly']
 negative_prompt = ['blurry',
-              'distorted',
-              'unfocused',
-              'deformed',
-              'disfigured',
-              'ugly']
+                   'distorted',
+                   'uncute']
 
-path = '/home/banyh2000/diffusion/daam/wrapupdata/moreusage/FID/generatedimage'
+
+path = '/home/banyh2000/diffusion/daam/wrapupdata/moreusage/FID/cat/generated'
 path = os.path.join(path, str(negative_time))
 os.makedirs(path, exist_ok=True)
 
