@@ -13,7 +13,7 @@ device = 'cuda'
 pipe = StableDiffusionPipeline.from_pretrained(model_id, use_auth_token=True)
 pipe = pipe.to(device)
 
-prompt = "a cat on the sofa"
+prompt = "a black cat on the grass"
 negative_time = 31
 # negative_prompt = ['blurry',
 #               'distorted',
@@ -26,7 +26,7 @@ negative_prompt = ['blurry',
                    'uncute']
 
 
-path = '/home/banyh2000/diffusion/daam/wrapupdata/moreusage/FID/cat/generated'
+path = '/home/banyh2000/diffusion/daam/wrapupdata/moreusage/FID/blackcat/generated'
 path = os.path.join(path, str(negative_time))
 os.makedirs(path, exist_ok=True)
 
